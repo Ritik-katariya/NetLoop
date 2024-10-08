@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\LocalRepo\\Restrurant Repo\\restaurant_crm_app\\logs\\winston\\successes\\.f57fbb735aa9dfce6a4c714e90b9d20ea28f7dda-audit.json",
+    "files": [
+        {
+            "date": 1721634957215,
+            "name": "C:\\LocalRepo\\Restrurant Repo\\restaurant_crm_app\\logs\\winston\\successes\\phu-2024-22-07-13-success.log",
+            "hash": "f3a6ee74c4ba34cdd47f2e1b659eaa632fae6489bb29c169c51125996a2e0252"
+        }
+    ],
+    "hashType": "sha256"
+}

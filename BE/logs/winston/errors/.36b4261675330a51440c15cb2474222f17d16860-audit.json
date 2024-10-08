@@ -1,0 +1,50 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\restaurant_crm_app\\logs\\winston\\errors\\.36b4261675330a51440c15cb2474222f17d16860-audit.json",
+    "files": [
+        {
+            "date": 1721646326078,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\errors\\phu-2024-22-07-16-error.log",
+            "hash": "034c0afc0c624cf030d6f57424f805b2ab45ee282957f38992d78f615f0ceb93"
+        },
+        {
+            "date": 1721662342493,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\errors\\phu-2024-22-07-21-error.log",
+            "hash": "bd392be431915b77b01d1733329785e8ffa5f382b30676c005a3cc6507eac9d4"
+        },
+        {
+            "date": 1721733819234,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\errors\\phu-2024-23-07-16-error.log",
+            "hash": "d0ed9b23f32d2167aa29adfc6a13a6417a48bc4e5a04c61f9f54fb193b06b754"
+        },
+        {
+            "date": 1721734315685,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\errors\\phu-2024-23-07-17-error.log",
+            "hash": "752c15dc6ff4fa315390857f3ce1e06c847520d582ad4dc7bca59ac835ed19f8"
+        },
+        {
+            "date": 1721740802931,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\errors\\phu-2024-23-07-18-error.log",
+            "hash": "420f1ea967122d5394678984ad7ad93f05768d4fc84c5045d90f9bda2f1b688f"
+        },
+        {
+            "date": 1721745248783,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\errors\\phu-2024-23-07-20-error.log",
+            "hash": "b094b5a01930964c5d87be892b9ad7f7f01e669a72f667fe6908684af072de2b"
+        },
+        {
+            "date": 1721749452982,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\errors\\phu-2024-23-07-21-error.log",
+            "hash": "8988a06f87dbd00486daead32b145052922570929ac4efdaed66b190628db647"
+        },
+        {
+            "date": 1721753524337,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\errors\\phu-2024-23-07-22-error.log",
+            "hash": "1fd0e7d6d2b62ab4d5adb97f62fbf2bc98b4bb890a27c0a59704ed5af9875d7d"
+        }
+    ],
+    "hashType": "sha256"
+}

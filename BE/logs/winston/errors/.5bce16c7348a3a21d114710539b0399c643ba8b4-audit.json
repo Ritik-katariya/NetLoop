@@ -1,0 +1,50 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\.5bce16c7348a3a21d114710539b0399c643ba8b4-audit.json",
+    "files": [
+        {
+            "date": 1727349257986,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-26-09-16-error.log",
+            "hash": "911985123e8c4ec42430c3298631d7eb430f34419ed7b9025df82b40ff16809d"
+        },
+        {
+            "date": 1727352699979,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-26-09-17-error.log",
+            "hash": "a682ee3e43e1db7c83d0a92915143dc5ee759772099337fa6aa4ebac51325899"
+        },
+        {
+            "date": 1727379562098,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-27-09-01-error.log",
+            "hash": "3b298649259716e447a40b9951a0349aafe7ca814bc471faeb815d38dac0f699"
+        },
+        {
+            "date": 1727437270755,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-27-09-17-error.log",
+            "hash": "fa3ed0faaaef58e8876c89a041346ba68943e6f7bfde7cc9e41c642e5d4a02a8"
+        },
+        {
+            "date": 1727443400364,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-27-09-18-error.log",
+            "hash": "9c08b249dc953cd8d0944dc519fa8b82fd6238019b61d11ad1d270c4355b1cb4"
+        },
+        {
+            "date": 1727444227085,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-27-09-19-error.log",
+            "hash": "f1ccd257526bce6f869bf41449ac6244ab99f6e35bb596aab69463b4b51edf70"
+        },
+        {
+            "date": 1727695965031,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-30-09-17-error.log",
+            "hash": "7beaae7b63bf711b6076701d38ffdb7653afb467f3cddef2766027bdeb4ea286"
+        },
+        {
+            "date": 1727875603005,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-02-10-18-error.log",
+            "hash": "dc5e8d222c6026fdadb68df000289523b88e09e2783f2d7bd4e46e9d8d1d83e4"
+        }
+    ],
+    "hashType": "sha256"
+}

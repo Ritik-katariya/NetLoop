@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+  model Owner{
+  id             String   @id     @default(uuid())
+  name           String
+  email          String   @unique
+  phone          String   @unique
+  status         Boolean  @default(false)
+  created_at     DateTime  @default(now())
+  updated_at     DateTime   @updatedAt
+}
+ 
+ model Auth {
+  id       String   @id @default(uuid())
+  email    String   @unique
+  password String
+  role     UserRole @default(Owner)
+  userId   String?
+  @@map("Auth")
+}
+
+
+model UserVerfication {
+  id           String      @id     @default(uuid())
+  email        String      @unique
+  otp          String?
+  password     String
+  expiresAt    DateTime?   @default(now())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  @@map("UserVerfication")
+}
+
+enum UserRole{
+  Owner
+  User
+}
+
+
+

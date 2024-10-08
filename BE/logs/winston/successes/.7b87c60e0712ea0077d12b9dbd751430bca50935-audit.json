@@ -1,0 +1,50 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\restaurant_crm_app\\logs\\winston\\successes\\.7b87c60e0712ea0077d12b9dbd751430bca50935-audit.json",
+    "files": [
+        {
+            "date": 1721646326057,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\successes\\phu-2024-22-07-16-success.log",
+            "hash": "f5e1e56c164c9397d4c7a62e05e86adb5ef72bc26d1b048c4452d89766867b8f"
+        },
+        {
+            "date": 1721662342460,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\successes\\phu-2024-22-07-21-success.log",
+            "hash": "ed71e742bce4813ae2ed97e3b28aadf746cbaf259fcc5a2035af6b7430db9427"
+        },
+        {
+            "date": 1721733819192,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\successes\\phu-2024-23-07-16-success.log",
+            "hash": "6e56fd2c8d00b201409dfc01621196d57a608244ff081117fd25172af9f86235"
+        },
+        {
+            "date": 1721734315608,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\successes\\phu-2024-23-07-17-success.log",
+            "hash": "9c2d61dd7706b5376cedca6dde853a125d8eec6fe9c6092cd090cd17b43b479e"
+        },
+        {
+            "date": 1721740802869,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\successes\\phu-2024-23-07-18-success.log",
+            "hash": "ec8b5c9e806cb8cd8b704e12e900ba54ab342dd9833fd1b5545227847275feb8"
+        },
+        {
+            "date": 1721745248753,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\successes\\phu-2024-23-07-20-success.log",
+            "hash": "38ae5cd4decc63943f34eb81fc07b3351c47f3317f1fbdf5fc7691c0bb3001bd"
+        },
+        {
+            "date": 1721749452919,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\successes\\phu-2024-23-07-21-success.log",
+            "hash": "cff43ad96bec5b33466dabfaf3e1058ed41e43d041371da07e7be4e4098d7677"
+        },
+        {
+            "date": 1721753524206,
+            "name": "D:\\restaurant_crm_app\\logs\\winston\\successes\\phu-2024-23-07-22-success.log",
+            "hash": "08f03f5f7225575b4ecf4e336478d2ade43477870c1fad369ff7cd1c0f097820"
+        }
+    ],
+    "hashType": "sha256"
+}

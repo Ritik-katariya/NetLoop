@@ -1,0 +1,50 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\.a4188c33ffd1a4f8387fb2236dd3aab88808d7c6-audit.json",
+    "files": [
+        {
+            "date": 1727349257981,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-26-09-16-success.log",
+            "hash": "cbb53088ed264c7526ebf00de564f9e6705e3dfcfc9bbf0801f6c2759cea054a"
+        },
+        {
+            "date": 1727352699973,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-26-09-17-success.log",
+            "hash": "c49f9d76a1f38d3e66edf41e95066433f949b414381e673cf15343f6a7f47a13"
+        },
+        {
+            "date": 1727379562094,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-27-09-01-success.log",
+            "hash": "f43c856f7b5207b21374f6325957a6bcc6d2a2a0c7ac4329fe333e2bb38e1b79"
+        },
+        {
+            "date": 1727437270751,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-27-09-17-success.log",
+            "hash": "8f288af6c879fcc982d4666664ecc416ff7ff2b614c5dab60d61b50ae72616b2"
+        },
+        {
+            "date": 1727443400360,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-27-09-18-success.log",
+            "hash": "961b98f45d2a18e3c2eb955db667db826a77b3cb13c408d9b251a6234c7041ad"
+        },
+        {
+            "date": 1727444227081,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-27-09-19-success.log",
+            "hash": "f31df286a6f4169e3c312d0b138d1390230d0a03157ba952222edc7718d403c8"
+        },
+        {
+            "date": 1727695965027,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-30-09-17-success.log",
+            "hash": "98251132547dbc164cd30534d0f1e41396f4d869033a20cc7162034fabab8950"
+        },
+        {
+            "date": 1727875602999,
+            "name": "D:\\my pc\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-02-10-18-success.log",
+            "hash": "939978c69f338641e1f5f5f2fe9e46e15390a2f2be7b6bbe1f34561cfe4dcf0e"
+        }
+    ],
+    "hashType": "sha256"
+}

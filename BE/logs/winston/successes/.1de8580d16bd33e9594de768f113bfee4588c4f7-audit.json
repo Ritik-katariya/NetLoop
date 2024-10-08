@@ -1,0 +1,115 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\.1de8580d16bd33e9594de768f113bfee4588c4f7-audit.json",
+    "files": [
+        {
+            "date": 1726334450424,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-14-09-22-success.log",
+            "hash": "c1d04e05fc0530ab9a1de35f8b3dcd2f0f555651b2939a7be41819c3a7627d3b"
+        },
+        {
+            "date": 1726338401080,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-14-09-23-success.log",
+            "hash": "6f432d88746c699049847622e0b04c36cbf2cfec392705448ce08b4eb6a56cf7"
+        },
+        {
+            "date": 1727030972617,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-23-09-00-success.log",
+            "hash": "270a950f94c3103a3f390d027fe2995fc21e410ae667c5c4ee7ccbea2c0f013f"
+        },
+        {
+            "date": 1727087244983,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-23-09-15-success.log",
+            "hash": "2a3730bd9291761ab8a85ade6f15f0768531209eb7c776af70773b5138050b21"
+        },
+        {
+            "date": 1727087572502,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-23-09-16-success.log",
+            "hash": "47810c365309c1f49d55cc2e83b14014a0f2cff21e55231d63f22d0c514b42cf"
+        },
+        {
+            "date": 1727091000479,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-23-09-17-success.log",
+            "hash": "9b343eabb7fbdea9ea9d176aef5c17c5ea0a5c3db1ca39fc140a590af5616f9a"
+        },
+        {
+            "date": 1727094960293,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-23-09-18-success.log",
+            "hash": "df718cefbcfd15ac63fff905dcea532f20fd271d15d728fb19cfa166be36c1f5"
+        },
+        {
+            "date": 1727098201058,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-23-09-19-success.log",
+            "hash": "78109607102d0f05c3b4290b1029bed16e7dfe4b2fa7ceb92603b58e845d9b4e"
+        },
+        {
+            "date": 1727104096582,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-23-09-20-success.log",
+            "hash": "8be64fed2cb281ef636f37fc42c652cba59535bc2c862cd4ac6a4cd779a6ff48"
+        },
+        {
+            "date": 1727105619411,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-23-09-21-success.log",
+            "hash": "93abc29bd6de324210e4336f923162fd81dbda28029e4c5948ac87d64049d29f"
+        },
+        {
+            "date": 1727109403914,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-23-09-22-success.log",
+            "hash": "b24086dafa0f76a4a6004dfe9c07255a48ac7f26e5802bdadb1d660bfc73b552"
+        },
+        {
+            "date": 1727172996463,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-24-09-15-success.log",
+            "hash": "f6bca47479595d76b5385d3bed649655c32a9b2d56d5b8b89abd2b85cef7391a"
+        },
+        {
+            "date": 1727182941735,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-24-09-18-success.log",
+            "hash": "da218ca7a1034b017ce7a824ed69129bcdd0bab454dc3f1ccae564531de68adc"
+        },
+        {
+            "date": 1727184845889,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-24-09-19-success.log",
+            "hash": "04726361dbe63a3429392f94d86120e9450c20c0fa3407360807207c2056ba8a"
+        },
+        {
+            "date": 1727191661427,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-24-09-20-success.log",
+            "hash": "ae0904ffbd9f8a00962c788cea83df75bdbd7ec2ccd4c83ece80dd4dc8de99bd"
+        },
+        {
+            "date": 1727191814751,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-24-09-21-success.log",
+            "hash": "a1214485f1ee495ec64c02efe8b861619be9c9d4a08feca771a9198e01b5132b"
+        },
+        {
+            "date": 1727203439457,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-25-09-00-success.log",
+            "hash": "2af3ea5d9cc080174970ec14ef9dc34db43a26911f26bb21c34765c019a3dede"
+        },
+        {
+            "date": 1727206918028,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-25-09-01-success.log",
+            "hash": "78015bac71e5564e9e7a4bc0b94998a7aca02ce58f2c3e4a2f2b6b58cbc6340f"
+        },
+        {
+            "date": 1727256475166,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-25-09-14-success.log",
+            "hash": "c877ff459f14d0d05446678b7c8c362afb8a74e4e0cafd72a156b98ca5ff905c"
+        },
+        {
+            "date": 1727256602705,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-25-09-15-success.log",
+            "hash": "7346abd8eee5dd88eead2ceff827e2a8042e6495170f9f95c6afb74faa4440c4"
+        },
+        {
+            "date": 1727260270304,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\successes\\phu-2024-25-09-16-success.log",
+            "hash": "1827b2a4ce30296f108cbceeee6a02323bbf29a3c106f47c53e766ca9de46c5a"
+        }
+    ],
+    "hashType": "sha256"
+}

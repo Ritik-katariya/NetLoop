@@ -1,0 +1,115 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\.15414f2a2d16392bf19dcaf3832e84afffd6adc4-audit.json",
+    "files": [
+        {
+            "date": 1726334450429,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-14-09-22-error.log",
+            "hash": "e39ca6d694c1d9127567aae45939ac4d5917853c2d459c6cfca221c9efc324c3"
+        },
+        {
+            "date": 1726338401085,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-14-09-23-error.log",
+            "hash": "2ae684f54f38887b302feb235336f3611078e4beeeb0f40fcdda53149d8951f7"
+        },
+        {
+            "date": 1727030972621,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-23-09-00-error.log",
+            "hash": "058a55a39d9a5505e85278e7df7f54b0afda9c277e76db6de603d8250353ce13"
+        },
+        {
+            "date": 1727087244987,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-23-09-15-error.log",
+            "hash": "540a9ba9b66ecd55b450ed49c55822b3e0c839557bbbecdbec2ce033357a7bb2"
+        },
+        {
+            "date": 1727087572506,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-23-09-16-error.log",
+            "hash": "42769254e429d213421b5937faf6e9ca34f0d06751581de581074e9f411afe50"
+        },
+        {
+            "date": 1727091000484,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-23-09-17-error.log",
+            "hash": "61149e7aaf931c3164312bf29e7849a4fc718dc533df35a5ea174f599e71c9f2"
+        },
+        {
+            "date": 1727094960298,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-23-09-18-error.log",
+            "hash": "21dfdf4df174972c98f2d3a1db1411cac6da034c4dab24ec33f19ce08007a137"
+        },
+        {
+            "date": 1727098201062,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-23-09-19-error.log",
+            "hash": "8ce11e767dd73704dbe5e7b2d7cf1db3c90eac5853dcf828671a18bc5a21f31e"
+        },
+        {
+            "date": 1727104096591,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-23-09-20-error.log",
+            "hash": "fd9aa58c026fb4245dfc6d173cc1a6c610a4c02c3424723894c84fceb34bdd3c"
+        },
+        {
+            "date": 1727105619415,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-23-09-21-error.log",
+            "hash": "cdb3154c5c4ee4b453e30df24e5023d4302fc9d5bc85d23345bd090718be8772"
+        },
+        {
+            "date": 1727109403927,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-23-09-22-error.log",
+            "hash": "4c45aecdb3213413febaa937653c19fea7558e01a213cf6f8282ed00b356c803"
+        },
+        {
+            "date": 1727172996480,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-24-09-15-error.log",
+            "hash": "3837cf8dff0cf784a4b7cbe48874c9a546e316358d94a4fbebb03e938f7f5240"
+        },
+        {
+            "date": 1727182941740,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-24-09-18-error.log",
+            "hash": "e6f672001e7d6721ffe5cab159944388fea895397ee3290dced53c692726b483"
+        },
+        {
+            "date": 1727184845893,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-24-09-19-error.log",
+            "hash": "c10ea4eb7667f4cf47cf4f8b667ecc49ffc5bd51d0c03071da3a65dcf99bc15a"
+        },
+        {
+            "date": 1727191661431,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-24-09-20-error.log",
+            "hash": "f58d0a0a783105065ed852ce56cfbef9c962448723199f154a44311fc531519f"
+        },
+        {
+            "date": 1727191814755,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-24-09-21-error.log",
+            "hash": "53a8aced0954b9d3c683172b441c4e07db1d4a58593823957643fd4b3f91a3f1"
+        },
+        {
+            "date": 1727203439461,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-25-09-00-error.log",
+            "hash": "6010b44f793a09234836b1e73a204cdd198c042aae5d26ad1096ec3bb80968bf"
+        },
+        {
+            "date": 1727206918033,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-25-09-01-error.log",
+            "hash": "713e67447bb34c47a1bacf5ed829b190c5646724aaf4d71133b1bb194e67a6da"
+        },
+        {
+            "date": 1727256475170,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-25-09-14-error.log",
+            "hash": "4254a02383bd9a9f762180aa2b858224136cca9099ea55db682d6f96c95d6ff5"
+        },
+        {
+            "date": 1727256602710,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-25-09-15-error.log",
+            "hash": "001dcbef24a96ef2e8c30d0992b215a60f30da26693623ed43c2594a6a14bbd5"
+        },
+        {
+            "date": 1727260347285,
+            "name": "C:\\Users\\ASUS\\Desktop\\main\\InternShip\\Restro\\BE\\logs\\winston\\errors\\phu-2024-25-09-16-error.log",
+            "hash": "b9fbeee8d8b44b95feb9901c78aa05b8d42f6ffdd7365ab07dda039a39effdf2"
+        }
+    ],
+    "hashType": "sha256"
+}
