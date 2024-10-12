@@ -8,11 +8,35 @@ import { Secret } from 'jsonwebtoken';
 import moment from 'moment';
 const { v4: uuidv4 } = require('uuid');
 import * as path from 'path';
-
+const otpGenerator = require("otp-generator");
+import { EmailtTransporter } from '../../../helper/emailtransfer';
+import { logger } from '../../../shared/logger';
+ 
 type ILginResponse = {
     accessToken?: string;
     user: {}
 }
+
+
+const sendOtponEmail = async (email: string, otp: string) => {
+    const pathName = path.join(__dirname, "../../../../template/verify.html");
+    const subject = "Sending Security code for Forgot Password";
+    const obj = { OTP: otp };
+    const toMail = email;
+    try {
+      await EmailtTransporter({ pathName, replacementObj: obj, toMail, subject });
+    } catch (err) {
+      throw new ApiError(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        "Unable to send email !"
+      );
+    }
+    logger.info("send Security key successfully");
+  
+  };
+  
+
+
 
 const loginUser = async (user: any): Promise<ILginResponse> => {
     const { email, password } = user;
@@ -24,8 +48,8 @@ const loginUser = async (user: any): Promise<ILginResponse> => {
         throw new ApiError(httpStatus.NOT_FOUND, "User is not Exist !");
     }
     // check Verified doctor or not
-    if (isUserExist.role === 'Owner') {
-        const getOwnerInfo = await prisma.owner.findUnique({
+    if (isUserExist.role === 'member') {
+        const getOwnerInfo = await prisma.members.findUnique({
             where: {
                 email: isUserExist.email
             }
@@ -67,10 +91,57 @@ const resetpassword=async (user:any):Promise<any> => {
         data: { password: hashedPassword },
     });
     return { message: "Password reset successfully" };
-    
+ 
 }
+const forgotpassword = async (payload: any) => {
+    const { email } = payload;
+    if (email.length <= 0) throw new Error("enter valid email address");
+  
+    const isUserExist = await prisma.auth.findUnique({
+      where: { email },
+    });
+    if (!isUserExist) throw new Error("email not found");
+    const otp = otpGenerator.generate(8, {
+      upperCaseAlphabets: true,
+      specialChars: true,
+    });
+    const expiresDate = new Date(Date.now() + 10 * 60 * 1000);
+    const forgotpass = await prisma.forgotPassword.create({
+      data: { email, otp, expiresAt: expiresDate },
+    });
+    sendOtponEmail(email, otp);
+    logger.info("Reset Password successfully");
+  
+    return forgotpassword;
+  };
+
+const setNewPassword = async (payload: any) => {
+    const { email, otp, password, confirmPassword } = payload;
+    if (password.length < 8)
+      throw new Error("Password should be at least 8 characters long");
+    if (password !== confirmPassword)
+      throw new Error("Password and confirm password does not match");
+    const isUserExist = await prisma.auth.findUnique({
+      where: { email },
+    });
+    if (!isUserExist) throw new Error("email not found");
+    const isOtpValid = await prisma.forgotPassword.findFirst({
+      where: { email, otp, expiresAt: { gt: new Date() } },
+    });
+    if (!isOtpValid) throw new Error("Invalid OTP or expired OTP");
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await prisma.auth.update({
+      where: { email },
+      data: { password: hashedPassword },
+    });
+    await prisma.forgotPassword.delete({ where: { email, otp } });
+    return { message: "Password reset successfully" };
+  };
+  
 
 export const AuthService={
     loginUser,
-    resetpassword
+    resetpassword,
+    forgotpassword,
+    setNewPassword
 }

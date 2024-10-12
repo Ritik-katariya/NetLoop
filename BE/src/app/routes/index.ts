@@ -1,23 +1,12 @@
 import express from "express";
-
-import { UserRouter } from "../modules/user/user.route";
-import { TableRouter } from "../modules/table/table.route";
-import { ownerRouter } from "../modules/owner/owner.routes";
+import { memberRouter } from "../modules/member/member.routes";
 import { AuthRouter } from "../modules/auth/auth.routes";
 const router = express.Router();
 
 const moduleRoutes = [
   {
-    path: "/user",
-    route: UserRouter,
-  },
-  {
-    path: "/table",
-    route: TableRouter,
-  },
-  {
-    path:"/owner",
-    route:ownerRouter,
+    path:"/member",
+    route:memberRouter,
   },
   {
     path:"/auth",
