@@ -228,27 +228,19 @@ const getoneMember = async (id: string): Promise<Members | null> => {
   return result;
 };
 const updateMember = async (req: Request): Promise<Members> => {
-  const file = req.file as IUpload;
+  
   const id = req.params.id as string;
   const user = req.body;
-
-  if (file) {
-    const uploadImage = await CloudinaryHelper.uploadFile(file);
-    if (uploadImage) {
-      user.img = uploadImage.secure_url;
-    } else {
-      throw new ApiError(
-        httpStatus.EXPECTATION_FAILED,
-        "Failed to Upload Image"
-      );
-    }
-  }
   const result = await prisma.members.update({
     where: { id },
     data: user,
   });
   return result;
 };
+
+
+
+
 const deleteMember = async (id: string): Promise<any> => {
   const result = await prisma.$transaction(async (tx) => {
     const patient = await tx.members.delete({

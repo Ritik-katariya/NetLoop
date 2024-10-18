@@ -24,16 +24,17 @@ datasource db {
 model Profile{
   id                   String            @id     @default(uuid())
   img                  String?
+  coverImg             String?
   member               Members           @relation(fields: [memberId],references: [id])
   memberId             String            @unique
-  bio                  String
-  address              String
-  city                 String
-  state                String
-  country              String
-  pincode              Int
-  dob                  DateTime
-  gender               Gender
+  bio                  String?
+  address              String?
+  city                 String?
+  state                String?
+  country              String?
+  pincode              Int?
+  dob                  DateTime?
+  gender               Gender?
 @@map("Profile")
 }  
 

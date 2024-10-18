@@ -12,13 +12,7 @@ router.post('/resendotp',memberController.reSendOtponEmail);
 router.post('/verifyOTP',memberController.verifyOTP);
 router.get("/", memberController.getAllMember);
 router.get("/:id?", memberController.getoneMember);
-router.patch(
-  "/:id?",
-  CloudinaryHelper.upload.single("file"),
-  (req: Request, res: Response, next: NextFunction) => {
-    return memberController.updateMember(req, res, next);
-  }
-);
+router.patch("/:id?",memberController.updateMember);
 router.delete("/:id?", memberController.deleteMember);
 
 
