@@ -1,25 +1,11 @@
-import { Members, Profile } from "@prisma/client";
+import {Profile } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 import ApiError from "../../../errors/apiError";
 import httpStatus from "http-status";
-import bcrypt from "bcrypt";
 import { Request } from "express";
-import { EmailtTransporter } from "../../../helper/emailtransfer";
-import config from "../../../config";
-import moment from "moment";
-import { isValid } from "zod";
-import * as path from "path";
-import { Otpverify } from "@prisma/client";
-import { promises } from "dns";
-import { validateEmail } from "../../../utils/emailValidate";
-const otpGenerator = require("otp-generator");
-const { v4: uuidv4 } = require("uuid");
 import { IUpload } from "../../../interfaces/file";
 import { CloudinaryHelper } from "../../../helper/uploadHelper";
-import { memberFilters } from "./profile.interface";
-import { IGenericResponse } from "../../../interfaces/common";
-import { memberFilltersData } from "./profile.interface";
-import { memberSearchableFields } from "./profile.interface";
+
 
 //use for create a Profile
 const createProfile = async (req: Request): Promise<any> => {

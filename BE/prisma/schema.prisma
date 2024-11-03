@@ -42,24 +42,32 @@ model Details{
   id                   String            @id     @default(uuid())
   member               Members           @relation(fields: [memberId],references: [id])
   memberId             String            @unique
-  education            String[]
-  hobbie               String[]
-  interests            String[]
-  overview             String
+  education            Education[]
+  hobbie               String[]          @default([])
+  interests            String[]          @default([])
+  overview             String?
   work                 Work[]
-  skills               String[]
+  skills               String[]          @default([])
   @@map("Details")
 }
 
+model Education{
+  id                   String            @id     @default(uuid())
+  details               Details?           @relation(fields: [detailsid],references: [id])
+  detailsid             String?            @unique
+  degree                String?
+  college               String?
+  start_date           DateTime?
+}
 model Work{
   id                   String            @id     @default(uuid())
-  member               Details           @relation(fields: [detailsid],references: [id])
-  detailsid             String            @unique
-  oragnasation         String
-  position             String
-  start_date           DateTime
-  end_date             DateTime
-  description          String
+  member               Details?           @relation(fields: [detailsid],references: [id])
+  detailsid             String ?           @unique
+  oragnasation         String?
+  position             String?
+  start_date           DateTime?
+  end_date             DateTime?
+  description          String?
   @@map("Work")
 }
  model Verfied{
