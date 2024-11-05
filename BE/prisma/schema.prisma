@@ -9,17 +9,19 @@ datasource db {
 
 
   model Members{
-  id                  String            @id     @default(uuid())
-  name                String
-  email               String            @unique
-  phone               String            @unique
-  status              Boolean           @default(false)
-  verified            Verfied?
-  profile             Profile?
-  details             Details?
-  created_at          DateTime          @default(now())
-  updated_at          DateTime          @updatedAt
-  @@map("Member")
+   id          String      @id @default(uuid())
+  name        String
+  email       String      @unique
+  phone       String      @unique
+  status      Boolean     @default(false)
+  verified    Verified?
+  profile     Profile?
+  details     Details?
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  networks    Network[]   @relation("MemberNetworks") // Many-to-many relationship
+
+  @@map("Members")
 }
 model Profile{
   id                   String            @id     @default(uuid())
@@ -70,7 +72,7 @@ model Work{
   description          String?
   @@map("Work")
 }
- model Verfied{
+ model Verified{
   id                   String            @id     @default(uuid())
   adharno              Int               @unique
   adharimg             String  
@@ -88,7 +90,7 @@ model Work{
   id                    String             @id @default(uuid())
   email                 String             @unique
   password              String
-  role                  UserRole           @default(member)
+  role                  UserRole           @default(member) 
   userId                String?
   @@map("Auth")
 }
@@ -111,6 +113,28 @@ model forgotPassword{
   expiresAt    DateTime   @default(now())
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+}
+model Network {
+  id           String      @id @default(uuid())
+  name         String
+  verified     Boolean     @default(false)
+  address      String[]
+  city         String
+  state        String
+  country      String
+  pincode      Int
+  website      String
+  socialmedia  String[]
+  about        String
+  logo         String?
+  cover        String?
+  followers    Int
+  posts        Int
+  members      Members[]    @relation("MemberNetworks") // Many-to-many relationship
+
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  @@map("Network")
 }
 enum UserRole{
   admin

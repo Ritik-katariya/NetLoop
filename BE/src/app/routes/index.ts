@@ -3,6 +3,7 @@ import { memberRouter } from "../modules/member/member.routes";
 import { AuthRouter } from "../modules/auth/auth.routes";
 import { profileRouter } from "../modules/profile/profile.routes";
 import { detailsRouter } from "../modules/details/details.routes";
+import { networkRouter } from "../modules/network/network.routes";
 const router = express.Router();
 
 const moduleRoutes = [
@@ -21,6 +22,10 @@ const moduleRoutes = [
   {
     path:"/details",
     route:detailsRouter, 
+  },
+  {
+    path:"/network",
+    route:networkRouter, 
   }
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
