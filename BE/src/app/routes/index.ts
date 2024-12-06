@@ -4,6 +4,7 @@ import { AuthRouter } from "../modules/auth/auth.routes";
 import { profileRouter } from "../modules/profile/profile.routes";
 import { detailsRouter } from "../modules/details/details.routes";
 import { networkRouter } from "../modules/network/network.routes";
+import { clusterRouter } from "../modules/cluster/cluster.routes";
 const router = express.Router();
 
 const moduleRoutes = [
@@ -26,6 +27,11 @@ const moduleRoutes = [
   {
     path:"/network",
     route:networkRouter, 
+  }
+  ,
+  {
+    path:"/cluster",
+    route:clusterRouter, 
   }
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

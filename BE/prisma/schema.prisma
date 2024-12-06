@@ -9,26 +9,32 @@ datasource db {
 
 
   model Members{
-   id          String      @id @default(uuid())
+   id         String      @id @default(uuid())
   name        String
   email       String      @unique
   phone       String      @unique
   status      Boolean     @default(false)
   verified    Verified?
-  profile     Profile?
-  details     Details?
+  profile     Profile[]
+  posts        Post[]
   created_at  DateTime    @default(now())
   updated_at  DateTime    @updatedAt
   networks    Network[]   @relation("MemberNetworks") // Many-to-many relationship
-
+  Cluster     Cluster[]   @relation("MemberClusters")
+  likes       Likes[]
+  shares      Share[]
+  comments    Comments[]
   @@map("Members")
 }
 model Profile{
   id                   String            @id     @default(uuid())
   img                  String?
   coverImg             String?
-  member               Members           @relation(fields: [memberId],references: [id])
-  memberId             String            @unique
+  member               Members?           @relation(fields: [memberId],references: [id])
+  memberId             String?            @unique
+  networks             Network? @relation(fields: [networkId],references: [id])
+  networkId            String?
+  posts                 Post[]
   bio                  String?
   address              String?
   city                 String?
@@ -37,13 +43,14 @@ model Profile{
   pincode              Int?
   dob                  DateTime?
   gender               Gender?
+  details              Details?
 @@map("Profile")
 }  
 
 model Details{
   id                   String            @id     @default(uuid())
-  member               Members           @relation(fields: [memberId],references: [id])
-  memberId             String            @unique
+  profile              Profile          @relation(fields: [profileId],references: [id])
+  profileId            String @unique
   education            Education[]
   hobbie               String[]          @default([])
   interests            String[]          @default([])
@@ -54,22 +61,22 @@ model Details{
 }
 
 model Education{
-  id                   String            @id     @default(uuid())
+  id                    String            @id     @default(uuid())
   details               Details?           @relation(fields: [detailsid],references: [id])
   detailsid             String?            @unique
   degree                String?
   college               String?
-  start_date           DateTime?
+  start_date            DateTime?
 }
 model Work{
-  id                   String            @id     @default(uuid())
-  member               Details?           @relation(fields: [detailsid],references: [id])
+  id                    String            @id     @default(uuid())
+  member                Details?           @relation(fields: [detailsid],references: [id])
   detailsid             String ?           @unique
-  oragnasation         String?
-  position             String?
-  start_date           DateTime?
-  end_date             DateTime?
-  description          String?
+  oragnasation          String?
+  position              String?
+  start_date            DateTime?
+  end_date              DateTime?
+  description           String?
   @@map("Work")
 }
  model Verified{
@@ -116,7 +123,7 @@ model forgotPassword{
 }
 model Network {
   id           String      @id @default(uuid())
-  name         String
+  name         String      @unique
   verified     Boolean     @default(false)
   address      String[]
   city         String
@@ -129,13 +136,178 @@ model Network {
   logo         String?
   cover        String?
   followers    Int
-  posts        Int
+  posts        Post[]
+  profile      Profile[]
   members      Members[]    @relation("MemberNetworks") // Many-to-many relationship
-
+  cluster      Cluster[]
+  likes        Likes[]
+  shares       Share[]
+  comments     Comments[]   
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
   @@map("Network")
 }
+
+
+model Cluster{
+  id           String      @id @default(uuid())
+  Members      Members[]   @relation("MemberClusters")
+  name         String      @unique
+  verified     Boolean     @default(false)
+  address      String[]
+  city         String
+  state        String
+  country      String
+  pincode      Int
+  website      String
+  socialmedia  String[]
+  about        String
+  logo         String?
+  cover        String?
+  followers    Int
+  posts        Post[]
+  networkId    String
+  network      Network     @relation(fields: [networkId],references: [id])
+  likes        Likes[]
+  shares       Share[]
+  comments     Comments[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+ 
+ @@map("Cluster")
+}
+model Post{
+  id           String        @id @default(uuid())
+  description  String?
+  image        String?
+  video        String?
+  likes        Likes[]
+  comments     Comments[]
+  shares       Share[]
+  memberId     String
+  member       Members      @relation(fields: [memberId],references: [id])
+  networkId    String?
+  network      Network ?    @relation(fields: [networkId],references: [id])
+  profile      Profile?     @relation(fields: [profileId],references: [id])
+  profileId    String?
+  clusterId    String?
+  cluster      Cluster?      @relation(fields: [clusterId],references: [id])
+  createdAt    DateTime      @default(now())
+}
+model Likes{
+  id           String         @id @default(uuid())
+  memberId     String
+  member       Members        @relation(fields: [memberId],references: [id])
+  postId       String?
+  post         Post?          @relation(fields: [postId],references: [id])
+  network      Network?       @relation(fields: [networkId],references: [id])
+  networkId    String?
+  cluster      Cluster?       @relation(fields: [clusterId],references: [id])
+  clusterId    String?
+  comments     Comments?      @relation(fields: [commentId],references: [id])
+  commentId    String
+  exploreId    String
+  explore      Explore?       @relation(fields: [exploreId],references: [id])
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+model Share{
+  id           String        @id @default(uuid())
+  memberId     String
+  member       Members       @relation(fields: [memberId],references: [id])
+  postId       String?
+  post         Post?         @relation(fields: [postId],references: [id])
+  network      Network?       @relation(fields: [networkId],references: [id])
+  networkId    String?
+  cluster      Cluster?       @relation(fields: [clusterId],references: [id])
+  clusterId    String?
+  exploreId    String
+  explore      Explore?      @relation(fields: [exploreId],references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+model Comments{
+  id           String        @id @default(uuid())
+  content      String
+  memberId     String
+  likes        Likes[]
+  member       Members       @relation(fields: [memberId],references: [id])
+  postId       String?
+  post         Post?         @relation(fields: [postId],references: [id])
+  network      Network?       @relation(fields: [networkId],references: [id])
+  networkId    String?
+  cluster      Cluster?       @relation(fields: [clusterId],references: [id])
+  clusterId    String?
+  exploreId    String
+  explore      Explore?      @relation(fields: [exploreId],references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Explore{
+  id            String        @id @default(uuid())
+  news          News[]
+  events        Events[]
+  opinion       Opinion[]
+  promotion     Promotion[]
+  likes         Likes[]
+  comments      Comments[]
+  share         Share[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+  
+model News{
+  id           String        @id @default(uuid())
+  title        String
+  content      String
+  image        String[]
+  author       String[]
+  category     String
+  exploreId    String?
+  explore      Explore?      @relation(fields: [exploreId],references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+model Events{
+  id           String        @id @default(uuid())
+  title        String
+  description  String
+  location     String
+  startDate    DateTime
+  endDate      DateTime
+  attendees    Int?
+  image        String[]
+  author       String[]
+  category     String
+  exploreId    String?
+  explore      Explore?      @relation(fields: [exploreId],references: [id])
+  createdAt    DateTime      @default(now())
+}
+model Opinion{
+  id           String        @id @default(uuid())
+  title        String
+  description  String
+  author       String
+  poll         Int[]
+  rating       Int[]     
+  exploreId    String?
+  explore      Explore?      @relation(fields: [exploreId],references: [id])
+  createdAt    DateTime      @default(now())
+}
+
+model Promotion{
+  id           String        @id @default(uuid())
+  title        String[]
+  description  String
+  image        String[]
+  author       String[]
+  exploreId    String?
+  explore      Explore?      @relation(fields: [exploreId],references: [id])
+  createdAt    DateTime      @default(now())
+
+}
+
 enum UserRole{
   admin
   member
