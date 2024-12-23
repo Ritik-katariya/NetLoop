@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import netloop from '../../../images/netloop.png'
 import { IoHomeOutline } from "react-icons/io5";
 import { MdOutlineTravelExplore } from "react-icons/md";
 import { MdOutlineGroups3 } from "react-icons/md";
 import { AiTwotoneMessage } from "react-icons/ai";
 import { IoNotifications } from "react-icons/io5";
+import { NavLink } from 'react-router-dom';
+import { memberInfo } from '../../../utils/auth';
+import { useGetMemberQuery } from '../../../redux/api/member';
+import ProfileDP from './ProfileDP';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+const memb=memberInfo();
+const [member, setmember] = useState("")
+useEffect(() => {setmember(memb)},[memb])
 
+const {data}=useGetMemberQuery(member?.id);
+data&&console.log(data)
   const navItems = [
     { label: 'Home', href: '/',icon:<IoHomeOutline className='text-2xl' /> },
     { label: 'Explore', href: '/products',icon:<MdOutlineTravelExplore className='text-2xl'/> },
@@ -17,14 +26,14 @@ const Header = () => {
   ];
 
   return (
-    <nav className="bg-white text-primary-textd shadow-md">
+    <nav className="bg-white text-primary-textd md:shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo Section */}
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <a href="/" className="text-2xl font-bold">
-                <img src={netloop} alt="Netloop" className='w-48' />
+                <img src={netloop} alt="Netloop" className='w-32 md:w-48' />
               </a>
             </div>
           </div>
@@ -70,21 +79,52 @@ const Header = () => {
               </a>
             ))}
           </div>
+          {/* mobile search option */}
+          <div className=" md:hidden mx-4 -translate-x-4 flex-grow w-32 pt-1 max-w-md">
+            <div className="relative">
+              <input 
+                type="text" 
+                placeholder="Search..." 
+                className="w-full  h-7  rounded-lg bg-primary-textl text-primary-textd  focus:outline-none focus:ring-2 focus:ring-white/50 pl-9"
+              />
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-textd" 
+                width="16" 
+                height="16" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </div>
+          </div>
 
           {/* Login/Signup or Avatar */}
           <div className="hidden md:block">
-            <div className="ml-4 flex items-center">
-              <button className="bg-white text-[#03c6c7] px-4 py-2 rounded-full hover:bg-white/90 transition-colors">
-                Login/Signup
-              </button>
+            <div className="ml-4 flex items-center justify-center">
+              {member ? (
+                <ProfileDP data={data}/>
+              ) : (
+                <NavLink to='/login'>
+                  <button className="bg-white text-primary hover:text-[rgb(34,183,183)] px-4 py-2 rounded-full hover:bg-white/90 transition-colors">
+                    Login/Signup
+                  </button>
+                </NavLink>
+              )}
             </div>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center bg-[#f7f7f7] border-[.2px] rounded-sm border-[#727272]">
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-white hover:text-white/80 focus:outline-none"
+              className="text-primary hover:text-[rgb(34,183,183)] focus:outline-none"
             >
               {isMenuOpen ? (
                 <svg 
@@ -123,55 +163,36 @@ const Header = () => {
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {/* Search for Mobile */}
-              <div className="mb-4">
-                <div className="relative">
-                  <input 
-                    type="text" 
-                    placeholder="Search..." 
-                    className="w-full px-4 py-2 rounded-full bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
-                  />
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white" 
-                    width="24" 
-                    height="24" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                  </svg>
-                </div>
-              </div>
-
+       <div className='flex justify-end'>
+       {isMenuOpen && (
+          <div className="md:hidden w-[180px]   bg-white border-2 border-[#b3b3b3]">
+            <div className="px-4  pb-3 space-y-1 sm:px-3">
               {/* Mobile Navigation Links */}
               {navItems.map((item) => (
-                <a 
-                  key={item.label} 
-                  href={item.href} 
-                  className="text-white hover:bg-white/20 block px-3 py-2 rounded-md"
-                >
-                  {item.label}
-                </a>
+                 <a 
+                 key={item.label} 
+                 href={item.href} 
+                 className="hover:bg-white/20 px-3 py-2 rounded-md transition-colors"
+               >
+                 <span className='flex gap-4 items-center text-sm'>
+                     {item.icon}
+                      {item.label}
+                 </span>
+               </a>
               ))}
 
               {/* Mobile Login/Signup */}
               <div className="pt-4">
-                <button className="w-full bg-white text-[#03c6c7] px-4 py-2 rounded-full hover:bg-white/90 transition-colors">
+              <NavLink to='/login'>
+              <button className="w-full bg-white text-[#03c6c7] px-4 py-2 rounded-full hover:bg-white/90 transition-colors">
                   Login/Signup
                 </button>
+              </NavLink>
               </div>
             </div>
           </div>
         )}
+       </div>
       </div>
     </nav>
   );

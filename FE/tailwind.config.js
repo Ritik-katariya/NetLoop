@@ -5,6 +5,7 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
     "./node_modules/@nextui-org/react/dist/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@nextui-org/theme/dist/components/(avatar|input|form).js"
   ],
   theme: {
     extend: {
@@ -24,5 +25,7 @@ module.exports = {
       },
     },
   },
-  plugins: [nextui()],
+  plugins: [
+    require("@nextui-org/theme")
+  ],
 };
