@@ -161,7 +161,7 @@ const createMember = async (payload: any): Promise<any> => {
       }
 
       const member = await tx.members.create({ data: othersData });
-
+      const profile= await tx.profile.create({data:{memberId:member.id}});
       await tx.auth.update({
         where: { email: othersData.email },
         data: {

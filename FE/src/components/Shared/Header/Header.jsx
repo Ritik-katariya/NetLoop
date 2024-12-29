@@ -9,20 +9,23 @@ import { NavLink } from 'react-router-dom';
 import { memberInfo } from '../../../utils/auth';
 import { useGetMemberQuery } from '../../../redux/api/member';
 import ProfileDP from './ProfileDP';
+import NotificationPage from '../../Notification/NotificationPage';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-const memb=memberInfo();
-const [member, setmember] = useState("")
-useEffect(() => {setmember(memb)},[memb])
+const [member, setMember] = useState("");
+useEffect(() => {
+  const memb = memberInfo();
+  setMember(memb);
+}, []);
 
-const {data}=useGetMemberQuery(member?.id);
-data&&console.log(data)
+const { data } = useGetMemberQuery(member?.id);
+
   const navItems = [
     { label: 'Home', href: '/',icon:<IoHomeOutline className='text-2xl' /> },
     { label: 'Explore', href: '/products',icon:<MdOutlineTravelExplore className='text-2xl'/> },
     { label: 'Network', href: '/services',icon:<MdOutlineGroups3 className='text-2xl'/> },
     { label: 'Message', href: '/about',icon:<AiTwotoneMessage className='text-2xl'/> },
-    { label: 'Notification', href: '/contact',icon:<IoNotifications className='text-2xl'/> }
+    { label: 'Notification', href: '#',icon:<NotificationPage/> },
   ];
 
   return (

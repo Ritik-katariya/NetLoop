@@ -11,7 +11,7 @@ router.post(
   }
 );
 router.patch(
-  "/coverimg/:id",
+  "/banner/:id",
   CloudinaryHelper.upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
     return profileController.updateCoverImg(req, res, next);

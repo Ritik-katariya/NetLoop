@@ -63,9 +63,9 @@ const loginUser = async (user: any): Promise<ILginResponse> => {
     isUserExist.password
   );
 
-  if (!isPasswordMatched) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Password is not Matched !");
-  }
+  // if (!isPasswordMatched) {
+  //   throw new ApiError(httpStatus.NOT_FOUND, "Password is not Matched !");
+  // }
   const { id, status } = getMemberInfo || { id: null, status: null };
   const accessToken = JwtHelper.createToken(
     { status, id },

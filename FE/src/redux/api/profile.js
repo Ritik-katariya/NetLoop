@@ -1,13 +1,13 @@
 import { tagTypes } from "../tag-types";
 import { baseApi } from "./baseApi";
 
-const Member = "/member";
+const Profile = "/details";
 
-export const memberApi = baseApi.injectEndpoints({
+export const profileApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getMembers: build.query({
       query: (arg) => ({
-        url: `${Member}`,
+        url: `${Profile}`,
         method: "GET",
         params: arg,
       }),
@@ -21,14 +21,25 @@ export const memberApi = baseApi.injectEndpoints({
     }),
     getMember: build.query({
       query: (id) => ({
-        url: `${Member}/${id}`,
+        url: `${Profile}/${id}`,
         method: "GET",
       }),
       providesTags: [tagTypes.profile],
     }),
-    updateMember: build.mutation({
+    updateBanner: build.mutation({
       query: ({ data, id }) => ({
-        url: `${Member}/${id}`,
+        url: `${Profile}/banner/${id}`,
+        method: "PATCH",
+        data: data,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }),
+      invalidatesTags: [tagTypes.profile],
+    }),
+    updateBanner: build.mutation({
+      query: ({ data, id }) => ({
+        url: `${Profile}/${id}`,
         method: "PATCH",
         data: data,
         headers: {
@@ -39,22 +50,22 @@ export const memberApi = baseApi.injectEndpoints({
     }),
     sendOtp: build.mutation({
       query: (data) => ({
-        url: `${Member}/sendotp`,
+        url: `${Profile}/sendotp`,
         method: "POST",
         data,
       }),
     }),
     verifyOtp: build.mutation({
       query: (data) => ({
-        url: `${Member}/verifyOTP`,
+        url: `${Profile}/verifyOTP`,
         method: "POST",
         data,
       }),
     }),
-    createMember: build.mutation({
+    updateProfile: build.mutation({
       query: (data) => ({
-        url: `${Member}`,
-        method: "POST",
+        url: `${Profile}`,
+        method: "PATCH",
         data,
       }),
     }),
@@ -67,5 +78,8 @@ export const {
   useUpdateMemberMutation,
   useSendOtpMutation,
   useVerifyOtpMutation,
-  useCreateMemberMutation,
-} = memberApi;
+  useCreateProfileMutation,
+  useUpdateBannerMutation,
+  
+
+} = profileApi;
