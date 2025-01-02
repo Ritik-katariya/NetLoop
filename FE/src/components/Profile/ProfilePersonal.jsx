@@ -41,7 +41,7 @@ console.log(data)
         />
       </div>
       <div className="relative  lg:left-[790px] md:left-[340px] left-[240px] top-[-40px] z-[10]  w-12">
-        <UploadImg id={memberdata?.profile?.id} img={data?.coverImg} />
+        <UploadImg id={memberdata?.profile?.id} img={data?.coverImg} flag={1} />
       </div>
 
       {/* Profile Picture */}
@@ -50,6 +50,9 @@ console.log(data)
           src={data?.img}
           className="absolute -bottom-16 md:-bottom-16 left-12 w-32 h-32 md:w-44 md:h-44  border-4 border-white bg-gray-400"
         />
+        <div className="absolute left-40 md:left-48 top-[20px] z-[10] w-12">
+          <UploadImg id={memberdata?.profile?.id} img={data?.img} flag={0} />
+        </div>
       </div>
 
       {/* Profile Info */}

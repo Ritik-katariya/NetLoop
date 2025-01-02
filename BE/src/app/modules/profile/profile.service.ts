@@ -44,12 +44,17 @@ const createProfile = async (req: Request): Promise<any> => {
 const updateCoverImg = async (req: any): Promise<Profile> => {
   const data = await prisma.$transaction(async (tx) => {
     const file = req.file as any;
-    const { ...othersData } = req.body;
+    const { flag,...othersData } = req.body;
 console.log(req.body)
     if (file) {
       const uploadImage = await CloudinaryHelper.uploadFile(file);
       if (uploadImage) {
-        othersData.coverImg = uploadImage.secure_url;
+        if(flag==='1'){
+          othersData.coverImg = uploadImage.secure_url;
+        }
+        else{
+          othersData.img = uploadImage.secure_url;
+        }
       } else {
         throw new ApiError(
           httpStatus.EXPECTATION_FAILED,
