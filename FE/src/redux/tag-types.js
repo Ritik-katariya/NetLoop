@@ -13,8 +13,11 @@ export const tagTypes = {
   // clinic: 'clinic',
   // overview:'overview',
   // staff: 'staff',
-  profile: "member",
+  member: "member",
   profile: "profile",
+  details: "details",
+  network: "network",
+  email: "email",
 };
 
 export const tagTypeList = [
@@ -31,6 +34,10 @@ export const tagTypeList = [
   // tagTypes.medicine,
   // tagTypes.overview,
   // tagTypes.staff,
+
   tagTypes.profile,
-  tagTypes.profile,
+  tagTypes.member,
+  tagTypes.details,
+  tagTypes.network,
+  tagTypes.email,
 ];

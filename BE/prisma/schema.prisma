@@ -8,53 +8,58 @@ datasource db {
 }
 
 
-  model Members{
-   id         String      @id @default(uuid())
-  name        String
-  email       String      @unique
-  phone       String      @unique
-  status      Boolean     @default(false)
-  verified    Verified?
-  profile     Profile[]
-  posts        Post[]
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @updatedAt
-  networks    Network[]   @relation("MemberNetworks") // Many-to-many relationship
-  Cluster     Cluster[]   @relation("MemberClusters")
-  likes       Likes[]
-  shares      Share[]
-  comments    Comments[]
+model Members {
+  id         String      @id @default(uuid())
+  name       String
+  email      String      @unique
+  phone      String      @unique
+  status     Boolean     @default(false)
+  verified   Verified?
+  profile    Profile?
+  posts      Post[]
+  networks   Network[]   @relation("MemberNetworks") // Many-to-many relationship
+  Cluster    Cluster[]   @relation("MemberClusters")
+  likes      Likes[]
+  shares     Share[]
+  comments   Comments[]
+  explore    Explore[]
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
   @@map("Members")
 }
-model Profile{
-  id                   String            @id     @default(uuid())
-  img                  String?
-  coverImg             String?
-  member               Members?           @relation(fields: [memberId],references: [id])
-  memberId             String?            @unique
-  networks             Network? @relation(fields: [networkId],references: [id])
-  networkId            String?
-  posts                 Post[]
-  bio                  String?
-  address              String?
-  city                 String?
-  state                String?
-  country              String?
-  pincode              Int?
-  dob                  DateTime?
-  gender               Gender?
-  details              Details?
-@@map("Profile")
-}  
+
+model Profile {
+  id        String      @id @default(uuid())
+  img       String?
+  coverImg  String?
+  member    Members     @relation(fields: [memberId], references: [id], onDelete: Cascade) // Fixed here
+  memberId  String      @unique
+  bio       String?
+  address   String?
+  city      String?
+  state     String?
+  country   String?
+  pincode   Int?
+  dob       DateTime?
+  gender    Gender?
+  details   Details?
+  @@map("Profile")
+}
+ 
 
 model Details{
   id                   String            @id     @default(uuid())
-  profile              Profile          @relation(fields: [profileId],references: [id])
+  profile              Profile          @relation(fields: [profileId],references: [id],onDelete: Cascade)
   profileId            String @unique
   education            Education[]
   hobbie               String[]          @default([])
   interests            String[]          @default([])
   overview             String?
+  instagram            String?
+  twitter              String?
+  facebook             String?
+  linkedin             String?
+  github               String?
   work                 Work[]
   skills               String[]          @default([])
   @@map("Details")
@@ -62,7 +67,7 @@ model Details{
 
 model Education{
   id                    String            @id     @default(uuid())
-  details               Details?           @relation(fields: [detailsid],references: [id])
+  details               Details?           @relation(fields: [detailsid],references: [id],onDelete: Cascade)
   detailsid             String?            @unique
   degree                String?
   college               String?
@@ -70,7 +75,7 @@ model Education{
 }
 model Work{
   id                    String            @id     @default(uuid())
-  member                Details?           @relation(fields: [detailsid],references: [id])
+  details               Details?           @relation(fields: [detailsid],references: [id],onDelete: Cascade)
   detailsid             String ?           @unique
   oragnasation          String?
   position              String?
@@ -82,11 +87,11 @@ model Work{
  model Verified{
   id                   String            @id     @default(uuid())
   adharno              Int               @unique
-  adharimg             String  
-  enrollmentno         Int               @unique
+  adharimg             String[]  
+  enrollmentno         String               @unique
   enrollmentimg        String
   realphoto            String
-  member               Members           @relation(fields: [memberId],references: [id])
+  member               Members           @relation(fields: [memberId],references: [id],onDelete: Cascade)
   memberId             String            @unique
   verified             Boolean           @default(false)
   verified_at          DateTime          @default(now())
@@ -117,14 +122,14 @@ model forgotPassword{
   id           String      @id     @default(uuid())
   email        String      @unique
   otp          String?
-  expiresAt    DateTime   @default(now())
+  expiresAt    DateTime    @default(now())
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 }
 model Network {
-  id           String      @id @default(uuid())
-  name         String      @unique
-  verified     Boolean     @default(false)
+  id           String       @id @default(uuid())
+  name         String       @unique
+  verified     Boolean      @default(false)
   address      String[]
   city         String
   state        String
@@ -137,28 +142,23 @@ model Network {
   cover        String?
   followers    Int
   posts        Post[]
-  profile      Profile[]
-  members      Members[]    @relation("MemberNetworks") // Many-to-many relationship
+  members      Members[]     @relation("MemberNetworks") // Many-to-many relationship
   cluster      Cluster[]
   likes        Likes[]
   shares       Share[]
-  comments     Comments[]   
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  comments     Comments[]  
+  explore      Explore[] 
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
   @@map("Network")
 }
 
 
 model Cluster{
-  id           String      @id @default(uuid())
-  Members      Members[]   @relation("MemberClusters")
-  name         String      @unique
-  verified     Boolean     @default(false)
-  address      String[]
-  city         String
-  state        String
-  country      String
-  pincode      Int
+  id           String       @id @default(uuid())
+  Members      Members[]    @relation("MemberClusters")
+  name         String       @unique
+  verified     Boolean      @default(false)
   website      String
   socialmedia  String[]
   about        String
@@ -166,18 +166,18 @@ model Cluster{
   cover        String?
   followers    Int
   posts        Post[]
-  networkId    String
-  network      Network     @relation(fields: [networkId],references: [id])
-  likes        Likes[]
+  networkId    String 
+  network      Network       @relation(fields: [networkId],references: [id],onDelete: Cascade)
+  likes        Likes[] 
   shares       Share[]
   comments     Comments[]
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
  
  @@map("Cluster")
 }
 model Post{
-  id           String        @id @default(uuid())
+  id           String         @id @default(uuid())
   description  String?
   image        String?
   video        String?
@@ -185,19 +185,17 @@ model Post{
   comments     Comments[]
   shares       Share[]
   memberId     String
-  member       Members      @relation(fields: [memberId],references: [id])
+  member       Members       @relation(fields: [memberId],references: [id],onDelete: Cascade)
   networkId    String?
-  network      Network ?    @relation(fields: [networkId],references: [id])
-  profile      Profile?     @relation(fields: [profileId],references: [id])
-  profileId    String?
+  network      Network ?     @relation(fields: [networkId],references: [id],onDelete: Cascade)
   clusterId    String?
-  cluster      Cluster?      @relation(fields: [clusterId],references: [id])
+  cluster      Cluster?      @relation(fields: [clusterId],references: [id],onDelete: Cascade)
   createdAt    DateTime      @default(now())
 }
 model Likes{
   id           String         @id @default(uuid())
   memberId     String
-  member       Members        @relation(fields: [memberId],references: [id])
+  member       Members        @relation(fields: [memberId],references: [id],onDelete: Cascade)
   postId       String?
   post         Post?          @relation(fields: [postId],references: [id])
   network      Network?       @relation(fields: [networkId],references: [id])
@@ -214,12 +212,12 @@ model Likes{
 model Share{
   id           String        @id @default(uuid())
   memberId     String
-  member       Members       @relation(fields: [memberId],references: [id])
+  member       Members       @relation(fields: [memberId],references: [id],onDelete: Cascade)
   postId       String?
   post         Post?         @relation(fields: [postId],references: [id])
-  network      Network?       @relation(fields: [networkId],references: [id])
+  network      Network?      @relation(fields: [networkId],references: [id])
   networkId    String?
-  cluster      Cluster?       @relation(fields: [clusterId],references: [id])
+  cluster      Cluster?      @relation(fields: [clusterId],references: [id])
   clusterId    String?
   exploreId    String
   explore      Explore?      @relation(fields: [exploreId],references: [id])
@@ -231,21 +229,25 @@ model Comments{
   content      String
   memberId     String
   likes        Likes[]
-  member       Members       @relation(fields: [memberId],references: [id])
+  member       Members       @relation(fields: [memberId],references: [id],onDelete: Cascade)
   postId       String?
-  post         Post?         @relation(fields: [postId],references: [id])
-  network      Network?       @relation(fields: [networkId],references: [id])
+  post         Post?         @relation(fields: [postId],references: [id],onDelete: Cascade)
+  network      Network?      @relation(fields: [networkId],references: [id],onDelete: Cascade)
   networkId    String?
-  cluster      Cluster?       @relation(fields: [clusterId],references: [id])
+  cluster      Cluster?      @relation(fields: [clusterId],references: [id],onDelete: Cascade)
   clusterId    String?
   exploreId    String
-  explore      Explore?      @relation(fields: [exploreId],references: [id])
+  explore      Explore?      @relation(fields: [exploreId],references: [id],onDelete: Cascade)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
 
 model Explore{
   id            String        @id @default(uuid())
+  members       Members       @relation(fields: [memberId],references: [id],onDelete: Cascade)
+  memberId      String 
+  network       Network?      @relation(fields: [networkId],references: [id],onDelete: Cascade)
+  networkId     String?
   news          News[]
   events        Events[]
   opinion       Opinion[]
@@ -258,14 +260,14 @@ model Explore{
 }
   
 model News{
-  id           String        @id @default(uuid())
+  id           String         @id @default(uuid())
   title        String
   content      String
   image        String[]
   author       String[]
-  category     String
+  category     Category      @default(news)
   exploreId    String?
-  explore      Explore?      @relation(fields: [exploreId],references: [id])
+  explore      Explore?      @relation(fields: [exploreId],references: [id],onDelete: Cascade)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
@@ -273,13 +275,13 @@ model Events{
   id           String        @id @default(uuid())
   title        String
   description  String
-  location     String
-  startDate    DateTime
-  endDate      DateTime
+  location     String?
+  startDate    DateTime?
+  endDate      DateTime?
   attendees    Int?
   image        String[]
   author       String[]
-  category     String
+  category     Category      @default(events)
   exploreId    String?
   explore      Explore?      @relation(fields: [exploreId],references: [id])
   createdAt    DateTime      @default(now())
@@ -292,6 +294,7 @@ model Opinion{
   poll         Int[]
   rating       Int[]     
   exploreId    String?
+  category     Category      @default(opinion)     
   explore      Explore?      @relation(fields: [exploreId],references: [id])
   createdAt    DateTime      @default(now())
 }
@@ -303,6 +306,7 @@ model Promotion{
   image        String[]
   author       String[]
   exploreId    String?
+  category     Category      @default(promotion)
   explore      Explore?      @relation(fields: [exploreId],references: [id])
   createdAt    DateTime      @default(now())
 
@@ -320,6 +324,11 @@ enum Gender{
   notdisclosed
   other
 }
-
+ enum Category{
+  news
+  events
+  opinion
+  promotion
+  }
 
 

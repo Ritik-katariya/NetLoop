@@ -10,7 +10,13 @@ import netloop from "../../../images/netloop.png";
 import { removeTokenFromCookie } from "../../../utils/cookeeSet";
 import {Link, NavLink}  from "react-router-dom"
 export default function ProfileDP({ data }) {
-  console.log(data?.name);
+  console.log()
+  function logouthandler() {
+    removeTokenFromCookie();
+    window.location.reload();
+  }
+
+
   return (
     <div className="flex items-center gap-4 ">
       <Dropdown placement="bottom-end">
@@ -28,9 +34,9 @@ export default function ProfileDP({ data }) {
           className="bg-gray-100"
         >
           <DropdownItem key="profile" className="h-14 gap-2 ">
-            <p className="font-semibold"><NavLink to={"/profile"}>{data?.name}</NavLink></p>
+            <p className="font-semibold"><NavLink to={`/profile/${data?.profile.id}`}>{data?.name}</NavLink></p>
           </DropdownItem>
-          <DropdownItem key="settings"><NavLink to={"/profile"}>My Profile</NavLink></DropdownItem>
+          <DropdownItem key="settings"><NavLink to={`/profile/${data?.profile.id}`}>My Profile</NavLink></DropdownItem>
           <DropdownItem key="team_settings">Team Settings</DropdownItem>
           <DropdownItem key="analytics">Analytics</DropdownItem>
           <DropdownItem key="system">System</DropdownItem>
@@ -39,7 +45,7 @@ export default function ProfileDP({ data }) {
           <DropdownItem
             key="logout"
             color="danger"
-            onClick={removeTokenFromCookie}
+            onClick={logouthandler}
           >
             Log Out
           </DropdownItem>

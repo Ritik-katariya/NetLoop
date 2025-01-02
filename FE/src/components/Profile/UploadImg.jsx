@@ -9,25 +9,25 @@ import {
   } from "@nextui-org/react";
   import { Image } from "@nextui-org/image";
   import { useState } from "react";
-  import { useUpdateBannerMutation } from "../../redux/api/profile";
   import { ToastContainer, toast } from "react-toastify";
   import { RiEditFill } from "react-icons/ri";
-  export default function App({ id }) {
+  import { useUpdateProfileBannerMutation } from "../../redux/api/profile";
+  export default function UploadImg({id,img} ) {
     const [file, setFile] = useState(null);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [updateBanner] = useUpdateBannerMutation(); // Moved outside Uploadhandler
-  
+    const [updateProfileBanner,{isLoading,isSuccess}] = useUpdateProfileBannerMutation(); // Moved outside 
     const Uploadhandler = async (e) => {
       e.preventDefault(); // Prevent default form submission
       if (!file) {
         toast.error("Please select a file to upload");
         return;
       }
+    
   
       try {
         const formData = new FormData();
         formData.append("file", file);
-        await updateBanner({ file: formData, id }).unwrap();
+        await updateProfileBanner({ formData, id}).unwrap();
         toast.success("Image uploaded successfully");
         setFile(null); // Clear the file input
         onOpenChange(false); // Close the modal
@@ -39,7 +39,7 @@ import {
   
     return (
       <>
-        <Button onPress={onOpen}><RiEditFill /></Button>
+        <Button onPress={onOpen} className="w-12 h-12 bg-[#ffffff73] rounded-full"><RiEditFill /></Button>
         <Modal
           backdrop="opaque"
           classNames={{
@@ -50,16 +50,16 @@ import {
           onOpenChange={onOpenChange}
         >
           <ToastContainer />
-          <ModalContent>
+          <ModalContent className="bg-[#0000003f] ">
             {(onClose) => (
               < >
-                <ModalHeader className="flex flex-col gap-1">
+                <ModalHeader className="flex flex-col gap-1 text-primary text-2xl font-mono font-semibold">
                   Upload Banner
                 </ModalHeader>
                 <ModalBody>
                   <Image
-                    alt="NextUI hero Image"
-                    src="https://nextui.org/images/hero-card-complete.jpeg"
+                    alt="Cover Image"
+                    src={img}
                     width={300}
                   />
                   <form
@@ -67,29 +67,31 @@ import {
                     onSubmit={Uploadhandler}
                   >
                     <div className="shrink-0">
-                      <img
-                        className="h-16 w-16 object-cover rounded-full"
-                        src="https://nextui.org/images/hero-card-complete.jpeg"
-                        alt="Current profile photo"
-                      />
+                      {file && (
+                        <img
+                          className="h-16 w-16 object-cover rounded-full"
+                          src={URL.createObjectURL(file)}
+                          alt="current photo"
+                        />
+                      )}
                     </div>
                     <label className="block">
                       <span className="sr-only">Choose profile photo</span>
                       <input
                         type="file"
                         onChange={(e) => setFile(e.target.files[0])} // Correct file handling
-                        className="block w-full text-sm text-slate-500
+                        className="block w-full text-sm text-gray-300
                           file:mr-4 file:py-2 file:px-4
                           file:rounded-full file:border-0
                           file:text-sm file:font-semibold
-                          file:bg-violet-50 file:text-violet-700
-                          hover:file:bg-violet-100"
+                          file:bg-cyan-50 file:text-primary
+                          hover:file:bg-cyan-100"
                       />
                     </label>
   
                     <div>
-                      <Button color="primary" type="submit" className="rounded-lg">
-                        Upload
+                      <Button color="primary" type="submit" className="rounded-lg text-white" disabled={isLoading}>
+                        {isLoading?"Loading..":"Upload"}
                       </Button>
                     </div>
                   </form>

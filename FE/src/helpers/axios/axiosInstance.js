@@ -20,7 +20,7 @@ instance.interceptors.response.use(function (response) {
     const responseObj = {
         data: response?.data?.data,
         meta: response?.data?.meta
-    }
+    };
     return responseObj;
 }, function (error) {
     return Promise.reject(error);

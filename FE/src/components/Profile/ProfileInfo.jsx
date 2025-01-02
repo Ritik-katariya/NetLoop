@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IoPeople } from "react-icons/io5";
 import { FaRegHeart,FaInstagram  } from "react-icons/fa";
 import { TbBrandYoutubeFilled } from "react-icons/tb";
 import { Button } from "@nextui-org/react";
 import { MdModeEditOutline  } from "react-icons/md";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
+import { useGetProfileQuery } from "../../redux/api/profile";
+import { useState } from "react";
 export default function ProfileInfo() {
+  const id=useParams().id;
+    const { data, error, isLoading, isSuccess } = useGetProfileQuery(id);
+  const [detaildata, setDetaildata] = useState("")
+  useEffect(()=>{
+    setDetaildata(data?.details);
+  },[data])
     const profileData = {
         name: "Ritik Kumar",
         bio: "I am a Student at NIT Agartala 2026 | A Full stack Web developer In MERN Stack",
@@ -25,14 +33,14 @@ export default function ProfileInfo() {
   return (
    
        <div className="bg-white p-4 w-2/5 text-xs rounded-md shadow-lg lg:h-[560px]">
-        <div>
+        {detaildata?.overview&& <div>
             <h2 className="text-base font-semibold">Overview</h2>
-            <p >{profileData.bio}</p>
-        </div>
-            <div className="mt-6">
+           <p >{detaildata?.overview}</p>
+        </div>}
+            {detaildata?.interests?.lenth>0&&<div className="mt-6">
                 <h2 className="text-base font-semibold mb-4">Interests</h2>
                 <div className="flex flex-wrap gap-2">
-                    {profileData.interests.map((interest) => (
+                    {detaildata?.interests.map((interest) => (
                     <span
                         key={interest}
                         className="px-3 py-1 bg-gray-100 rounded-full text-sm"
@@ -41,12 +49,12 @@ export default function ProfileInfo() {
                     </span>
                     ))}
                 </div>
-            </div>
+            </div>}
           
-          <div className="mt-6">
+          {detaildata?.hobbie?.lenth>0&&<div className="mt-6">
             <h2 className="text-base font-semibold mb-4">Hobbies</h2>
             <div className="flex flex-wrap gap-2">
-              {profileData.hobbies.map((hobby) => (
+              {detaildata.hobbie.map((hobby) => (
                 <span
                   key={hobby}
                   className="px-3 py-1 bg-gray-100 rounded-full text-sm"
@@ -55,10 +63,10 @@ export default function ProfileInfo() {
                 </span>
               ))}
             </div>
-          </div>
+          </div>}
 
           {/* Social Links */}
-          <div className="mt-6 pb-8">
+          {<div className="mt-6 pb-8">
             <h2 className="text-base font-semibold mb-4">Social</h2>
             <div className="space-y-2">
               <p className="flex cursor-pointer items-center gap-2" ><span className="font-semibold flex justify-center items-center gap-2"><IoPeople />
@@ -68,9 +76,9 @@ export default function ProfileInfo() {
               <p className="flex cursor-pointer items-center gap-2"><span className="font-semibold flex justify-center items-center gap-2"><TbBrandYoutubeFilled />YouTube: @</span>{profileData.social.youtube}</p>
             </div>
 
-          </div>
+          </div>}
         <div className="flex justify-center items-center  font-semibold">
-       <NavLink to="/profile/details-edit">
+       <NavLink to={`/profile/details-edit/${detaildata?.id}`}>
        <Button className="bg-primary rounded-lg h-8 text-white text-base" ><MdModeEditOutline/> Details</Button>
        </NavLink>
         </div>

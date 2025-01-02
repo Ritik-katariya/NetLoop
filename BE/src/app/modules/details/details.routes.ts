@@ -6,7 +6,7 @@ import { detailsController } from "./details.controller";
 router.post("/", detailsController.createDetails);
 
 router.get("/:id", detailsController.getoneDetails);
-router.patch("/:id?", detailsController.updateDetails);
+router.put("/:id?", detailsController.updateDetails);
 router.delete("/:id?", detailsController.deleteDetails);
 
 export const detailsRouter = router;

@@ -38,87 +38,87 @@ const sendOtponEmail = async (email: string, otp: string) => {
 };
 
 //use for resend otp email
-const reSendOtponEmail = async (payload: any) => {
-  const { email } = payload;
+const sendOTP = async (payload: any): Promise<any> => {
+  const { email, password } = payload;
+
+  if (!email) {
+    throw new Error("Enter Email !!");
+  }
+
+  if (!validateEmail(email)) {
+    throw new Error("Enter a Valid Email");
+  }
+
   const pathName = path.join(__dirname, "../../../../template/verify.html");
   const subject = "Sending OTP for Email Verification";
-  const isExist = await prisma.otpverify.findUniqueOrThrow({
-    where: {
-      email,
-    },
-  });
-  const expiresDate = new Date(Date.now() + 10 * 60 * 1000);
-  const otp = otpGenerator.generate(6, {
-    upperCaseAlphabets: false,
-    specialChars: false,
-  });
 
-  const uVerify = await prisma.otpverify.update({
-    where: {
-      email,
-    },
-    data: {
-      expiresAt: expiresDate,
-      otp,
-    },
-  });
+  const data: any = await prisma.$transaction(
+    async (tx) => {
+      const isExist = await tx.otpverify.findUnique({
+        where: {
+          email,
+        },
+      });
 
-  const obj = { OTP: otp };
-  const toMail = email;
+      const otp = otpGenerator.generate(6, {
+        upperCaseAlphabets: false,
+        specialChars: false,
+      });
+
+      const expiresDate = new Date(Date.now() + 10 * 60 * 1000);
+
+      if (isExist) {
+        // Update OTP and expiration if the user already exists
+        await tx.otpverify.update({
+          where: {
+            email,
+          },
+          data: {
+            expiresAt: expiresDate,
+            otp,
+          },
+        });
+      } else {
+        // Validate password for new registrations
+        if (!password || password.length < 8) {
+          throw new Error("Password should be at least 8 characters long");
+        }
+        const hashpassword = await bcrypt.hash(password, 10);
+
+        // Create a new verification record
+        await tx.otpverify.create({
+          data: {
+            email,
+            expiresAt: expiresDate,
+            otp,
+            password: hashpassword,
+          },
+        });
+      }
+
+      return { email, otp };
+    },
+    {
+      timeout: 10000,
+    }
+  );
+
+  // const obj = { OTP: data.otp };
+  // const toMail = data.email;
+
   try {
-    await EmailtTransporter({ pathName, replacementObj: obj, toMail, subject });
+    // await EmailtTransporter({ pathName, replacementObj: obj, toMail, subject });
+    sendOtponEmail(data.email, data.otp);
   } catch (err) {
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
       "Unable to send email !"
     );
   }
-};
 
-//use for signup
-const sendOTP = async (payload: any): Promise<any> => {
-  const data: any = await prisma.$transaction(
-    async (tx) => {
-      const { email, password } = payload;
-      const isExist = await tx.otpverify.findUnique({
-        where: {
-          email,
-        },
-      });
-      if (!email) {
-        throw new Error("Enter Email !!");
-      }
-      if (!validateEmail(email)) {
-        throw new Error("Enter a Valid Email");
-      }
-      if (isExist) {
-        return reSendOtponEmail(email);
-      }
-      if (password.length < 8) {
-        throw new Error("Password should be at least 8 characters long");
-      }
-      const hashpassword = await bcrypt.hash(password, 10);
 
-      const expiresDate = new Date(Date.now() + 10 * 60 * 1000);
-      const otp = otpGenerator.generate(6, {
-        upperCaseAlphabets: false,
-        specialChars: false,
-      });
-      const mVerify = await tx.otpverify.create({
-        data: {
-          email,
-          expiresAt: expiresDate,
-          otp,
-          password: hashpassword,
-        },
-      });
-      return mVerify;
-    },
-    {
-      timeout: 10000,
-    }
-  );
-  sendOtponEmail(data.email, data.otp);
+
+  return { message: "OTP sent successfully", email: data.email };
 };
 
 //use for verify otp and  create a auth table
@@ -162,6 +162,7 @@ const createMember = async (payload: any): Promise<any> => {
 
       const member = await tx.members.create({ data: othersData });
       const profile= await tx.profile.create({data:{memberId:member.id}});
+      const details= await tx.details.create({data:{profileId:profile.id}});
       await tx.auth.update({
         where: { email: othersData.email },
         data: {
@@ -224,6 +225,9 @@ const getoneMember = async (id: string): Promise<Members | null> => {
     where: {
       id: id,
     },
+    include: {
+      profile: true
+    },
   });
   return result;
 };
@@ -260,7 +264,7 @@ const deleteMember = async (id: string): Promise<any> => {
 export const memberService = {
   createMember,
   sendOTP,
-  reSendOtponEmail,
+ 
   verifyOTP,
   getoneMember,
   updateMember,

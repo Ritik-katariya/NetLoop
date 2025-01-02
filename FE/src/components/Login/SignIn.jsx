@@ -11,8 +11,11 @@ import { saveTokenToCookie } from "../../utils/cookeeSet";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
+import { selectEmail } from "../../redux/feature/emailSlice";
 
 export default function SignIn({ setActiveForm }) {
+  const emailValue = useSelector(selectEmail);
   const navigate = useNavigate();
   const [loginMutation] = useUserLoginMutation();
   const [isVisible, setIsVisible] = useState(false);
@@ -20,18 +23,20 @@ export default function SignIn({ setActiveForm }) {
   const [password, setPassword] = useState("");
   const toggleVisibility = () => setIsVisible(!isVisible);
 
+  if(emailValue)setEmail(emailValue);
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
       const res = await loginMutation({ email, password });
       if (res?.error) {
-        toast.error( res.error.data.message);
+        toast.error( res.error.data);
         console.log("error", res.error);
       } else if (res?.data) {
         const savetoken = saveTokenToCookie(res.data.accessToken);
         console.log(savetoken);
         toast.success("Login success");
+        
         navigate("/");
       }
     } catch (error) {

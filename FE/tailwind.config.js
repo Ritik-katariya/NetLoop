@@ -5,7 +5,7 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
     "./node_modules/@nextui-org/react/dist/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@nextui-org/theme/dist/components/(avatar|input|modal|tabs|form).js"
+    "./node_modules/@nextui-org/theme/dist/components/(avatar|drawer|input|input-otp|modal|select|tabs|form|listbox|divider|popover|button|ripple|spinner|scroll-shadow).js"
   ],
   theme: {
     extend: {

@@ -25,8 +25,9 @@ const createProfile = async (req: Request): Promise<any> => {
         }
       }
 
-     try { const profile = await tx.profile.create({ data: othersData });
-
+     try {
+       const profile = await tx.profile.create({ data: othersData });
+       const details= await tx.details.create({data:{profileId:profile.id}});
      return profile;
       
      } catch (error) {
@@ -42,9 +43,9 @@ const createProfile = async (req: Request): Promise<any> => {
 
 const updateCoverImg = async (req: any): Promise<Profile> => {
   const data = await prisma.$transaction(async (tx) => {
-    const file = req.files as any;
+    const file = req.file as any;
     const { ...othersData } = req.body;
-
+console.log(req.body)
     if (file) {
       const uploadImage = await CloudinaryHelper.uploadFile(file);
       if (uploadImage) {
@@ -56,11 +57,20 @@ const updateCoverImg = async (req: any): Promise<Profile> => {
         );
       }
     }
-    const profile = await tx.profile.update({
-      where: { id: req.params.id },
-      data: othersData,
-    });
-    return profile;
+    try {
+      const profile = await tx.profile.update({
+        where: { id: req.params.id },
+        data: othersData,
+      });
+      return profile;
+      
+    } catch (error) {
+      console.log(error);
+      throw new Error("Failed to update profile");
+      
+    }
+  }, {
+    timeout: 200000
   });
   return data;
 };
@@ -73,6 +83,9 @@ const getProfile = async (id: string): Promise<Profile | null> => {
     where: {
       id: id,
     },
+    include: {
+      details: true,
+    },
   });
   return result;
 };
@@ -80,7 +93,9 @@ const getProfile = async (id: string): Promise<Profile | null> => {
 const updateProfile = async (req: Request): Promise<Profile> => {
   const file = req.file as IUpload;
   const id = req.params.id as string;
-  const { ...othersData } = req.body;
+  const { pincode, ...othersData } = req.body.data;
+  const convertedPincode = parseInt(pincode);
+  othersData.pincode = convertedPincode;
 
   if (file) {
     const uploadImage = await CloudinaryHelper.uploadFile(file);
@@ -93,11 +108,18 @@ const updateProfile = async (req: Request): Promise<Profile> => {
       );
     }
   }
-  const result = await prisma.profile.update({
-    where: { id },
-    data: othersData,
-  });
+  try {
+    const result = await prisma.profile.update({
+      where: { id },
+      data: othersData,
+    });
   return result;
+
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to update profile");
+    
+  }
 };
 const deleteProfile = async (id: string): Promise<any> => {
   const result = await prisma.$transaction(async (tx) => {

@@ -103,14 +103,14 @@ const updateNetwork = async (req: any): Promise<any> => {
 const getNetwork = async (id: string): Promise<Network> => {
   if (!id) throw new Error("id is required");
   
-  const result: any = await prisma.network.findFirst({ where: { id: id } });
+  const result: any = await prisma.network.findFirst({ where: { id: id ,verified:true} });
 
   return result;
 };
 const getNetworks = async (): Promise<Network[]> => {
   
   
-  const result: any = await prisma.network.findMany();
+  const result: any = await prisma.network.findMany({ where: {verified:true} });
 
   return result;
 };
@@ -120,6 +120,7 @@ const deleteNetwork = async (id: string): Promise<any> => {
     const details = await tx.network.delete({
       where: {
         id: id,
+       
       },
     });
     return details;

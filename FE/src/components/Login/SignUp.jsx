@@ -1,22 +1,24 @@
 import React, { useState } from "react";
-import { Input } from "@nextui-org/react";
-import { Button } from "@nextui-org/react";
-import { Divider, Link } from "@nextui-org/react";
+import { Input, Button, Divider, Link } from "@nextui-org/react";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { TbPasswordFingerprint } from "react-icons/tb";
-import { BsFillEyeSlashFill } from "react-icons/bs";
-import { BsFillEyeFill } from "react-icons/bs";
+import { BsFillEyeSlashFill, BsFillEyeFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import {useSendOtpMutation}  from "../../redux/api/member";
-
+import { useSendOtpMutation } from "../../redux/api/member";
+import { ToastContainer, toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { setEmail, selectEmail } from "../../redux/feature/emailSlice";
 
 export default function SignUp({ setActiveForm }) {
-  const [sendOtpMutation, { isLoading, }] = useSendOtpMutation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [sendOtpMutation] = useSendOtpMutation();
+
+  const email = useSelector(selectEmail);
   const [isVisible, setIsVisible] = useState(false);
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setconfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const EyeIcon = ({ isVisible, onClick }) => (
@@ -25,56 +27,57 @@ export default function SignUp({ setActiveForm }) {
     </button>
   );
 
-  const handleSignup =async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    const user={email,password}
-    await sendOtpMutation(user);
-    
-    // Implement signup logic here
-    console.log("Signup attempt with:", { email, password });
-    navigate("/verifyotp");
+    const user = { email, password };
+
+    try {
+      const result = await sendOtpMutation(user).unwrap();
+      toast.success("OTP sent successfully!");
+      navigate("/verifyotp");
+    } catch (error) {
+      toast.error("Failed to send OTP. Please try again.");
+      console.error("Failed to send OTP:", error);
+    }
   };
+
   return (
     <div>
       <form onSubmit={handleSignup} className="flex flex-col space-y-4">
+        <ToastContainer />
         <Input
           type="email"
-          // label="Email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => dispatch(setEmail(e.target.value))}
           placeholder="Enter your email"
           startContent={<MdOutlineAlternateEmail />}
           required
         />
         <Input
           type={isVisible ? "text" : "password"}
-          // label="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Create a password"
           startContent={<TbPasswordFingerprint />}
-          endContent={
-            <EyeIcon isVisible={isVisible} onClick={toggleVisibility} />
-          }
+          endContent={<EyeIcon isVisible={isVisible} onClick={toggleVisibility} />}
           required
         />
         <Input
           type="password"
           value={confirmPassword}
-          // label="Confirm Password"
+          onChange={(e) => setConfirmPassword(e.target.value)}
           placeholder="Confirm your password"
-          onChange={(e) => setconfirmPassword(e.target.value)}
           startContent={<TbPasswordFingerprint />}
           required
         />
-        {password !== confirmPassword && <p>Confirm password not match</p>}
+        {password && confirmPassword && password !== confirmPassword && (
+          <p className="text-red-500 text-sm">Passwords do not match</p>
+        )}
         <Button
           type="submit"
-          // size="lg"
-          // variant="solid"
-          disabled={password !== confirmPassword}
+          disabled={!email || password !== confirmPassword}
           color="primary"
-          className="w-full"
+          className="w-full cursor-pointer"
         >
           Sign Up
         </Button>
@@ -83,7 +86,7 @@ export default function SignUp({ setActiveForm }) {
           <span>Already have an account? </span>
           <Link
             color="primary"
-            href="login"
+            href="/login"
             onClick={() => setActiveForm("login")}
           >
             Login

@@ -28,8 +28,8 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/verifyotp' element={<OtpVerify />} />
         <Route path='/create' element={<UserCreate />} />
-        <Route path='/profile' element={<ProfileApp />} />
-        <Route path='profile/details-edit' element={<ProfileDetailsForm />} />
+        <Route path='/profile/:id?' element={<ProfileApp />} />
+        <Route path='/profile/details-edit/:id?' element={<ProfileDetailsForm />} />
         {/* <Route path='/signup' element={<SignUp />} /> */}
        
         

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export const useDebounced = ({ searchQuery, delay }) => {
     const [debouncedValue, setDebouncedValue] = useState(searchQuery);
@@ -15,3 +16,7 @@ export const useDebounced = ({ searchQuery, delay }) => {
 
     return debouncedValue;
 }
+
+export const useEmail = () => {
+    return useSelector((state) => state.email.email);
+};
