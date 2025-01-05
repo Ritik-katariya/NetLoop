@@ -207,6 +207,11 @@ const getAllMember = async (
 
   const result = await prisma.members.findMany({
     where: whereCondition,
+    include: {
+      profile: true,
+     
+      verified: true,
+    }
   });
 
   const total = await prisma.members.count({ where: whereCondition });
@@ -226,7 +231,8 @@ const getoneMember = async (id: string): Promise<Members | null> => {
       id: id,
     },
     include: {
-      profile: true
+      profile: true,
+      verified: true,
     },
   });
   return result;

@@ -86,9 +86,9 @@ model Work{
 }
  model Verified{
   id                   String            @id     @default(uuid())
-  adharno              Int               @unique
-  adharimg             String[]  
-  enrollmentno         String               @unique
+  adharno              String               @unique
+  adharimg             String  
+  enrollmentno         String            @unique
   enrollmentimg        String
   realphoto            String
   member               Members           @relation(fields: [memberId],references: [id],onDelete: Cascade)

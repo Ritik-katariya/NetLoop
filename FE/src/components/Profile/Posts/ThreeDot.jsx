@@ -12,7 +12,7 @@ import {
 import { MdModeEditOutline } from "react-icons/md";
 import CreatePost from "./CreatePost";
 import { useDeletePostMutation } from "../../../redux/api/post";
-import { toast,ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function OptionButton({id}) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();

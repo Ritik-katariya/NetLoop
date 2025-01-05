@@ -37,7 +37,7 @@ export default function ProfileDP({ data }) {
             <p className="font-semibold"><NavLink to={`/profile/${data?.profile.id}`}>{data?.name}</NavLink></p>
           </DropdownItem>
           <DropdownItem key="settings"><NavLink to={`/profile/${data?.profile.id}`}>My Profile</NavLink></DropdownItem>
-          <DropdownItem key="team_settings">Team Settings</DropdownItem>
+          <DropdownItem key="team_settings"><NavLink to={`/verify/${data?.id}`}> Verification</NavLink></DropdownItem>
           <DropdownItem key="analytics">Analytics</DropdownItem>
           <DropdownItem key="system">System</DropdownItem>
           <DropdownItem key="configurations">Configurations</DropdownItem>

@@ -6,6 +6,7 @@ import { detailsRouter } from "../modules/details/details.routes";
 import { networkRouter } from "../modules/network/network.routes";
 import { clusterRouter } from "../modules/cluster/cluster.routes";
 import { postRouter } from "../modules/post/post.routes";
+import { verificationRouter } from "../modules/verification/verification.routes";
 const router = express.Router();
 
 const moduleRoutes = [
@@ -38,6 +39,11 @@ const moduleRoutes = [
   {
     path:"/post",
     route:postRouter, 
+  }
+  ,
+  {
+    path:"/verification",
+    route:verificationRouter, 
   }
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

@@ -4,7 +4,7 @@ import { IoHomeOutline } from "react-icons/io5";
 import { MdOutlineTravelExplore } from "react-icons/md";
 import { MdOutlineGroups3 } from "react-icons/md";
 import { AiTwotoneMessage } from "react-icons/ai";
-import { IoNotifications } from "react-icons/io5";
+// import { IoNotifications } from "react-icons/io5";
 import { NavLink } from 'react-router-dom';
 import { memberInfo } from '../../../utils/auth';
 import { useGetMemberQuery } from '../../../redux/api/member';
@@ -16,12 +16,14 @@ import { setProfile } from '../../../redux/feature/profileSlice';
 const Header = () => {
   const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const id=memberInfo().id;
+  const member = memberInfo();
+  const id = member ? member.id : null;
 
-  const { data } = useGetMemberQuery(id);
+  const { data } = useGetMemberQuery(id, { skip: !id });
 useEffect(() => {
   if (data) {
-    const memb = { name: data.name, id: data.id, network: data.network };
+    console.log(data);
+    const memb = { name: data.name, id: data.id, network: data.network ,verified: data.verified};
     dispatch(setMember(memb));
   }
 }, [data, dispatch]);

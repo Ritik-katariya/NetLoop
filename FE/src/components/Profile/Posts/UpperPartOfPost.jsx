@@ -5,13 +5,14 @@ import { useSelector } from 'react-redux';
 import MenuModal from './ThreeDot';
 import CreatePost from './CreatePost';
 import OptionButton from './ThreeDot';
-
+import { GiCheckMark } from "react-icons/gi";
 const PostHeader = ({post}) => {
-   const { member, network } = useSelector((state) => ({
+   const { member, network,verified } = useSelector((state) => ({
      member: state.member.name,
-     network: state.member.networks
+     network: state.member.networks,
+     verified:state.member.verified
    }));
-  
+  console.log("verified",verified);
  const img = useSelector((state) => state.profile.img);
 
 
@@ -27,7 +28,7 @@ const PostHeader = ({post}) => {
         <div className="flex flex-col">
           <h3 className="text-base font-semibold">{member}</h3>
           {network.length > 0 && <p className="text-sm text-gray-500">{network[0]?.name}</p>}
-        </div>
+        </div>{verified&&<GiCheckMark className='text-primary'/>}
       <span className="text-sm text-gray-400 ml-2">{getTimeAgo(new Date(post?.createdAt))}</span>
              </div>
              <OptionButton id={post?.id}/>

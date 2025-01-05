@@ -14,6 +14,7 @@ import UserCreate from './components/Login/UserCreate';
 import Profile from './components/Profile/Profile';
 import ProfileApp from './components/Profile/ProfileApp';
 import ProfileDetailsForm from './components/Profile/EditProfileForm';
+import VerifiedPage from './components/Verify/VerifiedPage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path='/verifyotp' element={<OtpVerify />} />
         <Route path='/create' element={<UserCreate />} />
         <Route path='/profile/:id?' element={<ProfileApp />} />
+        <Route path='/verify/:id?' element={<VerifiedPage />} />
         <Route path='/profile/details-edit/:id?' element={<ProfileDetailsForm />} />
         {/* <Route path='/signup' element={<SignUp />} /> */}
        
