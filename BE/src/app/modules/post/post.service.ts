@@ -10,8 +10,8 @@ import { CloudinaryHelper } from "../../../helper/uploadHelper";
 const createPost = async (req: Request): Promise<any> => {
   const data = await prisma.$transaction(
     async (tx) => {
-      const files = req.files as { image?: any; video?: any };
-      const { memberId, ...otherData } = req.body;
+      const files = req.file as any;
+      const { memberId,networkId,clusterId, ...otherData } = req.body;
 
       // Validate if memberId exists in the Members table
       const memberExists = await tx.members.findUnique({
@@ -21,9 +21,10 @@ const createPost = async (req: Request): Promise<any> => {
         throw new ApiError(httpStatus.NOT_FOUND, "Member not found");
       }
 
-      // Handle image upload
-      if (files?.image) {
-        const uploadImage = await CloudinaryHelper.uploadFile(files.image[0]);
+    if (files) {
+      if ( files.mimetype.startsWith("image/")) {
+        // Handle image upload
+        const uploadImage = await CloudinaryHelper.uploadFile(files);
         if (uploadImage) {
           otherData.image = uploadImage.secure_url;
         } else {
@@ -32,11 +33,9 @@ const createPost = async (req: Request): Promise<any> => {
             "Failed to upload image"
           );
         }
-      }
-
-      // Handle video upload
-      if (files?.video) {
-        const uploadVideo = await CloudinaryHelper.uploadFile(files.video[0]);
+      } else if (files.mimetype.startsWith("video/")) {
+        // Handle video upload
+        const uploadVideo = await CloudinaryHelper.uploadFile(files);
         if (uploadVideo) {
           otherData.video = uploadVideo.secure_url;
         } else {
@@ -46,6 +45,10 @@ const createPost = async (req: Request): Promise<any> => {
           );
         }
       }
+    }
+
+      // Handle video upload
+      
 
       // Create post
       try {
@@ -57,7 +60,7 @@ const createPost = async (req: Request): Promise<any> => {
       }
     },
     {
-      timeout: 50000, // 10 seconds timeout for the transaction
+      timeout: 500000, // 10 seconds timeout for the transaction
     }
   );
 

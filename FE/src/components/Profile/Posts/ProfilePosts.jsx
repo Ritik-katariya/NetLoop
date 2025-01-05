@@ -1,11 +1,21 @@
-import React from 'react'
-import PostComponent from '../../Home/Posts/PostComponent'
+import React from 'react';
+import PostComponent from '../../Home/Posts/PostComponent';
+import { useGetPostsQuery } from '../../../redux/api/post';
 
 export default function ProfilePosts() {
-    const arr=[1,2,3,4]
+  const { data, isLoading, isSuccess, error } = useGetPostsQuery();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error?.message || "An unexpected error occurred."}</div>;
+  if (!isSuccess || !Array.isArray(data)) return <div>No posts available.</div>;
+console.log(data);
   return (
-    <div>
-      {arr.map(()=>(<PostComponent/>))}
+    <div className='flex flex-col gap-4 justify-center'>
+      {data.length > 0 ? (
+        data.map((post) => <PostComponent key={post?.id} post={post} />)
+      ) : (
+        <div>No posts found.</div>
+      )}
     </div>
-  )
+  );
 }

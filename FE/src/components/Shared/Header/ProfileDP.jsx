@@ -10,7 +10,7 @@ import netloop from "../../../images/netloop.png";
 import { removeTokenFromCookie } from "../../../utils/cookeeSet";
 import {Link, NavLink}  from "react-router-dom"
 export default function ProfileDP({ data }) {
-  console.log()
+
   function logouthandler() {
     removeTokenFromCookie();
     window.location.reload();

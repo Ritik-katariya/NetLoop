@@ -1,13 +1,14 @@
 import React from 'react'
 import PostComponent from './PostComponent'
-
+import { useGetPostsQuery } from '../../../redux/api/post'
 export default function Posts() {
-    const arr=[1,2,3,4,5,6,7,8,9,10]
+  const { data, isLoading, isSuccess, error } = useGetPostsQuery();
+    
   return (
     <div className='w-full px-6 flex flex-col justify-center items-start py-4'>
       {
-        arr.map(item=>(
-          <PostComponent item={item} id={item.index}/>
+        data?.map(item=>(
+          <PostComponent post={item} key={item.index} />
         ))
       }
     </div>

@@ -2,13 +2,13 @@ import React from "react";
 import { Card, Button, Avatar } from "@nextui-org/react";
 import UploadImg from "./UploadImg";
 import { RiEditFill } from "react-icons/ri";
-import { MdAdd,MdModeEditOutline  } from "react-icons/md";
 import { useGetProfileQuery } from "../../redux/api/profile";
 import { useParams } from "react-router-dom";
 import { memberInfo } from "../../utils/auth";
 import { useGetMemberQuery } from "../../redux/api/member";
 import { useState,useEffect } from "react";
 import ProfileInfoEdit from "./ProfileInfoEdit/ProfileInfoEdit";
+import CreatePost from "./Posts/CreatePost";
 
 export default function ProfilePersonal() {
   const member = memberInfo();
@@ -20,7 +20,7 @@ export default function ProfilePersonal() {
     
   }, [misSuccess, memberdata]);
 
-console.log(data)
+
   const profileData = {
    
     stats: {
@@ -64,12 +64,16 @@ console.log(data)
             </h1>
             <div className="space-x-4 flex justify-end items-center ">
               <ProfileInfoEdit/>
-              <Button  className="w-24 h-8 bg-gray-100  hover:bg-teal-300 focus:font-semibold focus:text-blu-950 rounded-lg "> <MdAdd />Post</Button>
+              <CreatePost id={''}/>
               
             </div>
           </div>
 
          {data?.bio&& <p className="text-gray-600 mt-1 text-sm text-center">{data?.bio}</p>}
+        </div>
+        <div className="flex gap-2 mt-1 text-gray-400 text-xs">
+          <span>{data?.city}</span>
+          <span>{data?.state}</span>
         </div>
       </div>
 

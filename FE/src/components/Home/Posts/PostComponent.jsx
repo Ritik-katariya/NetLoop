@@ -1,26 +1,21 @@
 import React from "react";
+import PostHeader from "../../Profile/Posts/UpperPartOfPost";
+import { Image } from "@nextui-org/react";
 
-const PostComponent = () => {
+const PostComponent = ({post}) => {
+  
   return (
-    <div className="w-full bg-white h-[400px] p-2 px-3 text-sm">
-      <div className="flex justify-between items-center ">
-        <div className="flex justify-between items-center gap-2">
-            <div className="w-14 h-14 rounded-full bg-gray-200">
-                <img src="" alt="" />
-            </div>
-            <div className="flex flex-col justify-center items-start">
-                <span className="flex justify-between items-center"><p>Name</p>
-                    <p>date</p>
-                </span>
-                <span>info</span>
-            </div>
-        </div>
-        <div>...</div>
-      </div>
+    <div className="w-[550px] bg-white  p-1 px-3 text-sm">
+      <PostHeader post={post}/>
       <div>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis sapiente quaerat dignissimos. Odio quae officia labore numquam architecto nostrum nihil?
+        {post?.description}
       </div>
-      <div className="w-full h-3/5 bg-gray-200"> </div>
+      <div className="w-full h-full flex justify-center items-center">
+        <Image
+          src={post?.image}
+          className="object-cover w-full p-1 h-[584px]"
+        />
+      </div>
       <div className="flex justify-between items-center">
         <div className="flex justify-evenly gap-3 items-center">
             <span>#</span>

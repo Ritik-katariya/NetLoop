@@ -26,12 +26,52 @@ const getoneDetails = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getEducation = catchAsync(async (req: Request, res: Response) => {
+  logger.info("insider controller:getEducation");
+  const result = await detailsService.getEducation(req.params.id);
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Get Education successfull !!",
+    success: true,
+    data: result,
+  });
+});
+const getWork = catchAsync(async (req: Request, res: Response) => {
+  logger.info("insider controller:getWork");
+  const result = await detailsService.getWork(req.params.id);
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Get Work successfull !!",
+    success: true,
+    data: result,
+  });
+});
 const updateDetails = catchAsync(async (req: Request, res: Response) => {
   logger.info("insider controller:updateDetails");
   const result = await detailsService.updateDetails(req, res);
   sendResponse(res, {
     statusCode: 200,
     message: "Update Profile successfull !!",
+    success: true,
+    data: result,
+  });
+});
+const updateEducation = catchAsync(async (req: Request, res: Response) => {
+  logger.info("insider controller:updateEducation");
+  const result = await detailsService.updateEducation(req, res);
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Update Education successfull !!",
+    success: true,
+    data: result,
+  });
+});
+const updateWork = catchAsync(async (req: Request, res: Response) => {
+  logger.info("insider controller:updateWork");
+  const result = await detailsService.updateWork(req, res);
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Update Work successfull !!",
     success: true,
     data: result,
   });
@@ -52,5 +92,10 @@ export const detailsController = {
  createDetails,
   getoneDetails,
   updateDetails,
-  deleteDetails
+  deleteDetails,
+  updateEducation,
+  updateWork,
+  getEducation,
+  getWork,
+
 };

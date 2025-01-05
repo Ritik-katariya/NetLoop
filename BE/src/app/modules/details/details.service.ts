@@ -128,9 +128,122 @@ const deleteDetails = async (id: string): Promise<any> => {
   return result;
 };
 
+
+
+const updateEducation = async (req: Request, res: Response): Promise<any> => {
+  const data= await prisma.$transaction(async (tx) => {
+    const id = req.params.id;
+    const { detailsId,...edudata } = req.body;
+    const isExists: Details | null = await tx.details.findUnique({
+      where: { id: detailsId },
+    });
+    if (!isExists) {
+      return res.status(401).json({
+        success: false,
+        message: "User is not authenticated",
+      });
+    }
+    const isEducation=await tx.education.findUnique({where:{id}});
+    if(!isEducation){
+      try {
+        const education = await tx.education.create({data: { ...edudata, detailsid: detailsId }});
+      return education;
+      } catch (error) {
+        return res.status(500).json({
+          success: false,
+          message: "An error occurred while creating education",
+          error: (error as Error).message,
+        });
+      }
+    }
+    try {
+      const education = await tx.education.update({where:{id},data:edudata});
+      return education;
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while updating education",
+        error: (error as Error).message,
+      });      
+
+    }
+
+  })
+}
+
+const getEducation = async (id: string): Promise<Details> => {
+  if (!id) throw new Error("id is required");
+  console.log(id);
+ try {
+  const result: any = await prisma.education.findFirst({ where: { id: id } });
+
+  return result;    
+ } catch (error) {
+ throw new Error("failed to get education");
+ 
+ }
+}
+const updateWork = async (req: Request, res: Response): Promise<any> => {
+  const data= await prisma.$transaction(async (tx) => {
+    const id = req.params.id;
+    const { detailsId,...workdata } = req.body;
+    const isExists: Details | null = await tx.details.findUnique({
+      where: { id: detailsId },
+    });
+    if (!isExists) {
+      return res.status(401).json({
+        success: false,
+        message: "User is not authenticated",
+      });
+    }
+    const isWork=await tx.work.findUnique({where:{id}});
+    if(!isWork){
+      try {
+        const work = await tx.work.create({data: { ...workdata, detailsid: detailsId }});
+      return work;
+      } catch (error) {
+        return res.status(500).json({
+          success: false,
+          message: "An error occurred while creating education",
+          error: (error as Error).message,
+        });
+      }
+    }
+    try {
+      const work = await tx.work.update({where:{id},data:workdata});
+      return work;
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while updating education",
+        error: (error as Error).message,
+      });      
+
+    }
+
+  })
+}
+
+const getWork = async (id: string): Promise<Details> => {
+  if (!id) throw new Error("id is required");
+  console.log(id);
+ try {
+  const result: any = await prisma.work.findFirst({ where: { id: id } });
+
+  return result;    
+ } catch (error) {
+ throw new Error("failed to get education");
+ 
+ }
+}
+
 export const detailsService = {
   createDetails,
   updateDetails,
   getDetails,
   deleteDetails,
+  updateEducation,
+  getEducation,
+  updateWork,
+  getWork,
 };

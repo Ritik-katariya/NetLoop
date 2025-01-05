@@ -47,7 +47,7 @@ export default function ProfileTab() {
 
           <Tab key="Posts" title="Posts" className="focus:text-primary ">
             <Card>
-              <CardBody>
+              <CardBody className="flex flex-col justify-center items-center">
               <ProfilePosts/>
               </CardBody>
             </Card>

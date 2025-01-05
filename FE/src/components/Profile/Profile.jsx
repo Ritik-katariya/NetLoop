@@ -9,7 +9,7 @@ const Profile = () => {
 
   return (
     <div className="md:min-h-screen px-8 py-2">
-      <div className="max-w-4xl mx-auto  rounded-xl shadow-lg">
+      <div className="max-w-4xl mx-auto  rounded-xl shadow-sm">
         
         <ProfilePersonal/>
         <ProfileTab/>
