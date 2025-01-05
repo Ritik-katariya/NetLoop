@@ -137,10 +137,15 @@ const deletePost = async (id: string): Promise<any> => {
   if (!id) throw new ApiError(httpStatus.BAD_REQUEST, "ID is required");
 
   const result = await prisma.$transaction(async (tx) => {
+   try {
     const post = await tx.post.delete({
       where: { id },
     });
     return post;
+   } catch (error) {
+    throw new Error(`Post delete failed: ${(error as Error).message}`);
+    
+   }
   });
 
   return result;

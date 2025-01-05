@@ -11,10 +11,22 @@ import {
 } from "@nextui-org/react";
 import { MdModeEditOutline } from "react-icons/md";
 import CreatePost from "./CreatePost";
+import { useDeletePostMutation } from "../../../redux/api/post";
+import { toast,ToastContainer } from "react-toastify";
 
 export default function OptionButton({id}) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
+const [deletePost] = useDeletePostMutation()
+  const deleteHandler = async() => {
+    if(!id)toast.error("Somthing is wrong");
+  
+    try {
+      await deletePost(id);
+      toast.success("Post deleted successfully")
+    } catch (error) {
+      toast.error("Post delete failed")
+    }
+  };
   return (
     <>
       <Button
@@ -35,14 +47,14 @@ export default function OptionButton({id}) {
       >
         <ModalContent className="bg-[#ffffff97] ">
           {(onClose) => (
-            <>
+            <><ToastContainer/>
               <ModalHeader className="flex flex-col gap-1">
                 Modal Title
               </ModalHeader>
               <ModalBody>
                 <div className="flex flex-col w-full">
                   <span><CreatePost id={id}/></span>
-                  <span>Delete</span>
+                  <span onClick={()=>deleteHandler()}>Delete</span>
                 </div>
               </ModalBody>
               <ModalFooter>
