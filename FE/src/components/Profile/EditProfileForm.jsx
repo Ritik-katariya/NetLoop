@@ -30,7 +30,7 @@ export default function ProfileDetailsForm() {
   } = useForm({
     defaultValues: {
       overview: "",
-      hobbie: [],
+      hobbies: [],
       interests: [],
       skills: [],
       education: [{ degree: "", college: "", start_date: "" }],
@@ -82,44 +82,17 @@ export default function ProfileDetailsForm() {
 
   const onSubmit = async (data) => {
     try {
-      // Transform the dates for education and work sections
-      const transformedData = {
-        ...data,
-        education: data.education.map((edu) => ({
-          ...edu,
-          start_date: edu.start_date ? new Date(edu.start_date) : null,
-        })),
-        work: data.work.map((work) => ({
-          ...work,
-          start_date: work.start_date ? new Date(work.start_date) : null,
-          end_date: work.end_date ? new Date(work.end_date) : null,
-        })),
-      };
-  
-      // Convert the transformed data object to JSON
-      const jsonData = JSON.stringify(transformedData);
-  
-      const response = await fetch(`http://localhost:5050/api/v1/details/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json", // Set Content-Type to JSON
-        },
-        body: jsonData, // Send JSON data as the body
-      });
-  
-      if (!response.ok) {
-        throw new Error("Failed to update profile");
+      const response = await updateProfileDetails({ id, ...data }).unwrap();
+      if (response.success) {
+        toast.success("Profile updated successfully");
+      } else {
+        toast.error("Failed to update profile");
       }
-  
-      toast.success("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile:", error);
-      const errorMessage = error.message || "Failed to update profile";
-      toast.error(errorMessage);
+      toast.error("Failed to update profile");
     }
   };
-  
-  
 
   return (
     <div>

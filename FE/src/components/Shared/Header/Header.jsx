@@ -138,7 +138,7 @@ useEffect(() => {
               ) : (
                 <NavLink to='/login'>
                   <button className="bg-white text-primary hover:text-[rgb(34,183,183)] px-4 py-2 rounded-full hover:bg-white/90 transition-colors">
-                    Login/Signup
+                    Login
                   </button>
                 </NavLink>
               )}

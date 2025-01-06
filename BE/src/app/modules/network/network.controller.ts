@@ -4,10 +4,9 @@ import sendResponse from "../../../shared/sendResponse";
 import { networkService } from "./network.service";
 import { logger } from "../../../shared/logger";
 
-
 const createNetwork = catchAsync(async (req: Request, res: Response) => {
-  logger.info("insider controller:createNetwork");
-  const result = await networkService.createNetwork(req,res);
+  logger.info("Inside controller: createNetwork");
+  const result = await networkService.createNetwork(req);
   sendResponse(res, {
     statusCode: 200,
     message: "Successfully Network Created !!",
@@ -16,86 +15,90 @@ const createNetwork = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getoneNetwork = catchAsync(async (req: Request, res: Response) => {
-  logger.info("insider controller:getoneNetwork");
+const getOneNetwork = catchAsync(async (req: Request, res: Response) => {
+  logger.info("Inside controller: getOneNetwork");
   const result = await networkService.getNetwork(req.params.id);
   sendResponse(res, {
     statusCode: 200,
-    message: "Get Profile successfull !!",
+    message: "Get Network successful !!",
     success: true,
     data: result,
   });
 });
-const  AddMember= catchAsync(async (req: Request, res: Response) => {
-  logger.info("insider controller:getoneNetwork");
-  const result = await networkService.AddMember(req,res);
+
+const addMemberToNetwork = catchAsync(async (req: Request, res: Response) => {
+  logger.info("Inside controller: addMemberToNetwork");
+  const result = await networkService.addMemberToNetwork(req, res);
   sendResponse(res, {
     statusCode: 200,
-    message: "Add member successfull !!",
+    message: "Add member successful !!",
     success: true,
     data: result,
   });
 });
-const memberwithnetwork = catchAsync(async (req: Request, res: Response) => {
-  logger.info("insider controller:getoneNetwork");
+
+const memberWithNetworks = catchAsync(async (req: Request, res: Response) => {
+  logger.info("Inside controller: memberWithNetworks");
   const result = await networkService.memberWithNetworks(req.params.id);
   sendResponse(res, {
     statusCode: 200,
-    message: "Get member with Networks successfull !!",
+    message: "Get member with Networks successful !!",
     success: true,
     data: result,
   });
 });
+
 const networkWithMembers = catchAsync(async (req: Request, res: Response) => {
-  logger.info("insider controller:getoneNetwork");
+  logger.info("Inside controller: networkWithMembers");
   const result = await networkService.networkWithMembers(req.params.id);
   sendResponse(res, {
     statusCode: 200,
-    message: "Get Network with member successfull !!",
+    message: "Get Network with members successful !!",
     success: true,
     data: result,
   });
 });
-const getallNetwork = catchAsync(async (req: Request, res: Response) => {
-  logger.info("insider controller:getallNetwork");
+
+const getAllNetworks = catchAsync(async (req: Request, res: Response) => {
+  logger.info("Inside controller: getAllNetworks");
   const result = await networkService.getNetworks();
   sendResponse(res, {
     statusCode: 200,
-    message: "Get Profile successfull !!",
+    message: "Get all Networks successful !!",
     success: true,
     data: result,
   });
 });
+
 const updateNetwork = catchAsync(async (req: Request, res: Response) => {
-  logger.info("insider controller:updateNetwork");
+  logger.info("Inside controller: updateNetwork");
   const result = await networkService.updateNetwork(req);
   sendResponse(res, {
     statusCode: 200,
-    message: "Update Network successfull !!",
+    message: "Update Network successful !!",
     success: true,
     data: result,
   });
 });
 
 const deleteNetwork = catchAsync(async (req: Request, res: Response) => {
-  logger.info("insider controller:deleteNetwork");
-  const result = await networkService.deleteNetwork(req.params.id);
+  logger.info("Inside controller: deleteNetwork");
+  const result = await networkService.deleteNetwork(req);
   sendResponse(res, {
     statusCode: 200,
-    message: "Delete Network successfull !!",
+    message: "Delete Network successful !!",
     success: true,
     data: result,
   });
 });
 
 export const networkController = {
- createNetwork,
-  getoneNetwork,
-  getallNetwork,
+  createNetwork,
+  getOneNetwork,
+  getAllNetworks,
   updateNetwork,
   deleteNetwork,
-  AddMember,
-  memberwithnetwork,
+  addMemberToNetwork,
+  memberWithNetworks,
   networkWithMembers,
- 
 };

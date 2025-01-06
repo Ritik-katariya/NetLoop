@@ -134,13 +134,13 @@ model Network {
   city         String
   state        String
   country      String
-  pincode      Int
+  pincode      String
   website      String
   socialmedia  String[]
   about        String
   logo         String?
   cover        String?
-  followers    Int
+  followers    String
   posts        Post[]
   members      Members[]     @relation("MemberNetworks") // Many-to-many relationship
   cluster      Cluster[]

@@ -12,14 +12,13 @@ export const detailsApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.details],
     }),
-
     updateProfileDetails: builder.mutation({
-      query: ({ id,...data }) => ({
+      query: ({ id, ...data }) => ({
         url: `${Details}/${id}`,
         method: "PUT",
-       data: data,
+        body: data,
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       }),
       invalidatesTags: [tagTypes.details],

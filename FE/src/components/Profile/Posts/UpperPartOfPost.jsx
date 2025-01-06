@@ -12,7 +12,7 @@ const PostHeader = ({post}) => {
      network: state.member.networks,
      verified:state.member.verified
    }));
-  console.log("verified",verified);
+  
  const img = useSelector((state) => state.profile.img);
 
 

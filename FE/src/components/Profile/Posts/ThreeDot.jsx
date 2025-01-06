@@ -13,6 +13,7 @@ import { MdModeEditOutline } from "react-icons/md";
 import CreatePost from "./CreatePost";
 import { useDeletePostMutation } from "../../../redux/api/post";
 import { toast, ToastContainer } from "react-toastify";
+import { BsThreeDots } from "react-icons/bs";
 
 export default function OptionButton({id}) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -29,12 +30,7 @@ const [deletePost] = useDeletePostMutation()
   };
   return (
     <>
-      <Button
-        className="bg-primary rounded-lg h-8 text-white text-base"
-        onPress={onOpen}
-      >
-        <MdModeEditOutline /> Details
-      </Button>
+     <BsThreeDots onClick={onOpen} className="cursor-pointer text-lg hover:text-primary"/>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}

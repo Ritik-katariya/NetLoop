@@ -18,7 +18,8 @@ const Home = () => {
 
       <div className="flex justify-between px-6">
         <SideProfile />
-        <hero className="flex w-1/2 flex-col justify-center items-center bg-transparent mt-16">
+        <hero className="flex w-1/2 flex-col justify-start items-center
+         bg-transparent mt-16">
           <Story />
           <Posts />
         </hero>

@@ -40,12 +40,12 @@ export const networkApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.network],
     }),
-    deleteNetwork: build.query({
+    deleteNetwork: build.mutation({
       query: (id) => ({
         url: `${Network}/${id}`,
         method: "DELETE",
       }),
-      providesTags: [tagTypes.network],
+      invalidatesTags: [tagTypes.network],
     }),
     updateNetwork: build.mutation({
       query: ({ data, id }) => ({
@@ -71,12 +71,17 @@ export const networkApi = baseApi.injectEndpoints({
     }),
 
     createNetwork: build.mutation({
-      query: (data) => ({
+      query: (formData) => ({
         url: `${Network}`,
         method: "POST",
-        data,
+        data: formData,
+        headers:{
+          "Content-Type": "multipart/form-data",
+        } // Use `body` instead of `data` for `FormData`
       }),
+      invalidatesTags: [tagTypes.network],
     }),
+    
   }),
 });
 
@@ -85,7 +90,7 @@ export const {
   useGetNetworkQuery,
   useGetMemberByNetworkQuery,
   useGetNetworkByMemberQuery,
-  useDeleteNetworkQuery,
+  useDeleteNetworkMutation,
   useUpdateNetworkMutation,
   useUpdateNetworkMemberMutation,
   useCreateNetworkMutation,
