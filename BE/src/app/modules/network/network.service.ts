@@ -7,6 +7,14 @@ import { CloudinaryHelper } from "../../../helper/uploadHelper";
 // Add a member to a network
 const addMemberToNetwork = async (req: Request, res: Response) => {
   const { memberId, networkId } = req.body;
+  const member = await prisma.members.findFirst({
+    where: { id: memberId },
+    select: { verified: true }
+  });
+
+  if (!member?.verified?.verified) {
+    throw new ApiError(400, "Member is not verified");
+  }
   await prisma.network.update({
     where: { id: networkId },
     data: {
@@ -15,6 +23,7 @@ const addMemberToNetwork = async (req: Request, res: Response) => {
       },
     },
   });
+  res.status(200).json({ message: "Member added to the network" });
 };
 
 // Fetch a member with their networks
@@ -115,11 +124,22 @@ const getNetwork = async (id: string): Promise<Network> => {
 
 // Get all networks
 const getNetworks = async (): Promise<Network[]> => {
-  const result: any = await prisma.network.findMany({
-    where: { verified: true },
-  });
+  try {
+    const networks: Network[] = await prisma.network.findMany({
+      where: { verified: true },include:{
+        members:true,
+        likes:true,
+      }
+    });
 
-  return result;
+    if (!networks.length) {
+      throw new Error("Data not found");
+    }
+
+    return networks;
+  } catch (error) {
+    throw new Error((error as any).message || "Internal server error");
+  }
 };
 
 // Delete a network
