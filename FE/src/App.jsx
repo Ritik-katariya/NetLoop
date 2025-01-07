@@ -16,6 +16,7 @@ import ProfileApp from './components/Profile/ProfileApp';
 import ProfileDetailsForm from './components/Profile/EditProfileForm';
 import VerifiedPage from './components/Verify/VerifiedPage';
 import NetworkPage from './components/AddNetwork/NetworkPage';
+import Network from './components/Network/Network';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path='/verify/:id?' element={<VerifiedPage />} />
         <Route path='/profile/details-edit/:id?' element={<ProfileDetailsForm />} />
         <Route path='/add-network' element={<NetworkPage />} />
+        <Route path='/network' element={<Network />} />
         {/* <Route path='/signup' element={<SignUp />} /> */}
        
         

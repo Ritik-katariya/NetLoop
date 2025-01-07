@@ -22,7 +22,7 @@ const Header = () => {
   const { data } = useGetMemberQuery(id, { skip: !id });
 useEffect(() => {
   if (data) {
-    console.log(data);
+   
     const memb = { name: data.name, id: data.id, network: data.network ,verified: data.verified};
     dispatch(setMember(memb));
   }
@@ -44,9 +44,9 @@ useEffect(() => {
 }, [data, dispatch]);
   const navItems = [
     { label: 'Home', href: '/', icon: <IoHomeOutline className='text-2xl' /> },
-    { label: 'Explore', href: '/products', icon: <MdOutlineTravelExplore className='text-2xl' /> },
-    { label: 'Network', href: '/services', icon: <MdOutlineGroups3 className='text-2xl' /> },
-    { label: 'Message', href: '/about', icon: <AiTwotoneMessage className='text-2xl' /> },
+    { label: 'Explore', href: '/explore', icon: <MdOutlineTravelExplore className='text-2xl' /> },
+    { label: 'Network', href: '/network', icon: <MdOutlineGroups3 className='text-2xl' /> },
+    { label: 'Message', href: '/message', icon: <AiTwotoneMessage className='text-2xl' /> },
     { label: 'Notification', href: '#', icon: <NotificationPage /> },
   ];
 

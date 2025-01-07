@@ -19,7 +19,7 @@ const CreatePostForm = ({id}) => {
     const [createPost, { isLoading }] = useCreatePostMutation();
     const [updatePost, { isLoading: upIsLoading }] = useUpdatePostMutation();
     const { data, isLoading: getIsLoading } = useGetPostQuery(id);
-    console.log("idd",id)
+    
     useEffect(()=>{
       if(id){
         reset(data);

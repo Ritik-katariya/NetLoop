@@ -17,7 +17,7 @@ import CreatePostForm from './CreatePostForm';
   
   export default function CreatePost({id}) {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
-  console.log("ID",id)
+
     return (
       <>
        {(id==='')?<Button  className="w-24 h-8 bg-gray-100  hover:bg-teal-300 focus:font-semibold focus:text-blu-950 rounded-lg " onPress={onOpen}> <MdAdd />Post</Button>:

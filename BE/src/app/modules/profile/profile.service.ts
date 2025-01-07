@@ -45,7 +45,7 @@ const updateCoverImg = async (req: any): Promise<Profile> => {
   const data = await prisma.$transaction(async (tx) => {
     const file = req.file as any;
     const { flag,...othersData } = req.body;
-console.log(req.body)
+
     if (file) {
       const uploadImage = await CloudinaryHelper.uploadFile(file);
       if (uploadImage) {

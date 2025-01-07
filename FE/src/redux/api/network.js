@@ -7,18 +7,13 @@ export const networkApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getNetworks: build.query({
       query: (arg) => ({
-        url: `${Network}`,
+        url: `${Network}`, // Replace `/networks` with the correct API endpoint
         method: "GET",
-        params: arg,
+        params: arg, // `arg` is passed as search parameters
       }),
-      transformResponse: (response) => {
-        return {
-          doctors: response.data,
-          meta: response.meta,
-        };
-      },
-      providesTags: [tagTypes.network],
+      providesTags:[tagTypes.network]
     }),
+    
     getNetwork: build.query({
       query: (id) => ({
         url: `${Network}/${id}`,
@@ -59,8 +54,8 @@ export const networkApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.network],
     }),
     updateNetworkMember: build.mutation({
-      query: ({ data, id }) => ({
-        url: `${Network}/${id}`,
+      query: ( data ) => ({
+        url: `${Network}/addmember`,
         method: "PATCH",
         data: data,
         headers: {

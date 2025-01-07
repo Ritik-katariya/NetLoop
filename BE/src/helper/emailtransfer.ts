@@ -12,7 +12,7 @@ type IEmailProps = {
     subject: string,
 }
 export const EmailtTransporter = async({pathName,replacementObj, toMail, subject }:IEmailProps) =>{  
-    console.log(replacementObj)
+    
     const html = await readHtmlFile(pathName);
     const template = handlebars.compile(html);
     const htmlToSend = template(replacementObj);
