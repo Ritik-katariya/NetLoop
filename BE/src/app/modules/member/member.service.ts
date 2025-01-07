@@ -231,12 +231,14 @@ const getoneMember = async (id: string): Promise<Members | null> => {
       id: id,
     },
     include: {
-      profile: true,
-      verified: true,
+      profile: true,       // Include the profile relation
+      verified: true,      // Include the verified relation
+      networks: true,
     },
   });
   return result;
 };
+
 const updateMember = async (req: Request): Promise<Members> => {
   
   const id = req.params.id as string;

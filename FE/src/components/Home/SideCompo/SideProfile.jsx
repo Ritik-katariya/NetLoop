@@ -1,29 +1,48 @@
-import React from 'react'
-
+import React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import {Avatar} from "@nextui-org/react";
 export default function SideProfile() {
-    const arr=[1,2]
+  const { memberData } = useSelector((state) => ({
+    memberData: state.member.memberData,
+  }));
+
   return (
-    <div className="w-[18%] mt-24 p-6 flex flex-col pt-9 text-sm   bg-gray-50 rounded-md h-[650px] shadow-md border-[.5px]">
-      <div className='flex justify-center items-center flex-col border-b-2 pb-2'>
-        <img src="" alt="" className='w-16 h-16 bg-gray-200 rounded-full '/>
-        <h1 className='text-center text-black text-base font-semibold pt-3'>Ritik Kumar</h1>
-        <h3 className='text-center text-xs text-gray-400'>NIT Agartala</h3>
+    <div className="w-[18%] mt-24 p-6 flex flex-col pt-9 text-sm   bg-gray-50 rounded-md h-[650px] shadow-md border-[.5px] max-xl:hidden">
+      <div className="flex justify-center items-center flex-col border-b-2 pb-2">
+        <Avatar showFallback
+          src={memberData?.profile.img}
+          alt="user"
+          className="w-32 h-32 bg-gray-200 border-2 border-primary rounded-full object-fill cursor-pointer"
+        />
+          <h1 className="text-center text-black text-base font-semibold pt-3">
+        <a to="/profile">
+            {memberData?.name || "Guest"}
+        </a>
+          </h1>
+
+        <h3 className="text-center text-xs text-gray-400 ">
+          {memberData?.networks[0].name}
+        </h3>
       </div>
-      <div className='border-b-2 pb-2'> 
+      <div className="border-b-2 pb-2">
         <span className="flex justify-between items-center pt-2 ">
-            <h3 className="text-lg font-semibold mb-2">Network</h3>
-            <h3 className="text-lg font-semibold mb-2">2</h3>
+          <h3 className="text-lg font-semibold mb-2">Network</h3>
+          <h3 className="text-lg font-semibold mb-2">
+            {memberData?.networks.length}
+          </h3>
         </span>
-        {arr.map((value)=>(<h3>{value}</h3>))}
+        {memberData?.networks?.map((value) => (
+          <h3 className="text-xs">{value?.name}</h3>
+        ))}
       </div>
-      <div >
+      {/* <div >
         <span className="flex justify-between items-center pt-4">
             <h3 className="text-lg font-semibold mb-2">Chanels</h3>
             <h3 className="text-lg font-semibold mb-2">2</h3>
         </span>
         {arr.map((value)=>(<h3>{value}</h3>))}
-      </div>
-      
+      </div> */}
     </div>
-  )
+  );
 }

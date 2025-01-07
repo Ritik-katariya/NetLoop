@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useMemo  } from 'react';
 import netloop from '../../../images/netloop.png'
 import { IoHomeOutline } from "react-icons/io5";
 import { MdOutlineTravelExplore } from "react-icons/md";
@@ -20,13 +20,26 @@ const Header = () => {
   const id = member ? member.id : null;
 
   const { data } = useGetMemberQuery(id, { skip: !id });
-useEffect(() => {
-  if (data) {
-   
-    const memb = { name: data.name, id: data.id, network: data.network ,verified: data.verified};
-    dispatch(setMember(memb));
-  }
-}, [data, dispatch]);
+  
+  const memb = useMemo(() => {
+    if (data?.id) {
+      return {
+        name: data.name,
+        id: data.id,
+        network: data.networks || [], // Default to empty array if undefined
+        verified: data.verified ?? false, // Default to false if undefined
+        memberData: data || null, // Pass the full data object
+      };
+    }
+    return null;
+  }, [data]);
+
+  // Dispatch `setMember` only when `memb` changes
+  useEffect(() => {
+    if (memb) {
+      dispatch(setMember(memb));
+    }
+  }, [memb, dispatch]);
 
 useEffect(() => {
   if (data && data.profile) {

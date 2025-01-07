@@ -84,7 +84,9 @@ const getPost = async (id: string): Promise<Post | null> => {
 
 // Get all Posts
 const getPosts = async (): Promise<Post[]> => {
-  const result = await prisma.post.findMany();
+  const result = await prisma.post.findMany({orderBy: {
+    createdAt: 'desc', // or any other field you want to order by
+  },});
   return result;
 };
 

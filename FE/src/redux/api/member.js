@@ -11,12 +11,6 @@ export const memberApi = baseApi.injectEndpoints({
         method: "GET",
         params: arg,
       }),
-      transformResponse: (response) => {
-        return {
-          doctors: response.data,
-          meta: response.meta,
-        };
-      },
       providesTags: [tagTypes.profile],
     }),
     getMember: build.query({
