@@ -1,6 +1,6 @@
 import React from 'react'
 import NetworkProfile from './Network'
-import Search from './NetworkSearch'
+import Search from '../../Shared/Search/Search'
 
 export default function NetworkProfilePage() {
   return (

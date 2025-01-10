@@ -22,14 +22,14 @@ export default function SideProfile() {
           </h1>
 
         <h3 className="text-center text-xs text-gray-400 ">
-          {memberData?.networks[0].name}
+          {memberData?.networks[0]?.name}
         </h3>
       </div>
       <div className="border-b-2 pb-2">
         <span className="flex justify-between items-center pt-2 ">
           <h3 className="text-lg font-semibold mb-2">Network</h3>
           <h3 className="text-lg font-semibold mb-2">
-            {memberData?.networks.length}
+            {memberData?.networks?.length}
           </h3>
         </span>
         {memberData?.networks?.map((value) => (

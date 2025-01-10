@@ -11,7 +11,7 @@ const createPost = async (req: Request): Promise<any> => {
   const data = await prisma.$transaction(
     async (tx) => {
       const files = req.file as any;
-      const { memberId,networkId,clusterId, ...otherData } = req.body;
+      const { memberId, networkId, clusterId, ...otherData } = req.body;
 
       // Validate if memberId exists in the Members table
       const memberExists = await tx.members.findUnique({
@@ -21,42 +21,46 @@ const createPost = async (req: Request): Promise<any> => {
         throw new ApiError(httpStatus.NOT_FOUND, "Member not found");
       }
 
-    if (files) {
-      if ( files.mimetype.startsWith("image/")) {
-        // Handle image upload
-        const uploadImage = await CloudinaryHelper.uploadFile(files);
-        if (uploadImage) {
-          otherData.image = uploadImage.secure_url;
-        } else {
-          throw new ApiError(
-            httpStatus.EXPECTATION_FAILED,
-            "Failed to upload image"
-          );
-        }
-      } else if (files.mimetype.startsWith("video/")) {
-        // Handle video upload
-        const uploadVideo = await CloudinaryHelper.uploadFile(files);
-        if (uploadVideo) {
-          otherData.video = uploadVideo.secure_url;
-        } else {
-          throw new ApiError(
-            httpStatus.EXPECTATION_FAILED,
-            "Failed to upload video"
-          );
+      if (files) {
+        if (files.mimetype.startsWith("image/")) {
+          // Handle image upload
+          const uploadImage = await CloudinaryHelper.uploadFile(files);
+          if (uploadImage) {
+            otherData.image = uploadImage.secure_url;
+          } else {
+            throw new ApiError(
+              httpStatus.EXPECTATION_FAILED,
+              "Failed to upload image"
+            );
+          }
+        } else if (files.mimetype.startsWith("video/")) {
+          // Handle video upload
+          const uploadVideo = await CloudinaryHelper.uploadFile(files);
+          if (uploadVideo) {
+            otherData.video = uploadVideo.secure_url;
+          } else {
+            throw new ApiError(
+              httpStatus.EXPECTATION_FAILED,
+              "Failed to upload video"
+            );
+          }
         }
       }
-    }
 
       // Handle video upload
-      
 
       // Create post
       try {
-        const post: Post | null = await tx.post.create({ data: { ...otherData, memberId } });
+        const post: Post | null = await tx.post.create({
+          data: { ...otherData, memberId, networkId },
+        });
         return post;
       } catch (error) {
         console.error(error);
-        throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create post");
+        throw new ApiError(
+          httpStatus.INTERNAL_SERVER_ERROR,
+          "Failed to create post"
+        );
       }
     },
     {
@@ -84,9 +88,12 @@ const getPost = async (id: string): Promise<Post | null> => {
 
 // Get all Posts
 const getPosts = async (): Promise<Post[]> => {
-  const result = await prisma.post.findMany({orderBy: {
-    createdAt: 'desc', // or any other field you want to order by
-  },});
+  const result = await prisma.post.findMany({
+    where: { networkId: null },
+    orderBy: {
+      createdAt: "desc", // or any other field you want to order by
+    },
+  });
   return result;
 };
 
@@ -139,18 +146,30 @@ const deletePost = async (id: string): Promise<any> => {
   if (!id) throw new ApiError(httpStatus.BAD_REQUEST, "ID is required");
 
   const result = await prisma.$transaction(async (tx) => {
-   try {
-    const post = await tx.post.delete({
-      where: { id },
-    });
-    return post;
-   } catch (error) {
-    throw new Error(`Post delete failed: ${(error as Error).message}`);
-    
-   }
+    try {
+      const post = await tx.post.delete({
+        where: { id },
+      });
+      return post;
+    } catch (error) {
+      throw new Error(`Post delete failed: ${(error as Error).message}`);
+    }
   });
 
   return result;
+};
+
+const getPostbyMember = async (id: string): Promise<any> => {
+  if (!id) throw new ApiError(httpStatus.BAD_REQUEST, "ID is required");
+  try {
+    const result = await prisma.post.findMany({
+      where: { memberId: id },
+      orderBy: { createdAt: "desc" },
+    });
+    return result;
+  } catch (error) {
+    throw new Error(`get Post by Member failed: ${(error as Error).message}`);
+  }
 };
 
 export const postService = {
@@ -159,4 +178,5 @@ export const postService = {
   getPost,
   deletePost,
   getPosts,
+  getPostbyMember,
 };

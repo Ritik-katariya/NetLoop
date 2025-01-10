@@ -11,6 +11,7 @@ router.post("/",CloudinaryHelper.upload.single("file"),(req: Request, res: Respo
 router.get("/", postController.getPosts);
 
 router.get("/:id?", postController.getonePost);
+router.get("/member/:id?", postController.getPostbyMember);
 
 router.patch("/:id?",CloudinaryHelper.upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {

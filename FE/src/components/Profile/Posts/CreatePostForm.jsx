@@ -11,22 +11,30 @@ import {
 } from "@nextui-org/react";
 import AllNetwork from "./AllNetwork";
 import { useCreatePostMutation } from "../../../redux/api/post";
-import { ToastContainer,toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { useUpdatePostMutation } from "../../../redux/api/post";
 import { useGetPostQuery } from "../../../redux/api/post";
-const CreatePostForm = ({id}) => {
-    const memberId=require("../../../utils/auth").memberInfo().id;
-    const [createPost, { isLoading }] = useCreatePostMutation();
-    const [updatePost, { isLoading: upIsLoading }] = useUpdatePostMutation();
-    const { data, isLoading: getIsLoading } = useGetPostQuery(id);
-    
-    useEffect(()=>{
-      if(id){
-        reset(data);
-      }
-    },[data, id]);
+const CreatePostForm = ({ id, close }) => {
+  const memberId = require("../../../utils/auth").memberInfo().id;
+  const [createPost, { isLoading }] = useCreatePostMutation();
+  const [updatePost, { isLoading: upIsLoading }] = useUpdatePostMutation();
+  const { data, isLoading: getIsLoading } = useGetPostQuery(id);
 
-  const [setnetworkId] = useState("")
+  useEffect(() => {
+    if (id) {
+      reset(data);
+    }
+  }, [data, id]);
+  const [setNetworkId] = useState("");
+  const [IdNet, setIdNet] = useState("");
+  function network(id) {
+    setIdNet(id);
+    console.log("id dekh", IdNet);
+  }
+  useEffect(() => {
+    console.log("IdNet updated:", IdNet);
+  }, [IdNet]);
+
   const [File, setFile] = useState(null);
   const {
     register,
@@ -36,36 +44,38 @@ const CreatePostForm = ({id}) => {
   } = useForm({
     defaultValues: {
       description: "",
-      memberId: memberId, 
-      networkId: "",
+      memberId: memberId,
+      networkId: IdNet,
       clusterId: "",
     },
   });
 
   const onSubmit = async (data) => {
     const formData = new FormData();
-      formData.append("description", data.description);
-      formData.append("memberId", data.memberId);
-      formData.append("networkId", "");
-      formData.append("clusterId", "");
-      formData.append("file", File);
-   if(id){
-         try {
-          await updatePost({formData, id}).unwrap();
-          toast.success("Post updated successfully");
-         } catch (error) {
-          toast.error("Error updating");
-         }
-   }else{
-    try { 
-      
-  
-      await createPost(formData).unwrap();
-     toast.success("Post created successfully");
-  } catch (error) {
-    toast.error("Failed to create post");
-  } 
-   }
+    formData.append("description", data.description);
+    formData.append("memberId", data.memberId);
+    formData.append("networkId", IdNet);
+    formData.append("clusterId", "");
+    formData.append("file", File);
+    if (id) {
+      try {
+        await updatePost({ formData, id }).unwrap();
+        toast.success("Post updated successfully");
+      } catch (error) {
+        toast.error("Error updating");
+      }
+    } else {
+      try {
+        await createPost(formData).unwrap();
+        toast.success("Post created successfully");
+        setTimeout(() => {
+          close();
+        }, 1000); // Navigate directly after showing the toast
+        reset();
+      } catch (error) {
+        toast.error("Failed to create post");
+      }
+    }
   };
 
   return (
@@ -103,8 +113,8 @@ const CreatePostForm = ({id}) => {
             </label>
 
             <div className="flex gap-4">
-<ToastContainer/>
-              <AllNetwork setnetworkId={setnetworkId}/>
+              <ToastContainer />
+              <AllNetwork network={network} />
               {/* <div>
               <Input
                 label="Cluster ID (Optional)"

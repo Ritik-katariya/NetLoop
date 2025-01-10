@@ -11,17 +11,17 @@ import {
 } from "@nextui-org/react";
 import { MdModeEditOutline } from "react-icons/md";
 
-export default function PostView() {
-  const post = {
-    author: "John Doe",
-    username: "@johndoe",
-    timeAgo: "12h",
-    content: "My First Post 🚀",
-    likes: 2808,
-    comments: 2804,
-    shares: 128,
-    image: "/api/placeholder/800/600",
-  };
+export default function PostView({post}) {
+  // const post = {
+  //   author: "John Doe",
+  //   username: "@johndoe",
+  //   timeAgo: "12h",
+  //   content: "My First Post 🚀",
+  //   likes: 2808,
+  //   comments: 2804,
+  //   shares: 128,
+  //   image: "/api/placeholder/800/600",
+  // };
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -29,9 +29,9 @@ export default function PostView() {
     <>
       <img
            onClick={onOpen}
-          src={`https://nextui.org/images/hero-card-complete.jpeg`}
+          src={post?.image}
           alt={`gallery-${"helo"}`}
-          className="w-full h-full object-cover"
+          className="w-56 h-56 object-fill"
         />
        
       <Modal
@@ -48,8 +48,8 @@ export default function PostView() {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Modal Title
-              </ModalHeader>
+                My Post
+                      </ModalHeader>
               <ModalBody>
                 <div className="max-w-2xl mx-auto p-4">
                   <Card className="w-full">
@@ -80,13 +80,13 @@ export default function PostView() {
 
                       {/* Post Content */}
                       <div className="px-4 py-2">
-                        <p className="text-large">{post.content}</p>
+                        <p className="text-large">{post?.discription}</p>
                       </div>
 
                       {/* Image */}
                       <div className="w-full">
                         <img
-                          src={post.image}
+                          src={post?.image}
                           alt="Post content"
                           className="w-full object-cover"
                         />
@@ -101,7 +101,7 @@ export default function PostView() {
                               className="flex items-center gap-1"
                             >
                               <span>👍</span>
-                              <span>{post.likes.toLocaleString()}</span>
+                              {/* <span>{post.likes.toLocaleString()}</span> */}
                             </Button>
                           </Tooltip>
 
@@ -111,7 +111,7 @@ export default function PostView() {
                               className="flex items-center gap-1"
                             >
                               <span>💬</span>
-                              <span>{post.comments.toLocaleString()}</span>
+                              {/* <span>{post.comments.toLocaleString()}</span> */}
                             </Button>
                           </Tooltip>
 
@@ -121,7 +121,7 @@ export default function PostView() {
                               className="flex items-center gap-1"
                             >
                               <span>↗️</span>
-                              <span>{post.shares.toLocaleString()}</span>
+                              {/* <span>{post.shares.toLocaleString()}</span> */}
                             </Button>
                           </Tooltip>
                         </div>

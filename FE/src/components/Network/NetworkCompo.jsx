@@ -5,9 +5,9 @@ import { FaRegHeart,FaHeart  } from "react-icons/fa";
 import { memberInfo } from "../../utils/auth";
 import { useUpdateNetworkMemberMutation } from "../../redux/api/network";
 import { toast,ToastContainer } from "react-toastify";
-
+import { NavLink } from "react-router-dom";
 const NetwrokCard = ({ value }) => {
-  const [updateNetworkMember, { isLoading, isSuccess }] = useUpdateNetworkMemberMutation();
+  const [updateNetworkMember, { isLoading, isSuccess,isError,error }] = useUpdateNetworkMemberMutation();
 
   const memberId=memberInfo().id;
   const [like, setlike] = useState(false);
@@ -24,6 +24,7 @@ const NetwrokCard = ({ value }) => {
     try {
       await updateNetworkMember({data: formData});
      if(isSuccess) toast.success("Member join successfully");
+     else toast.error("Member join failed",error);
       
     } catch (error) {
       console.error(error);
@@ -36,12 +37,16 @@ const NetwrokCard = ({ value }) => {
       {/* Background Image */}
       
 
+       <NavLink to={`/network/${value?.id}`}>
        <img src={value?.cover} alt={value?.name} className="w-full h-44" />
-<ToastContainer/>
+       </NavLink>
+           <ToastContainer/>
       {/* Content */}
       <div className=" px-2">
         <div className="flex justify-between items-center">
-        <h2 className="text-lg font-mono font-bold capitalize ">{value?.name}</h2>
+       <NavLink to={`/network/${value?.id}`}>
+
+        <h2 className="text-lg font-mono font-bold capitalize cursor-pointer">{value?.name}</h2></NavLink>
           <div className="absolute right-6 top-40">
             <div className="flex flex-col ">
               <span className="text-lg text-red-600 cursor-pointer rounded-full bg-[#ffffffde] w-8 h-8 flex justify-center items-center hover:scale-105" onClick={likehandler}>{like?<FaHeart />:<FaRegHeart />}</span>

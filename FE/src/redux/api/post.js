@@ -49,8 +49,17 @@ export const postApi = baseApi.injectEndpoints({
 
     }),
     invalidatesTags: [tagTypes.post],
+    
+    getPostByMember:build.query({
+      query: (memberId) => ({
+        url: `${Post}/member/${memberId}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.post],
+    })
   }),
 });
+
 
 export const {
   useGetPostsQuery,
@@ -58,6 +67,7 @@ export const {
   useUpdatePostMutation,
   useCreatePostMutation,
   useDeletePostMutation,
+  useGetPostByMemberQuery
  
  
 } = postApi;

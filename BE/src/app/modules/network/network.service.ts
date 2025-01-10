@@ -37,7 +37,7 @@ const memberWithNetworks = async (id: string) => {
 
 // Fetch a network with its members
 const networkWithMembers = async (id: string) => {
-  const networkWithMembers = await prisma.network.findUnique({
+  const networkWithMembers = await prisma.network.findMany({
     where: { id },
     include: { members: true },
   });
@@ -117,6 +117,11 @@ const getNetwork = async (id: string): Promise<Network> => {
 
   const result: any = await prisma.network.findFirst({
     where: { id, verified: true },
+    include: {
+      members: true,
+      likes: true,
+      cluster:true,
+    },
   });
 
   return result;

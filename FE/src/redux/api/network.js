@@ -29,8 +29,8 @@ export const networkApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.network],
     }),
     getNetworkByMember: build.query({
-      query: (id) => ({
-        url: `${Network}/member/${id}`,
+      query: (memberId) => ({
+        url: `${Network}/member/${memberId}`,
         method: "GET",
       }),
       providesTags: [tagTypes.network],

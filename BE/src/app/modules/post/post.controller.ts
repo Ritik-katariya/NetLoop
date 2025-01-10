@@ -58,6 +58,16 @@ const deletePost = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getPostbyMember=catchAsync(async (req:Request,res:Response) => {
+  logger.info("Get post by member ")
+  const result = await postService.getPostbyMember(req.params.id);
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Get Post by member successfull!!",
+    success: true,
+    data: result,
+  });
+});
 
 export const postController = {
   createPost,
@@ -65,4 +75,5 @@ export const postController = {
   getPosts,
   updatePost,
   deletePost,
+  getPostbyMember
 };

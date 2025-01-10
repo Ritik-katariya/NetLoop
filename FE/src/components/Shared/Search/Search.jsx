@@ -32,7 +32,7 @@ export const SearchIcon = (props) => {
 
 export default function Search() {
   return (
-    <div className="w-[300px] h-[44px]   flex justify-center items-center  rounded-full shadow-xl">
+    <div className="w-[280px] h-[44px]   flex justify-center items-center  rounded-full shadow-xl">
       <Input
         isClearable
        

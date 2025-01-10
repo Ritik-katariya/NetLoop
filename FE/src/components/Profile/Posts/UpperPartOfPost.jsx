@@ -14,7 +14,7 @@ const PostHeader = ({ post }) => {
     isLoading: misLoading,
     isSuccess: misSuccess,
   } = useGetMemberQuery(post?.memberId);
-  console.log(memberdata);
+ 
 
   const img = useSelector((state) => state.profile.img);
 
