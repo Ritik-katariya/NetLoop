@@ -18,6 +18,7 @@ import VerifiedPage from './components/Verify/VerifiedPage';
 import NetworkPage from './components/AddNetwork/NetworkPage';
 import Network from './components/Network/Network';
 import NetworkProfile from './components/Network/NetworkProfile';
+import MessagePage from './components/Message/MessagePage';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path='/add-network' element={<NetworkPage />} />
         <Route path='/network' element={<Network />} />
         <Route path='/network/:id?' element={<NetworkProfile />} />
+        <Route path='/message' element={<MessagePage />} />
         {/* <Route path='/signup' element={<SignUp />} /> */}
        
         

@@ -1,15 +1,15 @@
 import {Server} from 'http';
-import app from "./app";
+import {app,server} from "./app";
 import config from './config';
 
 async function bootstrap(){
-    const server:Server = app.listen(config.port, () =>{
+    const ser:Server = server.listen(config.port, () =>{
         console.log(`Server running on port ${config.port}`);
     });
 
     const exitHandler = () =>{
-        if(server){
-            server.close(() =>{
+        if(ser){
+            ser.close(() =>{
                 console.log('Server Close')
             })
         }
@@ -24,8 +24,8 @@ async function bootstrap(){
 
     process.on('SIGTERM', () =>{
         console.log('Sigterm Recieved');
-        if(server){
-            server.close();
+        if(ser){
+            ser.close();
         }
     })
 }
