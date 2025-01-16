@@ -8,6 +8,7 @@ import { setMessages } from "../../redux/feature/chatSlice.js";
 const SOCKET_SERVER_URL = process.env.REACT_APP_SERVER_API_BASE_URL || "http://localhost:5050";
 
 function Message() {
+  const [msg, setmsg] = useState(null);
   const [socket, setSocket] = useState(null);
   const [message, setMessage] = useState("");
   const [activeChat, setActiveChat] = useState(null);
@@ -17,12 +18,21 @@ function Message() {
   const dispatch = useDispatch();
    const [members, setmembers] = useState(null);
    useEffect(()=>{
+    console.log("members",data)
     if(data){
       const filterdata=data?.data.filter((data)=>data.id!==memberData?.id);
       setmembers(filterdata);
     }
     
-   },[])
+   },[data])
+
+
+   useEffect(()=>{
+if(messages){
+  const temp=messages.filter((msg)=>msg?.receiverSocketId==activeChat?.socketId)
+  
+}
+   },[activeChat]);
   // Initialize socket connection
   useEffect(() => {
     if (!memberData?.id) return;
@@ -75,7 +85,7 @@ function Message() {
         <div className="p-4">
           <h2 className="text-xl font-bold mb-4">Chats</h2>
           <ul>
-            {members.map((member) => (
+            {members?.map((member) => (
               <li
                 key={member.id}
                 onClick={() => setActiveChat({ ...member, socketId: member.id })}

@@ -41,8 +41,9 @@ io.on("connection", (socket: Socket) => {
     if (receiverSocketId && users[receiverSocketId]) {
       io.to(users[receiverSocketId]).emit("newMessage", {
         content,
-        senderSocketId: socket.id,
+        receiverSocketId : socket.id,
       });
+      console.log("msg send",{ content, receiverSocketId})
     } else {
       console.log("Receiver socket not found or invalid:", receiverSocketId);
     }
