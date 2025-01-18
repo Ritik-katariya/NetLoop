@@ -4,35 +4,51 @@ import { io } from "socket.io-client";
 import { Card, Button, Input } from "@nextui-org/react";
 import { useGetMembersQuery } from "../../redux/api/member";
 import { setMessages } from "../../redux/feature/chatSlice.js";
+// import { useGetChatQuery } from "../../redux/api/chat.js";
+import { useGetMessageQuery } from "../../redux/api/message.js";
+import { useCreateMessageMutation } from "../../redux/api/message.js";
+import { useGetChatQuery } from "../../redux/api/chat.js";
+import { memberInfo } from "../../utils/auth.js";
+
+
+
 
 const SOCKET_SERVER_URL = process.env.REACT_APP_SERVER_API_BASE_URL || "http://localhost:5050";
 
+
+
 function Message() {
-  const [msg, setmsg] = useState(null);
+const memberId=memberInfo().id;
   const [socket, setSocket] = useState(null);
   const [message, setMessage] = useState("");
   const [activeChat, setActiveChat] = useState(null);
   const { data, isLoading, isError } = useGetMembersQuery();
   const { memberData } = useSelector((state) => state.member);
   const [messages, setMessages] = useState([]);
-  const dispatch = useDispatch();
+  const [file, setFile] = useState(null)
+  const {data:msg}=useGetMessageQuery({senderId:memberData?.id,receiverId:activeChat?.socketId})
+  const [createMessage, { isLoading: isLoadingMessage, isError: isErrorMessage }] = useCreateMessageMutation();
+  const {data: chatData } = useGetChatQuery(memberId);
+
+// console.log(chatData[0].members,"chat data")
+
+   const dispatch = useDispatch();
    const [members, setmembers] = useState(null);
+
+
    useEffect(()=>{
     console.log("members",data)
     if(data){
       const filterdata=data?.data.filter((data)=>data.id!==memberData?.id);
       setmembers(filterdata);
     }
-    
    },[data])
 
 
-   useEffect(()=>{
-if(messages){
-  const temp=messages.filter((msg)=>msg?.receiverSocketId==activeChat?.socketId)
+   useEffect(() => {
+        setMessages(msg);
+  },[activeChat]);
   
-}
-   },[activeChat]);
   // Initialize socket connection
   useEffect(() => {
     if (!memberData?.id) return;
@@ -49,9 +65,9 @@ if(messages){
       console.log("Online users:", onlineUsers);
     });
 
-    newSocket.on("newMessage", (content) => {
-      console.log("New message received:", content);
-      setMessages((prevMessages) => [...prevMessages, content]);
+    newSocket.on("newMessage", ({senderId, receiverId, message ,file}) => {
+      console.log("New message received:", {senderId, receiverId, message ,file});
+      setMessages((prevMessages) => [...prevMessages, {senderId, receiverId, message ,file}]);
     });
 
     setSocket(newSocket);
@@ -59,21 +75,35 @@ if(messages){
     return () => {
       newSocket.disconnect();
     };
-  }, [memberData?.id]);
+  }, [memberData?.id,messages,activeChat]);
 
   const handleSendMessage = () => {
     if (!message.trim() || !socket || !activeChat) return;
 
-    const receiverSocketId = activeChat.socketId;
-    console.log("Sending message to:", receiverSocketId);
+    const receiverId = activeChat.socketId;
+    console.log("Sending message to:", receiverId);
 
-    socket.emit("sendMessage", { content: message, receiverSocketId });
-    setMessages((prevMessages) => [...prevMessages, { content: message, receiverSocketId: memberData.id }]);
+    socket.emit("sendMessage", { senderId:memberData?.id, receiverId, message ,file});
+    setMessages((prevMessages) => [...prevMessages, { senderId:memberData?.id, receiverId, message ,file}]);
+
+    const formData = new FormData();
+    formData.append("senderId", memberData?.id);
+    formData.append("receiverId", receiverId);
+    formData.append("message", message);
+
+    if (file) {
+      formData.append("file", file);
+    }
+
+
+    createMessage({data:formData});
+  
     setMessage("");
   };
 
   const handleTyping = (e) => {
     setMessage(e.target.value);
+    socket.emit("Typing","Typing");
   };
 
   if (isLoading) return <div>Loading members...</div>;
@@ -85,7 +115,7 @@ if(messages){
         <div className="p-4">
           <h2 className="text-xl font-bold mb-4">Chats</h2>
           <ul>
-            {members?.map((member) => (
+            {(chatData&&chatData[0]?.members)&&chatData[0].members?.map((member) => (
               <li
                 key={member.id}
                 onClick={() => setActiveChat({ ...member, socketId: member.id })}
@@ -112,17 +142,17 @@ if(messages){
               <h3 className="font-bold">{activeChat.name}</h3>
             </div>
             <div className="flex-1 overflow-y-auto p-4">
-              {messages.map((msg, index) => (
+              {messages?.map((msg, index) => (
                 <div
                   key={index}
-                  className={`mb-4 ${msg.receiverSocketId === memberData?.id ? "text-right" : "text-left"}`}
+                  className={`mb-4 ${msg.senderId === memberData?.id ? "text-right" : "text-left"}`}
                 >
                   <div
                     className={`inline-block p-2 rounded-lg ${
                       msg.senderId === memberData?.id ? "bg-blue-500 text-white" : "bg-gray-200"
                     }`}
                   >
-                    {msg.content}
+                    {msg.message}
                   </div>
                 </div>
               ))}

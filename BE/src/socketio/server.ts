@@ -1,4 +1,6 @@
 import { Server, Socket } from "socket.io";
+import prisma from "../shared/prisma";
+import { Message } from "@prisma/client";
 import http from "http";
 import express from "express";
 import config from "../config";
@@ -35,18 +37,31 @@ io.on("connection", (socket: Socket) => {
   }
 
   // Handle message sending
-  socket.on("sendMessage", ({ content, receiverSocketId }) => {
-    console.log("Message received:", content, "to receiver socket:", receiverSocketId);
-
-    if (receiverSocketId && users[receiverSocketId]) {
-      io.to(users[receiverSocketId]).emit("newMessage", {
-        content,
-        receiverSocketId : socket.id,
-      });
-      console.log("msg send",{ content, receiverSocketId})
-    } else {
-      console.log("Receiver socket not found or invalid:", receiverSocketId);
+  socket.on("sendMessage", ({ message, senderId,receiverId,file }) => {
+    // console.log("Message received:", content, "to receiver socket:", receiverSocketId);
+    try {
+      async (message:string,senderId:string,receiverId:string,file:any) => {
+        await prisma.message.create({data:{
+          senderId,
+          receiverId,
+          message,
+          file,
+        }})
+        
+      }
+    } catch (error) {
+      console.log("something went wrong")
     }
+    console.log("user",users[receiverId],receiverId);
+    if (receiverId && users[receiverId]) {
+      io.to(users[receiverId]).emit("newMessage", {
+        message, senderId,receiverId,file 
+      });
+      console.log("msg send",{ message, senderId,receiverId,file })
+    } else {
+      console.log("Receiver socket not found or invalid:", receiverId);
+    }
+   
   });
 
   // Handle disconnections

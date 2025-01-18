@@ -23,6 +23,8 @@ model Members {
   shares     Share[]
   comments   Comments[]
   explore    Explore[]
+  chats      Chat[]       @relation("MemberChats")
+  requests   ChatRequest?
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   @@map("Members")
@@ -310,6 +312,31 @@ model Promotion{
   explore      Explore?      @relation(fields: [exploreId],references: [id])
   createdAt    DateTime      @default(now())
 
+}
+model Message{
+  id               String        @id @default(uuid())
+  senderId         String
+  receiverId       String
+  file             String?
+  message          String
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+model Chat{
+  id               String        @id @default(uuid())
+  memberId         String 
+  members          Members[]     @relation("MemberChats")
+  createdAt        DateTime      @default(now())
+  
+}
+model ChatRequest{
+  id               String        @id @default(uuid())
+  members          Members       @relation(fields: [memberId],references: [id],onDelete: Cascade)
+  memberId         String         @unique
+  senderId         String
+  message          String?         
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 }
 
 enum UserRole{

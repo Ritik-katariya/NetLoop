@@ -22,7 +22,7 @@ import MessagePage from './components/Message/MessagePage';
 
 function App() {
   return (
-    <Router>
+    <Router >
       <Routes>
         {/* <Route element={<PrivateOutlet />}> */}
           
