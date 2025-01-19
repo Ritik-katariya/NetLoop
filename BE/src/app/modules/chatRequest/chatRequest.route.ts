@@ -5,6 +5,7 @@ const router = express.Router();
 
 // Create a ChatRequest
 router.post("/", chatRequestController.createChatRequest);
+router.post("/create", chatRequestController.createChatRequest)
 
 // Get a ChatRequest by ID
 router.get("/:id", chatRequestController.getChatRequestById);

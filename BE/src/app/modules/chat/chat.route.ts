@@ -15,6 +15,8 @@ router.get("/member/:memberId", chatController.getChatsForMember);
 // Add a member to a chat
 router.patch("/add-member/:id", chatController.addMemberToChat);
 
+router.patch("/remove-member/:id", chatController.removeMemberFromChat);
+
 // Delete a chat by ID
 router.delete("/:id", chatController.deleteChat);
 

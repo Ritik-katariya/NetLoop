@@ -19,12 +19,12 @@ export const chatApi = baseApi.injectEndpoints({
 
       
         updateChat: build.mutation({
-            query: ({ memberId, id }) => ({
+            query: ({ id, data }) => ({
                 url: `${Chat}/add-member/${id}`,
                 method: "PATCH",
-                data: memberId,
+                data: data,
                 headers: {
-                    "Content-Type": "multipart/form-data",
+                   
                 },
             }),
             invalidatesTags: [tagTypes.chat],

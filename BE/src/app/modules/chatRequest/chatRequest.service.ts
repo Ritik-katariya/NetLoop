@@ -1,20 +1,32 @@
 import prisma from "../../../shared/prisma";
-import { ChatRequest } from "@prisma/client";
 import { Request, Response } from "express";
 
 const createChatRequest = async (req: Request, res: Response): Promise<any> => {
   const { memberId, senderId, message } = req.body;
+const isPre=await prisma.chatRequest.findFirst({ where:{memberId: memberId, senderId: senderId}});
+  if(isPre){
+    return res.status(409).json({ error: "You have already sent a chat request to this member." });
+  }
+  try {
+    if (!memberId || !senderId || !message) {
+      return res
+        .status(400)
+        .json({ error: "All fields (memberId, senderId, message) are required." });
+    }
 
-  const chatRequest = await prisma.chatRequest.create({
-    data: {
-      memberId,
-      senderId,
-      message,
-    },
-  });
+    const chatRequest = await prisma.chatRequest.create({
+      data: { memberId, senderId, message },
+    });
 
-  return chatRequest;
+    return res.status(201).json({ success: true, data: chatRequest });
+  } catch (error) {
+    console.error("Error creating chat request:", error);
+    return res.status(500).json({ error: "Send chat request failed." });
+  }
 };
+
+
+
 
 const getChatRequestById = async (id: string): Promise<any> => {
   const chatRequest = await prisma.chatRequest.findUnique({
@@ -27,6 +39,13 @@ const getChatRequestById = async (id: string): Promise<any> => {
 const getChatRequestsForMember = async (memberId: string): Promise<any[]> => {
   const chatRequests = await prisma.chatRequest.findMany({
     where: { memberId },
+    orderBy:{createdAt:"asc"},
+    include:{
+        sender:{include:{
+          profile:true,
+         
+        }},
+    }
   });
 
   return chatRequests;

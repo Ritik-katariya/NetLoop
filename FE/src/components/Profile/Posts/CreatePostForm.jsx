@@ -29,10 +29,9 @@ const CreatePostForm = ({ id, close }) => {
   const [IdNet, setIdNet] = useState("");
   function network(id) {
     setIdNet(id);
-    console.log("id dekh", IdNet);
+    
   }
   useEffect(() => {
-    console.log("IdNet updated:", IdNet);
   }, [IdNet]);
 
   const [File, setFile] = useState(null);

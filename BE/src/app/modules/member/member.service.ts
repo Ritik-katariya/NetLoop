@@ -211,6 +211,7 @@ const getAllMember = async (
       profile: true,
      
       verified: true,
+
     }
   });
 
@@ -234,6 +235,9 @@ const getoneMember = async (id: string): Promise<Members | null> => {
       profile: true,       // Include the profile relation
       verified: true,      // Include the verified relation
       networks: true,
+      chatRequests: true,
+      sentRequests: true,
+    
     },
   });
   return result;

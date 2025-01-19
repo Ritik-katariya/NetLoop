@@ -47,6 +47,16 @@ const addMemberToChat = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const removeMemberFromChat = catchAsync(async (req: Request, res:Response) => {
+  logger.info("Inside controller: removeMemberFromChat");
+  const result = await chatService.removeMemberFromChat(req,res);
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Member removed from chat successfully!",
+    success: true,
+    data: result,
+  });
+});
 
 const deleteChat = catchAsync(async (req: Request, res: Response) => {
   logger.info("Inside controller: deleteChat");
@@ -65,4 +75,5 @@ export const chatController = {
   getChatsForMember,
   addMemberToChat,
   deleteChat,
+  removeMemberFromChat,
 };

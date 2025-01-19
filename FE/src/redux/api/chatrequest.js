@@ -5,42 +5,38 @@ const ChatRequest = "/request";
 
 export const requestApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
-       
         getRequest: build.query({
             query: (memberId) => ({
                 url: `${ChatRequest}/member/${memberId}`,
                 method: "GET",
             }),
-            providesTags: [tagTypes.chatrequest],
+            providesTags: (result, error, memberId) => [{ type: tagTypes.chatrequest, id: memberId }],
         }),
         updateRequest: build.mutation({
             query: ({ data, id }) => ({
                 url: `${ChatRequest}/${id}`,
                 method: "PATCH",
-                data: data,
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
+                body: data, // Use 'body' instead of 'data'
             }),
-            invalidatesTags: [tagTypes.chatrequest],
+            invalidatesTags: (result, error, { id }) => [{ type: tagTypes.chatrequest, id }],
         }),
         deleteRequest: build.mutation({
             query: (id) => ({
                 url: `${ChatRequest}/${id}`,
                 method: "DELETE",
             }),
-            invalidatesTags: [tagTypes.chatrequest],
+            invalidatesTags: (result, error, id) => [{ type: tagTypes.chatrequest, id }],
         }),
         createRequest: build.mutation({
-            query: (data) => ({
-                url: `${ChatRequest}`,
+            query: ({data}) => ({
+                url: `${ChatRequest}/create`,
                 method: "POST",
-                data,
+                data: data,
                 headers: {
-                    "Content-Type": "multipart/form-data",
+                  
                 },
             }),
-            invalidatesTags: [tagTypes.chatrequest],
+            invalidatesTags: [{ type: tagTypes.chatrequest }],
         }),
     }),
 });
@@ -50,5 +46,4 @@ export const {
     useUpdateRequestMutation,
     useDeleteRequestMutation,
     useCreateRequestMutation,
-  
 } = requestApi;

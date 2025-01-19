@@ -24,7 +24,8 @@ model Members {
   comments   Comments[]
   explore    Explore[]
   chats      Chat[]       @relation("MemberChats")
-  requests   ChatRequest?
+  chatRequests  ChatRequest[]  @relation("MemberRequests")
+  sentRequests  ChatRequest[]  @relation("MemberChatRequest")
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   @@map("Members")
@@ -329,14 +330,15 @@ model Chat{
   createdAt        DateTime      @default(now())
   
 }
-model ChatRequest{
-  id               String        @id @default(uuid())
-  members          Members       @relation(fields: [memberId],references: [id],onDelete: Cascade)
-  memberId         String         @unique
-  senderId         String
-  message          String?         
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+model ChatRequest {
+  id        String   @id @default(uuid())
+  members   Members  @relation("MemberRequests", fields: [memberId], references: [id], onDelete: Cascade)
+  memberId  String
+  sender    Members  @relation("MemberChatRequest", fields: [senderId], references: [id])
+  senderId  String
+  message   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum UserRole{
