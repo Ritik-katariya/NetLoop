@@ -22,10 +22,14 @@ model Members {
   likes      Likes[]
   shares     Share[]
   comments   Comments[]
-  explore    Explore[]
   chats      Chat[]       @relation("MemberChats")
   chatRequests  ChatRequest[]  @relation("MemberRequests")
   sentRequests  ChatRequest[]  @relation("MemberChatRequest")
+  news          News[]
+  openion       Opinion[]
+  event         Events[]
+  permotions    Promotion[]
+
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   @@map("Members")
@@ -150,7 +154,7 @@ model Network {
   likes        Likes[]
   shares       Share[]
   comments     Comments[]  
-  explore      Explore[] 
+  explore      Explore?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
   @@map("Network")
@@ -247,10 +251,8 @@ model Comments{
 
 model Explore{
   id            String        @id @default(uuid())
-  members       Members       @relation(fields: [memberId],references: [id],onDelete: Cascade)
-  memberId      String 
-  network       Network?      @relation(fields: [networkId],references: [id],onDelete: Cascade)
-  networkId     String?
+  network       Network       @relation(fields: [networkId],references: [id],onDelete: Cascade)
+  networkId     String        @unique
   news          News[]
   events        Events[]
   opinion       Opinion[]
@@ -260,6 +262,7 @@ model Explore{
   share         Share[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+  @@map("Explore")
 }
   
 model News{
@@ -269,8 +272,11 @@ model News{
   image        String[]
   author       String[]
   category     Category      @default(news)
-  exploreId    String?
-  explore      Explore?      @relation(fields: [exploreId],references: [id],onDelete: Cascade)
+  exploreId    String        
+  explore      Explore       @relation(fields: [exploreId],references: [id],onDelete: Cascade)
+  memberId     String
+  member       Members       @relation(fields: [memberId],references: [id], onDelete: Cascade)
+  expireAt     DateTime      
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
@@ -287,6 +293,9 @@ model Events{
   category     Category      @default(events)
   exploreId    String?
   explore      Explore?      @relation(fields: [exploreId],references: [id])
+  memberId     String
+  member       Members       @relation(fields: [memberId],references: [id], onDelete: Cascade)
+  expireAt     DateTime 
   createdAt    DateTime      @default(now())
 }
 model Opinion{
@@ -299,6 +308,9 @@ model Opinion{
   exploreId    String?
   category     Category      @default(opinion)     
   explore      Explore?      @relation(fields: [exploreId],references: [id])
+  memberId     String
+  member       Members       @relation(fields: [memberId],references: [id], onDelete: Cascade)
+  expireAt     DateTime 
   createdAt    DateTime      @default(now())
 }
 
@@ -311,6 +323,9 @@ model Promotion{
   exploreId    String?
   category     Category      @default(promotion)
   explore      Explore?      @relation(fields: [exploreId],references: [id])
+  memberId     String
+  member       Members       @relation(fields: [memberId],references: [id], onDelete: Cascade)
+  expireAt     DateTime 
   createdAt    DateTime      @default(now())
 
 }

@@ -27,7 +27,10 @@ export default function OtpVerify() {
         console.log("error", error);
       } else {
         toast.success("OTP verify successfully");
-        navigate("/create", { replace: true, state: { email } });
+        setTimeout(() => {
+        
+          navigate("/create", { replace: true, state: { email } });
+        }, 1000);
       }
     } catch (error) {
       console.error("OTP verify failed :" + error.message);

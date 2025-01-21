@@ -7,6 +7,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@heroui/autocomplete": "^2.3.10",
+    "@heroui/tabs": "^2.2.8",
     "@heroui/tooltip": "^2.2.8",
     "@nextui-org/avatar": "^2.2.4",
     "@nextui-org/drawer": "^2.2.6",

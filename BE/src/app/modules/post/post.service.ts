@@ -21,9 +21,29 @@ const createPost = async (req: Request): Promise<any> => {
         throw new ApiError(httpStatus.NOT_FOUND, "Member not found");
       }
 
+      // Validate if networkId exists in the Networks table (if provided)
+      if (networkId) {
+        const networkExists = await tx.network.findUnique({
+          where: { id: networkId },
+        });
+        if (!networkExists) {
+          throw new ApiError(httpStatus.NOT_FOUND, "Network not found");
+        }
+      }
+
+      // Validate if clusterId exists in the Clusters table (if provided)
+      if (clusterId) {
+        const clusterExists = await tx.cluster.findUnique({
+          where: { id: clusterId },
+        });
+        if (!clusterExists) {
+          throw new ApiError(httpStatus.NOT_FOUND, "Cluster not found");
+        }
+      }
+
+      // Handle file uploads
       if (files) {
         if (files.mimetype.startsWith("image/")) {
-          // Handle image upload
           const uploadImage = await CloudinaryHelper.uploadFile(files);
           if (uploadImage) {
             otherData.image = uploadImage.secure_url;
@@ -34,7 +54,6 @@ const createPost = async (req: Request): Promise<any> => {
             );
           }
         } else if (files.mimetype.startsWith("video/")) {
-          // Handle video upload
           const uploadVideo = await CloudinaryHelper.uploadFile(files);
           if (uploadVideo) {
             otherData.video = uploadVideo.secure_url;
@@ -47,12 +66,15 @@ const createPost = async (req: Request): Promise<any> => {
         }
       }
 
-      // Handle video upload
-
       // Create post
       try {
         const post: Post | null = await tx.post.create({
-          data: { ...otherData, memberId, networkId },
+          data: {
+            ...otherData,
+            memberId,
+            networkId: networkId || null, // Set to null if not provided
+            clusterId: clusterId || null, // Set to null if not provided
+          },
         });
         return post;
       } catch (error) {
@@ -70,6 +92,7 @@ const createPost = async (req: Request): Promise<any> => {
 
   return data;
 };
+
 
 // Get a single Post by ID
 const getPost = async (id: string): Promise<Post | null> => {

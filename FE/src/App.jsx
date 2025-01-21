@@ -19,6 +19,8 @@ import NetworkPage from './components/AddNetwork/NetworkPage';
 import Network from './components/Network/Network';
 import NetworkProfile from './components/Network/NetworkProfile';
 import MessagePage from './components/Message/MessagePage';
+import Explore from './components/Explore/Explore';
+import CreateExpo from './components/Explore/CreateExpo';
 
 function App() {
   return (
@@ -40,6 +42,8 @@ function App() {
         <Route path='/network' element={<Network />} />
         <Route path='/network/:id?' element={<NetworkProfile />} />
         <Route path='/message' element={<MessagePage />} />
+        <Route path='/explore' element={<Explore />} />
+        <Route path='/create-explore/:id' element={<CreateExpo />} />
         {/* <Route path='/signup' element={<SignUp />} /> */}
        
         

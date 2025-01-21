@@ -10,6 +10,8 @@ import { verificationRouter } from "../modules/verification/verification.routes"
 import { chatRoutes } from "../modules/chat/chat.route";
 import { messageRoutes } from "../modules/message/message.route";
 import { chatRequestRoutes } from "../modules/chatRequest/chatRequest.route";
+import { exploreRouter } from "../modules/Explore/explore.route";
+import { newsRouter } from "../modules/News/news.route";
 const router = express.Router();
 
 const moduleRoutes = [
@@ -62,6 +64,16 @@ const moduleRoutes = [
   {
     path:"/request",
     route:chatRequestRoutes, 
+  }
+  ,
+  {
+    path:"/explore",
+    route:exploreRouter, 
+  }
+  ,
+  {
+    path:"/news",
+    route:newsRouter, 
   }
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
