@@ -5,7 +5,10 @@ export const tagTypes = {
   network: "network",
   email: "email",
   post: "post",
-  verification: "verification"
+  verification: "verification",
+  chat: "chat",
+  messages: "messages",
+  chatrequest: "chatrequest",
   
 };
 
@@ -16,5 +19,8 @@ export const tagTypeList = [
   tagTypes.network,
   tagTypes.email,
   tagTypes.post,
-  tagTypes.verification
+  tagTypes.verification,
+  tagTypes.chat,
+  tagTypes.messages,
+  tagTypes.chatrequest,
 ];

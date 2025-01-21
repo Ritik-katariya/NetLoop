@@ -7,6 +7,9 @@ import { networkRouter } from "../modules/network/network.routes";
 import { clusterRouter } from "../modules/cluster/cluster.routes";
 import { postRouter } from "../modules/post/post.routes";
 import { verificationRouter } from "../modules/verification/verification.routes";
+import { chatRoutes } from "../modules/chat/chat.route";
+import { messageRoutes } from "../modules/message/message.route";
+import { chatRequestRoutes } from "../modules/chatRequest/chatRequest.route";
 const router = express.Router();
 
 const moduleRoutes = [
@@ -44,6 +47,21 @@ const moduleRoutes = [
   {
     path:"/verification",
     route:verificationRouter, 
+  }
+  ,
+  {
+    path:"/chat",
+    route:chatRoutes, 
+  }
+  ,
+  {
+    path:"/messages",
+    route:messageRoutes, 
+  }
+  ,
+  {
+    path:"/request",
+    route:chatRequestRoutes, 
   }
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

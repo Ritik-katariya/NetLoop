@@ -7,7 +7,6 @@ export default function ProfilePost() {
   const memberId=memberInfo()?.id;
   
 const {data,isLoading,isSuccess,isError,error}=useGetPostByMemberQuery(memberId);
-  console.log(data)
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error?.message || "An unexpected error occurred."}</div>;
   if (!isSuccess || !Array.isArray(data)) return <div>No posts available.</div>;

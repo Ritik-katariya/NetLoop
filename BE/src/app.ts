@@ -7,7 +7,9 @@ import router from './app/routes';
 import config from './config';
 import { Session } from 'inspector';
 const passport=require('passport');
-const app: Application = express();
+// const app: Application = express();
+import { app, server } from "./socketio/server";
+
 
 app.use(cors());
 app.use(CookieParser());
@@ -28,27 +30,27 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 // Route to check protected access
-app.get('/protected', (req, res, next) => {
-    passport.authenticate('jwt', { session: false }, (err, user, info) => {
-      if (err) {
-        return res.status(500).json({ success: false, message: "An error occurred", error: err });
-      }
-      if (!user) {
-        return res.status(401).json({ success: false, message: "Unauthorized - Invalid token" });
-      }
-      req.user = user;
-      next();
-    })(req, res, next);
-  }, (req: Request, res: Response) => {
-    // This callback will run only if authentication succeeds
-    res.status(200).send({
-      success: true,
-      message: 'Access Granted',
-      user:{id: req.user.id,
-        email: req.user.email
-      },
-    });
-  });
+// app.get('/protected', (req, res, next) => {
+//     passport.authenticate('jwt', { session: false }, (err, user, info) => {
+//       if (err) {
+//         return res.status(500).json({ success: false, message: "An error occurred", error: err });
+//       }
+//       if (!user) {
+//         return res.status(401).json({ success: false, message: "Unauthorized - Invalid token" });
+//       }
+//       req.user = user;
+//       next();
+//     })(req, res, next);
+//   }, (req: Request, res: Response) => {
+//     // This callback will run only if authentication succeeds
+//     res.status(200).send({
+//       success: true,
+//       message: 'Access Granted',
+//       user:{id: req.user.id,
+//         email: req.user.email
+//       },
+//     });
+//   });
   
 
 
@@ -65,4 +67,4 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     next();
 })
 
-export default app;
+export  {app,server};

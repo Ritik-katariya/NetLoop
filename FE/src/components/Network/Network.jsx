@@ -5,7 +5,6 @@ import NoData from '../Shared/NoData';
 import Header from '../Shared/Header/Header';
 export default function Network() {
     const { data, isLoading, isSuccess, error } = useGetNetworksQuery();
-    console.log(data)
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error?.message || "An unexpected error occurred."}</div>;
     if (!isSuccess ||!Array.isArray(data)) return <div className='flex justify-center items-center w-full h-[700px]'><NoData/></div>;

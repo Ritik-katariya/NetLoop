@@ -21,6 +21,6 @@ export default {
         key: process.env.API_KEY,
         secret: process.env.API_SECRET
     },
-
+    CLIENT_URL: process.env.CLIENT_URL
     
 }
