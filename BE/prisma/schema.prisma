@@ -269,8 +269,8 @@ model News{
   id           String         @id @default(uuid())
   title        String
   content      String
-  image        String[]
-  author       String[]
+  image        String
+  author       String
   category     Category      @default(news)
   exploreId    String        
   explore      Explore       @relation(fields: [exploreId],references: [id],onDelete: Cascade)

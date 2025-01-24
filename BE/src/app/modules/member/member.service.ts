@@ -20,6 +20,8 @@ import { memberFilters } from "./member.interface";
 import { IGenericResponse } from "../../../interfaces/common";
 import { memberFilltersData } from "./member.interface";
 import { memberSearchableFields } from "./member.interface";
+import { JwtHelper } from "../../../helper/jwtToken";
+import { Secret } from "jsonwebtoken";
 
 //use for sending OTPemail
 const sendOtponEmail = async (email: string, otp: string) => {
@@ -171,8 +173,14 @@ const createMember = async (payload: any): Promise<any> => {
           userId: member.id,
         },
       });
-
-      return member;
+ const { id, status } = member || { id: null, status: null };
+  const accessToken = JwtHelper.createToken(
+    { status, id },
+    config.jwt.secret as Secret,
+    config.jwt.JWT_EXPIRES_IN as string
+  );
+  return { accessToken, user: { status, id } };
+     
     },
     {
       timeout: 10000, // 10 seconds timeout for the entire transaction
@@ -237,7 +245,11 @@ const getoneMember = async (id: string): Promise<Members | null> => {
     include: {
       profile: true,       // Include the profile relation
       verified: true,      // Include the verified relation
-      networks: true,
+      networks:{
+        include:{
+          explore:true,
+        }
+      },
       chatRequests: true,
       sentRequests: true,
     

@@ -29,7 +29,8 @@ export default function UserCreate() {
       const res = await createMemberMutation({ name, phone, email, status: true }).unwrap();
       toast.success("User created successfully!");
       setTimeout(() => {
-        navigate("login");
+      
+        navigate("/login", { replace: true });
       }, 1000);
     } catch (error) {
       console.error("Failed to create user:", error);

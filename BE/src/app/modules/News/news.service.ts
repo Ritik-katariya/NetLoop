@@ -9,8 +9,8 @@ import { CloudinaryHelper } from "../../../helper/uploadHelper";
 const createNews = async (req: Request): Promise<any> => {
   const data = await prisma.$transaction(
     async (tx) => {
-      const files = req.files as any;
-      const { exploreId, title, content, expireAt, memberId, ...otherData } = req.body;
+      const file = req.file as any;
+      const { exploreId, title, content, memberId, ...otherData } = req.body;
 
       if (!title || !content) {
         throw new ApiError(httpStatus.BAD_REQUEST, "Title and content are required");
@@ -25,14 +25,14 @@ const createNews = async (req: Request): Promise<any> => {
         }
       }
 
-      let imageUrls: string[] = [];
-      if (files?.images) {
-        const uploadPromises = files.images.map((file: any) =>
-          CloudinaryHelper.uploadFile(file)
-        );
-        const uploadResults = await Promise.all(uploadPromises);
-        imageUrls = uploadResults.map((upload) => upload.secure_url);
+      let imageUrls;
+      if (file) {
+        const img = await CloudinaryHelper.uploadFile(file);
+        imageUrls = img.secure_url;
+         
       }
+      const expireAt = new Date();
+          expireAt.setHours(expireAt.getHours() + 24);
 
       try {
         const news = await tx.news.create({
@@ -43,7 +43,7 @@ const createNews = async (req: Request): Promise<any> => {
             explore: exploreId
               ? { connect: { id: exploreId } }
               : undefined,
-            expireAt: expireAt ? new Date(expireAt) : null,
+            expireAt: expireAt,
             member: memberId
               ? { connect: { id: memberId } } // If memberId is provided, connect it
               : undefined,

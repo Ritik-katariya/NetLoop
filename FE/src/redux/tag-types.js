@@ -9,6 +9,7 @@ export const tagTypes = {
   chat: "chat",
   messages: "messages",
   chatrequest: "chatrequest",
+  news: "news",
   
 };
 
@@ -23,4 +24,5 @@ export const tagTypeList = [
   tagTypes.chat,
   tagTypes.messages,
   tagTypes.chatrequest,
+  tagTypes.news,
 ];
