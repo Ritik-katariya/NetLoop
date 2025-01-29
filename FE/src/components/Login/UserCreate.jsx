@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { selectEmail } from "../../redux/feature/emailSlice";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-
+import { saveTokenToCookie } from "../../utils/cookeeSet";
 export default function UserCreate() {
   const navigate = useNavigate();
   const email = useSelector(selectEmail);
@@ -19,7 +19,7 @@ export default function UserCreate() {
     setphone(value);
   };
 
-  const onSubmit = async (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
     if (phone.length !== 10) {
       toast.error("Phone number must be exactly 10 digits.");
@@ -29,8 +29,13 @@ export default function UserCreate() {
       const res = await createMemberMutation({ name, phone, email, status: true }).unwrap();
       toast.success("User created successfully!");
       setTimeout(() => {
-      
-        navigate("/login", { replace: true });
+        if (res?.error) {
+          toast.error(res.error.data);
+          console.log("error", res.error);
+        } else if (res?.accessToken) {
+          saveTokenToCookie(res.accessToken);
+          navigate("/");
+        }
       }, 1000);
     } catch (error) {
       console.error("Failed to create user:", error);
@@ -46,7 +51,7 @@ export default function UserCreate() {
           <ToastContainer />
         </CardHeader>
         <CardBody>
-          <form onSubmit={onSubmit} className="flex flex-col space-y-4 text-lg gap-2">
+          <form onSubmit={onSubmitHandler} className="flex flex-col space-y-4 text-lg gap-2">
             <Input
               type="text"
               value={name}
@@ -74,12 +79,12 @@ export default function UserCreate() {
             <Button type="submit" color="primary" className="w-full">
               Register
             </Button>
+          </form>
             <div className="text-center">
               <Link color="foreground" href="/login">
                 Back to Login
               </Link>
             </div>
-          </form>
         </CardBody>
       </Card>
     </div>

@@ -22,7 +22,6 @@ const createMember = catchAsync(async (req: Request, res: Response) => {
   logger.info("insider controller:createMember");
   const result = await memberService.createMember(req.body);
   const { accessToken } = result;
-
   const cookieOptions = {
       secure: config.env === 'production',
       httpOnly: true

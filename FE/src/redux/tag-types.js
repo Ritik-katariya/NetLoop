@@ -10,6 +10,10 @@ export const tagTypes = {
   messages: "messages",
   chatrequest: "chatrequest",
   news: "news",
+  explore: "explore",
+  explore:"poll",
+  explore:"rating",
+  explore:"promotion"
   
 };
 
@@ -25,4 +29,8 @@ export const tagTypeList = [
   tagTypes.messages,
   tagTypes.chatrequest,
   tagTypes.news,
+  tagTypes.explore,
+  tagTypes.poll,
+  tagTypes.rating,
+  tagTypes.promotion
 ];

@@ -12,6 +12,9 @@ import { messageRoutes } from "../modules/message/message.route";
 import { chatRequestRoutes } from "../modules/chatRequest/chatRequest.route";
 import { exploreRouter } from "../modules/Explore/explore.route";
 import { newsRouter } from "../modules/News/news.route";
+import { pollRouter } from "../modules/poll/poll.route";
+import { ratingRouter } from "../modules/rating/rating.route";
+import { promotionRouter } from "../modules/Promotion/promotion.route";
 const router = express.Router();
 
 const moduleRoutes = [
@@ -74,6 +77,21 @@ const moduleRoutes = [
   {
     path:"/news",
     route:newsRouter, 
+  }
+  ,
+  {
+    path:"/poll",
+    route:pollRouter, 
+  }
+  ,
+  {
+    path:"/rating",
+    route:ratingRouter, 
+  }
+  ,
+  {
+    path:"/promotion",
+    route:promotionRouter, 
   }
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

@@ -84,6 +84,19 @@ const getNews = async (id: string): Promise<News | null> => {
 const getAllNews = async (): Promise<News[]> => {
   const result = await prisma.news.findMany({
     orderBy: { createdAt: "desc" },
+    include: {
+      member: {
+        include: {
+          profile: {
+            select:{
+              img:true,
+            }
+          },
+          verified: true,
+          networks:{select:{id:true,name:true}}
+        }
+      },
+    },
   });
   return result;
 };

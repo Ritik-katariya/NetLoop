@@ -9,27 +9,29 @@ datasource db {
 
 
 model Members {
-  id         String      @id @default(uuid())
-  name       String
-  email      String      @unique
-  phone      String      @unique
-  status     Boolean     @default(false)
-  verified   Verified?
-  profile    Profile?
-  posts      Post[]
-  networks   Network[]   @relation("MemberNetworks") // Many-to-many relationship
-  Cluster    Cluster[]   @relation("MemberClusters")
-  likes      Likes[]
-  shares     Share[]
-  comments   Comments[]
-  chats      Chat[]       @relation("MemberChats")
+  id            String      @id @default(uuid())
+  name          String
+  email         String      @unique
+  phone         String      @unique
+  status        Boolean     @default(false)
+  verified      Verified?
+  profile       Profile?
+  posts         Post[]
+  networks      Network[]   @relation("MemberNetworks") // Many-to-many relationship
+  Cluster       Cluster[]   @relation("MemberClusters")
+  likes         Likes[]
+  shares        Share[]
+  comments      Comments[]
+  chats         Chat[]       @relation("MemberChats")
   chatRequests  ChatRequest[]  @relation("MemberRequests")
   sentRequests  ChatRequest[]  @relation("MemberChatRequest")
   news          News[]
-  openion       Opinion[]
+  poll          Poll[]   @relation("pollmember")
+  rating        Rating[] @relation("MemberRating")
+  ratingvotes   Rating[] @relation("MemberVoteRating")
   event         Events[]
   permotions    Promotion[]
-
+  pollvotes     Poll[]       @relation("MembersPoll")
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   @@map("Members")
@@ -255,7 +257,8 @@ model Explore{
   networkId     String        @unique
   news          News[]
   events        Events[]
-  opinion       Opinion[]
+  poll          Poll[]
+  rating        Rating[]
   promotion     Promotion[]
   likes         Likes[]
   comments      Comments[]
@@ -298,28 +301,46 @@ model Events{
   expireAt     DateTime 
   createdAt    DateTime      @default(now())
 }
-model Opinion{
+
+model Poll{
+  id           String        @id @default(uuid())
+  question     String
+  options      String[]
+  votes        Int[]
+  totalvotes   Int
+  category     Category      @default(poll)
+  memberId     String
+  member       Members       @relation("pollmember",fields: [memberId],references: [id], onDelete: Cascade)
+  exploreId    String?
+  explore      Explore?      @relation(fields: [exploreId],references: [id], onDelete: Cascade)
+  voter        Members[]       @relation("MembersPoll")
+  expireAt     DateTime 
+  createdAt    DateTime      @default(now())
+}
+model Rating{
   id           String        @id @default(uuid())
   title        String
   description  String
-  author       String
-  poll         Int[]
-  rating       Int[]     
-  exploreId    String?
-  category     Category      @default(opinion)     
-  explore      Explore?      @relation(fields: [exploreId],references: [id])
+  image        String?
+  rating       Int[]         @default([0,0,0,0,0])
+  totalrating  Int
+  category     Category      @default(rating)
   memberId     String
-  member       Members       @relation(fields: [memberId],references: [id], onDelete: Cascade)
+  linkUrl      String?
+  member       Members       @relation("MemberRating",fields: [memberId],references: [id], onDelete: Cascade)
+  exploreId    String?
+  explore      Explore?      @relation(fields: [exploreId],references: [id], onDelete: Cascade)
+  voter        Members[]       @relation("MemberVoteRating")
   expireAt     DateTime 
   createdAt    DateTime      @default(now())
 }
 
 model Promotion{
   id           String        @id @default(uuid())
-  title        String[]
-  description  String
-  image        String[]
-  author       String[]
+  text         String
+  textColor    String
+  link         String?
+  backgroundColor       String
   exploreId    String?
   category     Category      @default(promotion)
   explore      Explore?      @relation(fields: [exploreId],references: [id])
@@ -371,7 +392,8 @@ enum Gender{
  enum Category{
   news
   events
-  opinion
+  poll
+  rating
   promotion
   }
 

@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import ForgotPassword from "./ForgotPassword";
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
-// Custom Icons
 
 const LoginPage = () => {
   const [activeForm, setActiveForm] = useState("login");
+
+  const renderForm = useMemo(() => {
+    if (activeForm === "login") return <SignIn setActiveForm={setActiveForm} />;
+    if (activeForm === "signup") return <SignUp setActiveForm={setActiveForm} />;
+    if (activeForm === "forgot")
+      return <ForgotPassword setActiveForm={setActiveForm} />;
+  }, [activeForm]);
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
@@ -20,13 +26,7 @@ const LoginPage = () => {
               : "Forgot Password"}
           </h2>
         </CardHeader>
-        <CardBody>
-          {activeForm === "login" && <SignIn setActiveForm={setActiveForm} />}
-          {activeForm === "signup" && <SignUp setActiveForm={setActiveForm} />}
-          {activeForm === "forgot" && (
-            <ForgotPassword setActiveForm={setActiveForm} />
-          )}
-        </CardBody>
+        <CardBody>{renderForm}</CardBody>
       </Card>
     </div>
   );

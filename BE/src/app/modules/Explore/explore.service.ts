@@ -39,7 +39,8 @@ const getExplore = async (id: string): Promise<Explore | null> => {
     include: {
       news: true,
       events: true,
-      opinion: true,
+      poll: true,
+      rating:true,
       promotion: true,
       likes: true,
       comments: true,
@@ -60,7 +61,8 @@ const getAllExplores = async (): Promise<Explore[]> => {
     include: {
       news: true,
       events: true,
-      opinion: true,
+      poll: true,
+      rating: true,
       promotion: true,
       likes: true,
       comments: true,

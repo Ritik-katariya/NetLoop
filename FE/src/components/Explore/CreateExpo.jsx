@@ -35,8 +35,8 @@ export default function CreateExpo() {
         classNames={{
           tabList: "w-full relative flex gap-4 overflow-x-auto no-scrollbar",
           cursor: "w-full",
-          tab: "relative flex items-center justify-center p-2 text-gray-600 hover:text-gray-900",
-          tabPanel: "relative flex-1 p-4"
+          tab: "relative flex items-center justify-center p-2 text-gray-700 hover:text-primary focus:text-primary  text-xl font-semibold hover:scale-105",
+          tabPanel: "relative flex-1 p-4 "
           
 
 
