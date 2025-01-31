@@ -12,6 +12,8 @@ import { GiCheckMark } from "react-icons/gi";
 import { Avatar } from "@nextui-org/react";
 import { getTimeAgo } from "../../../utils/timeAgoCreate";
 import OptionButton from "../../Profile/Posts/ThreeDot";
+import { useVoteOnRatingMutation } from '../../../redux/api/rating';
+
 const StarRating = ({ 
   totalStars = 5, 
   initialRating = 0, 
@@ -75,7 +77,9 @@ const StarRating = ({
 const member=[]
 const createdAt=""
 const id=""
-const ProductRatingForm = () => {
+const RatingInputForm = () => {
+  const [voteOnRating]=useVoteOnRatingMutation();
+  
   const [userRating, setUserRating] = useState(0);
 
   const dummyProduct = {
@@ -160,4 +164,4 @@ const ProductRatingForm = () => {
   );
 };
 
-export default ProductRatingForm;
+export default RatingInputForm;

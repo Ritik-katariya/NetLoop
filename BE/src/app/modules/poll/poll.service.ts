@@ -132,6 +132,26 @@ const getPollsByExplore = async (exploreId: string): Promise<Poll[]> => {
   const result = await prisma.poll.findMany({
     where: { exploreId },
     orderBy: { createdAt: "desc" },
+    include: {
+      member: {
+        select: {
+          id: true,
+          name: true,
+          networks: {
+            select: {
+              id: true,
+              name: true
+            }
+          },
+          profile: {
+            select: {
+              img: true
+            }
+          }
+        }
+      },
+      voter: {select:{id:true}}
+    }
   });
 
   return result;

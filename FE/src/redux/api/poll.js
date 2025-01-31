@@ -48,12 +48,12 @@ export const pollApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.poll],
     }),
     voteOnPoll: build.mutation({
-      query: ({ data, id }) => ({
+      query: ({id,data }) => ({
         url: `${Poll}/vote/${id}`,
         method: "PATCH",
         data: data,
         headers: {
-          "Content-Type": "multipart/form-data",
+          
         },
       }),
       invalidatesTags: [tagTypes.poll],

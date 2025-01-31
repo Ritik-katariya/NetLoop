@@ -133,6 +133,10 @@ const getRatingsByExplore = async (exploreId: string): Promise<Rating[]> => {
   const result = await prisma.rating.findMany({
     where: { exploreId },
     orderBy: { createdAt: "desc" },
+    include: { member: {include:{profile:{select:{img:true}},
+    networks:{select:{name:true}},
+    verified:{select:{verified:true}},
+  }} },
   });
 
   return result;

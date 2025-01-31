@@ -11,9 +11,9 @@ export const tagTypes = {
   chatrequest: "chatrequest",
   news: "news",
   explore: "explore",
-  explore:"poll",
-  explore:"rating",
-  explore:"promotion"
+  poll:"poll",
+  rating:"rating",
+  promotion:"promotion"
   
 };
 

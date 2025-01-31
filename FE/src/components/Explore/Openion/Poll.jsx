@@ -1,59 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Trash2, Plus, Check } from "lucide-react";
 import { GiCheckMark } from "react-icons/gi";
 import { Avatar } from "@nextui-org/react";
 import { getTimeAgo } from "../../../utils/timeAgoCreate";
 import OptionButton from "../../Profile/Posts/ThreeDot";
-export default function Poll() {
-  const [question, setQuestion] = useState("jkhjk");
-  const [options, setOptions] = useState(["kljl", "kjhk"]);
-  const [votes, setVotes] = useState({});
+import { useVoteOnPollMutation } from "../../../redux/api/poll";
+import { memberInfo } from "../../../utils/auth";
+export default function Poll({data}) {
+  const memberId=memberInfo().id;
+const {question, options, createdAt, member,id,totalvotes:totalVote,votes:vote,voter} = data;
+  const [votes, setVotes] = useState([]);
+  const [totalVotes, settotalVotes] = useState(0);
   const [userVoted, setUserVoted] = useState(false);
   const [showResults, setShowResults] = useState(false);
+const [voteOnPoll]=useVoteOnPollMutation();
 
-  const handleAddOption = () => {
-    if (options.length < 12) {
-      setOptions([...options, ""]);
-    }
-  };
+useEffect(() => {
+  setVotes(vote);
+  settotalVotes(totalVote);
+  const hasVoted = voter?.some((v) => v.id === memberId);
+  if(hasVoted){
+    setUserVoted(true);
+    setShowResults(true);
+  }
+},[data]); 
+console.log(voter,"voter",data)
 
-  const handleRemoveOption = (index) => {
-    if (options.length > 2) {
-      const newOptions = options.filter((_, i) => i !== index);
-      setOptions(newOptions);
-    }
-  };
-
-  const handleOptionChange = (index, value) => {
-    const newOptions = [...options];
-    newOptions[index] = value;
-    setOptions(newOptions);
-  };
-
-  const handleVote = (index) => {
+  const handleVote = async(index) => {
     if (!userVoted) {
-      const newVotes = { ...votes };
-      newVotes[index] = (newVotes[index] || 0) + 1;
-      setVotes(newVotes);
+    try {
+      const res=await voteOnPoll({id,data:{optionIndex:index,memberId}}).unwrap();
+      console.log(res,"vote on poll");
+    
+        setVotes(res?.data?.votes);
+        settotalVotes(res?.data?.totalVotes);
+       
       setUserVoted(true);
       setShowResults(true);
+    } catch (error) {
+      console.error(error,"Vote failed");
+    }
+
     }
   };
 
-  const getTotalVotes = () => {
-    return Object.values(votes).reduce((a, b) => a + b, 0);
-  };
 
-  const getPercentage = (votes, index) => {
-    const totalVotes = getTotalVotes();
+
+  const getPercentage = ( index) => {
+   
     if (totalVotes === 0) return 0;
-    return Math.round(((votes[index] || 0) / totalVotes) * 100);
+    const ans= Math.round((votes[index] / totalVotes) * 100);
+    console.log(ans,"votes");
+    return ans;
   };
 
 
-  const member=[]
-const createdAt=""
-const id=""
+ 
   return (
     <div className="w-[550px] h-[350px] mb-4 bg-white flex flex-col justify-start items-between  space-y-1 px-3 text-sm ">
        <div className="flex items-center justify-between p-4 bg-white w-full -p-2">
@@ -97,18 +99,17 @@ const id=""
                       >
                         <span>{option}</span>
                         {showResults && (
-                          <span className="flex items-center gap-2">
-                            {getPercentage(votes, index)}%
-                            {userVoted && votes[index] && (
-                              <Check size={16} className="text-green-500" />
-                            )}
-                          </span>
-                        )}
+                            <span className="flex items-center gap-2">
+                              {getPercentage(index) >= 0 && `${getPercentage(index)}%`}
+                              {userVoted && votes[index] > 0 && <Check size={16} className="text-green-500" />}
+                            </span>
+                          )}
+
                       </div>
                       {showResults && (
                         <div
                           className="absolute inset-0 bg-blue-100 rounded-lg opacity-20"
-                          style={{ width: `${getPercentage(votes, index)}%` }}
+                          style={{ width: `${getPercentage( index)}%` }}
                         />
                       )}
                     </div>
@@ -119,7 +120,7 @@ const id=""
 
           {showResults && (
             <div className="mt-4 text-sm text-gray-500 text-center">
-              {getTotalVotes()} votes
+              {totalVotes} votes
             </div>
           )}
         </div>
