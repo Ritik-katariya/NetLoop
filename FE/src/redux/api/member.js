@@ -1,6 +1,6 @@
 import { tagTypes } from "../tag-types";
 import { baseApi } from "./baseApi";
-
+import { setUserInfo } from "../../utils/local-storage";
 const Member = "/member";
 
 export const memberApi = baseApi.injectEndpoints({
@@ -51,6 +51,13 @@ export const memberApi = baseApi.injectEndpoints({
         method: "POST",
         data,
       }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+                      try {
+                          const result = (await queryFulfilled).data;
+                          setUserInfo({ accessToken: result.accessToken });
+                      } catch (error) {
+                      }
+                  },
     }),
   }),
 });

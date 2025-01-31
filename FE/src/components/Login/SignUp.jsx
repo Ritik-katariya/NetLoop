@@ -34,6 +34,9 @@ export default function SignUp({ setActiveForm }) {
     try {
       const result = await sendOtpMutation(user).unwrap();
       toast.success("OTP sent successfully!");
+      setTimeout(() => {
+        
+      }, 1000);
       navigate("/verifyotp");
     } catch (error) {
       toast.error("Failed to send OTP. Please try again.");

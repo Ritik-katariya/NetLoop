@@ -5,7 +5,6 @@ import { memberController } from "./member.controller";
 
 router.post("/", memberController.createMember);
 router.post("/sendotp", memberController.sendOTP);
-router.post("/resendotp", memberController.reSendOtponEmail);
 router.post("/verifyOTP", memberController.verifyOTP);
 router.get("/", memberController.getAllMember);
 router.get("/:id?", memberController.getoneMember);

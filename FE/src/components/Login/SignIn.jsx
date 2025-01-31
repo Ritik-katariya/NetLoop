@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Input } from "@nextui-org/react";
-import { Button } from "@nextui-org/react";
-import { Divider, Link } from "@nextui-org/react";
+import { Button, Divider } from "@nextui-org/react";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { TbPasswordFingerprint } from "react-icons/tb";
-import { BsFillEyeSlashFill } from "react-icons/bs";
-import { BsFillEyeFill } from "react-icons/bs";
+import { BsFillEyeSlashFill, BsFillEyeFill } from "react-icons/bs";
 import { useUserLoginMutation } from "../../redux/api/authApi";
 import { saveTokenToCookie } from "../../utils/cookeeSet";
 import { useNavigate } from "react-router-dom";
@@ -21,27 +19,26 @@ export default function SignIn({ setActiveForm }) {
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  if(emailValue)setEmail(emailValue);
+  if (emailValue) setEmail(emailValue);
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
       const res = await loginMutation({ email, password });
       if (res?.error) {
-        toast.error( res.error.data);
+        toast.error(res.error.data);
         console.log("error", res.error);
       } else if (res?.data) {
-        const savetoken = saveTokenToCookie(res.data.accessToken);
-        console.log(savetoken);
-        toast.success("Login success");
-        
+        saveTokenToCookie(res.data.accessToken);
+        toast.success("Login successful");
         navigate("/");
       }
     } catch (error) {
       console.log("error", error);
-      
     }
   };
 
@@ -59,26 +56,18 @@ export default function SignIn({ setActiveForm }) {
       >
         <Input
           type="email"
-          // label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
           startContent={<MdOutlineAlternateEmail />}
-          // endContent={<MdOutlineAlternateEmail />}
           required
-
-          //  className="border-b-2 rounded-lg "
-        ></Input>
+        />
 
         <Input
           type={isVisible ? "text" : "password"}
-          // label="Password"
-          isRequired
-          errorMessage="Enter your password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter your password"
-          labelPlacement="outside"
           startContent={<TbPasswordFingerprint />}
           endContent={
             <EyeIcon isVisible={isVisible} onClick={toggleVisibility} />
@@ -91,24 +80,24 @@ export default function SignIn({ setActiveForm }) {
         </Button>
         <ToastContainer />
         <div className="text-center">
-          <Link
-            color="foreground"
-            href="#"
+          <button
+            type="button"
+            className="text-primary hover:underline"
             onClick={() => setActiveForm("forgot")}
           >
             Forgot Password?
-          </Link>
+          </button>
         </div>
         <Divider />
         <div className="text-center">
           <span>Don't have an account? </span>
-          <Link
-            color="primary"
-            href="#"
+          <button
+            type="button"
+            className="text-primary hover:underline"
             onClick={() => setActiveForm("signup")}
           >
             Sign Up
-          </Link>
+          </button>
         </div>
       </form>
     </div>

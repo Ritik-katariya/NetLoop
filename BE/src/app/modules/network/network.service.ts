@@ -87,6 +87,14 @@ const createNetwork = async (req: Request): Promise<any> => {
         },
       },
     });
+
+  const explore=await prisma.explore.create({
+    data:{
+      networkId:network.id
+    }
+  })
+
+
     return network;
   } catch (error) {
     throw new Error("Network error: " + JSON.stringify(error));

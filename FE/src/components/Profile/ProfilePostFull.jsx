@@ -27,12 +27,17 @@ export default function PostView({post}) {
 
   return (
     <>
-      <img
+     {post?.image&& <img
            onClick={onOpen}
           src={post?.image}
           alt={`gallery-${"helo"}`}
           className="w-56 h-56 object-fill"
-        />
+        />}
+        {
+          post?.video&&<video className="w-56 h-56" controls>
+          <source src={post?.video} type="video/mp4" />
+        </video>
+        }
        
       <Modal
         isOpen={isOpen}

@@ -18,6 +18,7 @@ export default function ProfileDP({ data }) {
    const { verified } = useSelector((state) => ({
      verified:state.member.verified
    }));
+  console.log(data?.networks,"networks")
   return (
     <div className="flex items-center gap-4 ">
       <Dropdown placement="bottom-end">
@@ -42,7 +43,7 @@ export default function ProfileDP({ data }) {
             </p>
           </DropdownItem>
           <DropdownItem key="settings">
-            <NavLink to={`/profile/${data?.profile.id}`}>My Profile</NavLink>
+            <NavLink to={`/profile/${data?.profile?.id}`}>My Profile</NavLink>
           </DropdownItem>
          <DropdownItem key="team_settings">
          {!verified?  <NavLink to={`/verify/${data?.id}`}> Verification</NavLink>:<p className="hover:text-primary">Verified</p>}
@@ -50,6 +51,11 @@ export default function ProfileDP({ data }) {
           {data?.verified && (
             <DropdownItem key="Add Network">
               <NavLink to={"/add-network"}>Add Network</NavLink>
+            </DropdownItem>
+          )}
+          {data?.networks?.length>0 && (
+            <DropdownItem key="Add Network">
+              <NavLink to={`/create-explore/${data?.networks[0]?.explore?.id}`}>Create Explore</NavLink>
             </DropdownItem>
           )}
           <DropdownItem >

@@ -19,7 +19,7 @@ import { MdModeEditOutline  } from "react-icons/md";
     return (
       <>
         <Button className="bg-primary rounded-lg h-8 text-white text-base" onPress={onOpen} ><MdModeEditOutline/> Details</Button>
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='full' backdrop="opaque"
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='md' backdrop="opaque"
         classNames={{
           backdrop: "bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20",
         }}>

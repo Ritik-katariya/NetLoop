@@ -6,6 +6,7 @@ import { memberService } from "./member.service";
 import { logger } from "../../../shared/logger";
 import { memberFilltersData } from "./member.interface";
 import pick from "../../../shared/pick";
+import config from "../../../config";
 const sendOTP = catchAsync(async (req: Request, res: Response) => {
   logger.info("insider controller:sendOTP");
   const result = await memberService.sendOTP(req.body);
@@ -16,25 +17,22 @@ const sendOTP = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-const reSendOtponEmail = catchAsync(async (req: Request, res: Response) => {
-  logger.info("insider controller:reSendOtponEmail");
-  const result = await memberService.reSendOtponEmail(req.body);
-  sendResponse(res, {
-    statusCode: 200,
-    message: "Successfully OTP Send !!",
-    success: true,
-    data: result,
-  });
-});
+
 const createMember = catchAsync(async (req: Request, res: Response) => {
   logger.info("insider controller:createMember");
   const result = await memberService.createMember(req.body);
+  const { accessToken } = result;
+  const cookieOptions = {
+      secure: config.env === 'production',
+      httpOnly: true
+  }
+  res.cookie('accessToken', accessToken, cookieOptions)
   sendResponse(res, {
-    statusCode: 200,
-    message: "Successfully Owner Created !!",
-    success: true,
-    data: result,
-  });
+      statusCode: 200,
+      message: 'Successfully create member !!',
+      success: true,
+      data: result,
+  })
 });
 const verifyOTP = catchAsync(async (req: Request, res: Response) => {
   logger.info("insider controller:verifyOTP");
@@ -94,7 +92,6 @@ const deleteMember = catchAsync(async (req: Request, res: Response) => {
 export const memberController = {
   createMember,
   sendOTP,
-  reSendOtponEmail,
   verifyOTP,
   getoneMember,
   updateMember,
