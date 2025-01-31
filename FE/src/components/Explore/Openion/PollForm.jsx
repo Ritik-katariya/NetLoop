@@ -54,10 +54,7 @@ const exploreId=useParams().id;
     }
   try {
     await createPollMutation( {"question": formData.question, "options": validOptions,"memberId":memberId,"exploreId":exploreId});
-    console.log("Poll Created:", {
-      question: formData.question,
-      options: validOptions,
-    });
+
     setFormData({ question: "", options: ["", ""] });
     toast.success("Poll created successfully");
   } catch (error) {

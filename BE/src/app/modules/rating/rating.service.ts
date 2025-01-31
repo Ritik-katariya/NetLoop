@@ -136,7 +136,7 @@ const getRatingsByExplore = async (exploreId: string): Promise<Rating[]> => {
     include: { member: {include:{profile:{select:{img:true}},
     networks:{select:{name:true}},
     verified:{select:{verified:true}},
-  }} },
+  }},voter:{select:{id:true}} },
   });
 
   return result;

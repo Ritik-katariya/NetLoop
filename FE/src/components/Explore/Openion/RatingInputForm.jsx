@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Card, 
   CardBody, 
@@ -8,11 +8,9 @@ import {
   Link 
 } from "@nextui-org/react";
 import { Star, ExternalLink } from 'lucide-react';
-import { GiCheckMark } from "react-icons/gi";
-import { Avatar } from "@nextui-org/react";
-import { getTimeAgo } from "../../../utils/timeAgoCreate";
-import OptionButton from "../../Profile/Posts/ThreeDot";
 import { useVoteOnRatingMutation } from '../../../redux/api/rating';
+import PostUserHeader from '../../Shared/PostHeader/PostUserHeader';
+import { memberInfo } from '../../../utils/auth';
 
 const StarRating = ({ 
   totalStars = 5, 
@@ -23,6 +21,10 @@ const StarRating = ({
 }) => {
   const [rating, setRating] = useState(initialRating);
   const [hoverRating, setHoverRating] = useState(0);
+
+  useEffect(() => {
+    setRating(initialRating);
+  }, [initialRating]);
 
   const handleClick = (selectedRating) => {
     if (!readOnly) {
@@ -74,90 +76,84 @@ const StarRating = ({
     </div>
   );
 };
-const member=[]
-const createdAt=""
-const id=""
-const RatingInputForm = () => {
-  const [voteOnRating]=useVoteOnRatingMutation();
-  
+
+const RatingInputForm = ({ data }) => {
+  const memberId = memberInfo().id;
+  const { member, createdAt, id, image, linkUrl, totalrating: totalrate, rating = [], title, description, voter } = data;
+
+  const [hasVoted, setHasVoted] = useState(false);
+  const [totalRating, setTotalRating] = useState(totalrate || 0);
+  const [voteOnRating] = useVoteOnRatingMutation();
+  const [averageRating, setAverageRating] = useState(0);
   const [userRating, setUserRating] = useState(0);
 
-  const dummyProduct = {
-    title: 'Wireless Noise Cancelling Headphones',
-    image: '/api/placeholder/400/300',
-    description: 'Premium over-ear headphones with advanced noise cancellation technology.',
-    link: 'https://example.com/product'
+  useEffect(() => {
+    setTotalRating(totalrate);
+    setHasVoted(voter?.some((v) => v.id === memberId));
+
+    if (rating.length > 0) {
+      const totalVotes = rating.reduce((acc, num) => acc + num, 0);
+      const weightedSum = rating.reduce((acc, num, index) => acc + num * (index+1), 0);
+      const voteTotal = totalVotes > 0 ? (weightedSum / totalVotes).toFixed(2) : 0;
+      setAverageRating(parseFloat(voteTotal));
+    } else {
+      setAverageRating(0);
+    }
+  }, [data]);
+
+  const submitHandler = async () => {
+    try {
+      const res = await voteOnRating({ id, data: { ratingValue: userRating, memberId } }).unwrap();
+      
+      if (res?.data) {
+        setTotalRating(res.data.totalrating);
+        setAverageRating(parseFloat(res.data.averageRating || 0));
+        setHasVoted(true); // Prevents duplicate voting
+      }
+    } catch (error) {
+      console.error("Rating submission failed", error);
+    }
   };
 
   return (
-    <div className="bg-white w-[550px] flex items-center justify-center p-2 flex-col">
-        <div className="flex items-center justify-between p-4 bg-white w-full -p-2">
-      <div className="flex items-center gap-3">
-        <Avatar
-          src={member?.profile?.img}
-          size="md"
-          className="border-2 border-primary"
-        />
-          <div className="flex flex-col">
-            <div className="flex justify-start items-center gap-4">
-            <h3 className="text-base font-semibold">{member?.name}</h3>
-            {member?.verified && <GiCheckMark className="text-primary" />}
-            <span className="text-xs text-gray-400 ml-2">
-              {getTimeAgo(new Date(createdAt))}
-            </span>
-            </div>
-           {member?.networks?.length > 0 && (<p className="text-[10px] text-gray-500">{member?.networks[0]?.name}</p>)}
-          </div>
-      </div>
-      <OptionButton id={id} />
-    </div>
+    <div className="bg-white w-[550px] flex items-center justify-center p-2 flex-col mb-6">
+      <PostUserHeader member={member} createdAt={createdAt} id={id} />
       <Card className="w-full">
         <CardHeader className="flex gap-3">
-          <Image
-            alt={dummyProduct.title}
-            className='object-cover'
-            radius="sm"
-            src="https://heroui.com/images/album-cover.png"
-          />
+          <Image alt={title} className="object-cover w-44 h-44" radius="sm" src={image} />
           <div className="flex flex-col">
-            <h3 className="text-lg font-bold">{dummyProduct.title}</h3>
-            <p className="text-small text-default-500">{dummyProduct.description}</p>
+            <h3 className="text-lg font-bold">{title}</h3>
+            <p className="text-small text-default-500">{description}</p>
           </div>
         </CardHeader>
         <CardBody className="space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-sm font-medium flex items-center gap-2 text-gray-500">
-              <StarRating
-                initialRating={4.8}
-                readOnly={true}
-              />
-              <p>4.5</p>
-              <p>4k Reviews</p>
+              <StarRating initialRating={averageRating} readOnly={true} />
+              <p>{totalRating}</p>
+              <p>members</p>
             </span>
-            <Link 
-              href={dummyProduct.link} 
-              isExternal 
-              color="primary" 
-              showAnchorIcon
-            >
+            <Link href={linkUrl} isExternal color="primary" showAnchorIcon>
               View Product
             </Link>
           </div>
 
-          <StarRating
-            initialRating={userRating}
-            onChange={setUserRating}
-            size={56}
-          />
-
-          <Button 
-            color="primary" 
-            variant="solid" 
-            fullWidth
-            disabled={userRating === 0}
-          >
-            Submit Rating
-          </Button>
+          {!hasVoted ? (
+            <>
+              <StarRating initialRating={userRating} onChange={setUserRating} size={56} />
+              <Button 
+                color="primary" 
+                variant="solid" 
+                fullWidth 
+                disabled={userRating === 0}
+                onClick={submitHandler}
+              >
+                Submit Rating
+              </Button>
+            </>
+          ) : (
+            <p className="text-green-500 text-center">Thank you for your rating!</p>
+          )}
         </CardBody>
       </Card>
     </div>

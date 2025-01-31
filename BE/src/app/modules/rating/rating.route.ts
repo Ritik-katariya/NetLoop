@@ -25,7 +25,7 @@ router.patch(
     return ratingController.updateRating(req, res, next);
   }
 );
-router.patch("submit-vote/:id?",ratingController.submitRating)
+router.patch("/submit-vote/:id?",ratingController.submitRating)
 
 router.delete("/:id?", ratingController.deleteRating);
 
