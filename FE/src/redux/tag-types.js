@@ -13,7 +13,10 @@ export const tagTypes = {
   explore: "explore",
   poll:"poll",
   rating:"rating",
-  promotion:"promotion"
+  promotion:"promotion",
+  opinion:"opinion",
+  story:"story",
+
   
 };
 
@@ -32,5 +35,8 @@ export const tagTypeList = [
   tagTypes.explore,
   tagTypes.poll,
   tagTypes.rating,
-  tagTypes.promotion
+  tagTypes.promotion,
+  tagTypes.opinion,
+  tagTypes.story,
+ // Add more tag types as needed
 ];

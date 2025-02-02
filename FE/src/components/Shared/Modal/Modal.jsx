@@ -13,12 +13,12 @@ import { MdModeEditOutline  } from "react-icons/md";
 
 
   
-  export default function Modal() {
+  export default function Modalapp() {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
   
     return (
       <>
-        <Button className="bg-primary rounded-lg h-8 text-white text-base" onPress={onOpen} ><MdModeEditOutline/> Details</Button>
+        <Button className="bg-primary rounded-lg h-8 text-white text-base cursor-pointer" onPress={onOpen} ><MdModeEditOutline/> Details</Button>
         <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='md' backdrop="opaque"
         classNames={{
           backdrop: "bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20",
