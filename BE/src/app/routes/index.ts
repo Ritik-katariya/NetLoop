@@ -16,6 +16,7 @@ import { pollRouter } from "../modules/poll/poll.route";
 import { ratingRouter } from "../modules/rating/rating.route";
 import { promotionRouter } from "../modules/Promotion/promotion.route";
 import { storyRouter } from "../modules/story/story.route";
+import { searchRouter } from '../modules/search/search.route';
 const router = express.Router();
 
 const moduleRoutes = [
@@ -99,7 +100,11 @@ const moduleRoutes = [
     path:"/story",
     route:storyRouter, 
   }
-
+  ,
+  {
+    path: '/search',
+    route: searchRouter,
+  },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
 export default router;

@@ -13,6 +13,8 @@ import NotificationPage from '../../Notification/NotificationPage';
 import { useDispatch } from 'react-redux';
 import { setMember } from '../../../redux/feature/memberSlice';
 import { setProfile } from '../../../redux/feature/profileSlice';
+import SearchItem from '../SearchItem';
+
 const Header = () => {
   const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -78,28 +80,7 @@ useEffect(() => {
 
           {/* Search Section */}
           <div className="hidden md:block mx-4 flex-grow max-w-md">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="w-full px-4 py-2 rounded-lg bg-primary-textl text-primary-textd  focus:outline-none focus:ring-2 focus:ring-white/50 pl-12"
-              />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary-textd"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-            </div>
+            <SearchItem />
           </div>
 
           {/* Navigation Links */}
@@ -118,29 +99,8 @@ useEffect(() => {
             ))}
           </div>
           {/* mobile search option */}
-          <div className=" md:hidden mx-4 -translate-x-4 flex-grow w-32 pt-1 max-w-md">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="w-full  h-7  rounded-lg bg-primary-textl text-primary-textd  focus:outline-none focus:ring-2 focus:ring-white/50 pl-9"
-              />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-textd"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-            </div>
+          <div className="md:hidden mx-4 -translate-x-4 flex-grow w-32 pt-1 max-w-md">
+            <SearchItem />
           </div>
 
           {/* Login/Signup or Avatar */}
