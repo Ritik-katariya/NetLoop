@@ -8,10 +8,7 @@ import Home from './components/Home/Home/Home';
 import NotFound from './components/UI/NotFound';
 import LoginPage from './components/Login/Login';
 import OtpVerify from './components/Login/OtpVerify';
-import SignUp from './components/Login/SignUp';
-import ForgotPassword from './components/Login/ForgotPassword';
 import UserCreate from './components/Login/UserCreate';
-import Profile from './components/Profile/Profile';
 import ProfileApp from './components/Profile/ProfileApp';
 import ProfileDetailsForm from './components/Profile/EditProfileForm';
 import VerifiedPage from './components/Verify/VerifiedPage';
@@ -21,6 +18,7 @@ import NetworkProfile from './components/Network/NetworkProfile';
 import MessagePage from './components/Message/MessagePage';
 import Explore from './components/Explore/Explore';
 import CreateExpo from './components/Explore/CreateExpo';
+import StoryPage from './components/Story/StoryPage';
 
 function App() {
   return (
@@ -35,7 +33,7 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/verifyotp' element={<OtpVerify />} />
         <Route path='/create' element={<UserCreate />} />
-        <Route path='/profile/:id?' element={<ProfileApp />} />
+        <Route path='/:name/:id?' element={<ProfileApp />} />
         <Route path='/verify/:id?' element={<VerifiedPage />} />
         <Route path='/profile/details-edit/:id?' element={<ProfileDetailsForm />} />
         <Route path='/add-network' element={<NetworkPage />} />
@@ -44,6 +42,8 @@ function App() {
         <Route path='/message' element={<MessagePage />} />
         <Route path='/explore' element={<Explore />} />
         <Route path='/create-explore/:id' element={<CreateExpo />} />
+        <Route path='/story/:id' element={<StoryPage />} />
+        {/* <Route path='/story' element={<StoryPage />} /> */}
         {/* <Route path='/signup' element={<SignUp />} /> */}
        
         

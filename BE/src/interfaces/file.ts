@@ -28,5 +28,9 @@ export type ICloudinaryResponse = {
     secure_url: string,
     folder: string,
     original_filename: string,
-    api_key: string
+    api_key: string,
+    hls_url: string,
+    thumbnail_url: string,
+    
+  access_mode: string
 }
