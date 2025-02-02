@@ -14,11 +14,11 @@ const Home = () => {
       </div>
 
       {/* Keeping the original flexbox layout */}
-      <div className="flex justify-center items-start gap-4 mt-16">
+      <div className="flex w-screen justify-center items-start gap-4 mt-16">
         <SideProfile />
 
         {/* Fixed: Changed 'hero' to 'div' while keeping the same CSS */}
-        <div className="flex w-screen xl:w-[40%] h-full flex-col justify-center items-center bg-transparent">
+        <div className="flex w-full xl:w-[40%] h-full flex-col justify-center items-center bg-transparent">
           {/* Ensuring event listeners work */}
           <Story className="cursor-pointer" />
           <Posts className="cursor-pointer" />

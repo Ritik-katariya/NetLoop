@@ -11,7 +11,7 @@ export default function SideProfile() {
   }));
 
   return (
-    <div className="w-[18%] mt-4 p-6 flex flex-col pt-9 text-sm   bg-gray-50 rounded-md h-[650px] shadow-md border-[.5px] max-xl:hidden">
+    <div className="w-[18%] mt-4 p-6 flex flex-col pt-9 text-sm max-lg:hidden  bg-gray-50 rounded-md h-[650px] shadow-md border-[.5px] max-xl:hidden">
       <div className="flex justify-center items-center flex-col border-b-2 pb-2">
         <Avatar showFallback
           src={memberData?.profile.img}
@@ -47,7 +47,7 @@ export default function SideProfile() {
         {arr.map((value)=>(<h3>{value}</h3>))}
       </div> */}
       <div className="flex w-full justify-center">
-     <StoryModal/>
+    { memberData&&<StoryModal/>}
 
       </div>
     </div>

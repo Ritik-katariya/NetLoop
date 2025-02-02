@@ -7,7 +7,7 @@ export default function SideNotify() {
   const { data, isLoading, isSuccess, error } = useGetMembersQuery();
   
   return (
-    <div className="w-[18%] mt-4 p-6 flex flex-col gap-6 bg-gray-50 rounded-md h-[650px] shadow-md border-[.5px] max-xl:hidden">
+    <div className="w-[18%] mt-4 p-6 flex flex-col gap-6 max-lg:hidden bg-gray-50 rounded-md h-[650px] shadow-md border-[.5px] max-xl:hidden">
       <div>
         <span className="flex justify-between items-center">
         <h1 className="text-xl font-semibold mb-2">Members</h1>

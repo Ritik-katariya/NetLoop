@@ -4,7 +4,6 @@ import { Autoplay, FreeMode } from "swiper/modules";
 import StoryComponent from "./StoryComponent";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useGetStoriesQuery } from "../../../redux/api/storyApi";
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/free-mode";
 
@@ -14,19 +13,18 @@ const Story = () => {
   const swiperRef = useRef(null);
 
   if (isLoading) {
-    return <div>Loading stories...</div>;
+    return <div className="text-center text-gray-500 py-4">Loading stories...</div>;
   }
-  console.log(storyData,"loading")
 
-  const stories = storyData|| [];
-console.log(storyData,"stories")
+  const stories = storyData || [];
+
   return (
-    <div className="relative w-full px-4 py-3 bg-white rounded-md mt-4">
-      {/* Left Button */}
+    <div className="relative w-full px-2 py-3 bg-white rounded-md mt-4">
+      {/* Left Button (Hidden on Mobile) */}
       {stories.length > 0 && (
         <button
           onClick={() => swiperRef.current?.slidePrev()}
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-black/15 text-white/40 p-3 rounded-full shadow-lg hover:bg-black/50 transition"
+          className="hidden md:flex absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-black/15 text-white/40 p-2 rounded-full shadow-lg hover:bg-black/50 transition"
         >
           <ChevronLeft size={24} />
         </button>
@@ -35,8 +33,8 @@ console.log(storyData,"stories")
       {/* Swiper Slider */}
       <Swiper
         modules={[FreeMode, Autoplay]}
-        slidesPerView={"auto"}
-        spaceBetween={2}
+        slidesPerView={2} // Default for mobile
+        spaceBetween={8}
         freeMode={true}
         loop={stories.length > 3}
         autoplay={{
@@ -52,19 +50,24 @@ console.log(storyData,"stories")
             setCursor(storyData.nextCursor);
           }
         }}
+        breakpoints={{
+          640: { slidesPerView: 3 }, // Tablets
+          768: { slidesPerView: 4 }, // Small Laptops
+          1024: { slidesPerView: 5 }, // Desktops
+        }}
       >
         {stories.map((story) => (
-          <SwiperSlide key={story.id} className="!w-24">
+          <SwiperSlide key={story.id} className="!w-20 sm:!w-24">
             <StoryComponent story={story} />
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* Right Button */}
+      {/* Right Button (Hidden on Mobile) */}
       {stories.length > 0 && (
         <button
           onClick={() => swiperRef.current?.slideNext()}
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-black/15 text-white/40 p-3 rounded-full shadow-lg hover:bg-black/50 transition"
+          className="hidden md:flex absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-black/15 text-white/40 p-2 rounded-full shadow-lg hover:bg-black/50 transition"
         >
           <ChevronRight size={24} />
         </button>

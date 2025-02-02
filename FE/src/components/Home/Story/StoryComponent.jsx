@@ -9,11 +9,11 @@ export default function StoryComponent({ story }) {
   };
 
   return (
-    <div className="bg-primary w-16 rounded-full h-16 flex justify-center items-center overflow-hidden cursor-pointer">
+    <div className="bg-teal-100 w-16 rounded-full h-16 flex justify-center items-center overflow-hidden cursor-pointer">
       
         <img 
-          src={story.mediaUrl || story.thumbnail} 
-          alt={story.title}
+          src={story?.mediaType==="IMAGE"?story.mediaUrl :story?.thumbnail} 
+          alt={story?.title}
           className="w-16 h-16 object-cover rounded-full"
           onClick={() => viewHandler(story)}
         />

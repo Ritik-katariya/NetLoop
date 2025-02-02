@@ -7,15 +7,21 @@ import CreatePost from "./CreatePost";
 import OptionButton from "./ThreeDot";
 import { GiCheckMark } from "react-icons/gi"; 
 import { useGetMemberQuery } from "../../../redux/api/member";
+import { useNavigate } from "react-router-dom";
 const PostHeader = ({ post }) => {
+  const  Navigate  = useNavigate();
   const {
     data: memberdata,
     error: merror,
     isLoading: misLoading,
     isSuccess: misSuccess,
   } = useGetMemberQuery(post?.memberId);
- 
+ const name=memberdata?.name?.trim()?.split(' ')?.join('');
+const clickhandler = (e) => {
+  e.preventDefault();
+  Navigate(`/${name}/${memberdata.id}`)
 
+}
   const img = useSelector((state) => state.profile.img);
 
   return (
@@ -25,10 +31,11 @@ const PostHeader = ({ post }) => {
           src={memberdata?.profile?.img}
           size="md"
           className="border-2 border-primary"
+          onClick={clickhandler}
         />
           <div className="flex flex-col">
             <div className="flex justify-start items-center gap-4">
-            <h3 className="text-base font-semibold">{memberdata?.name}</h3>
+            <h3 className="text-base font-semibold" onClick={clickhandler}>{memberdata?.name}</h3>
             {memberdata?.verified && <GiCheckMark className="text-primary" />}
             <span className="text-xs text-gray-400 ml-2">
               {getTimeAgo(new Date(post?.createdAt))}

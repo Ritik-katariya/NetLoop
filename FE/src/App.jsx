@@ -33,7 +33,7 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/verifyotp' element={<OtpVerify />} />
         <Route path='/create' element={<UserCreate />} />
-        <Route path='/profile/:id?' element={<ProfileApp />} />
+        <Route path='/:name/:id?' element={<ProfileApp />} />
         <Route path='/verify/:id?' element={<VerifiedPage />} />
         <Route path='/profile/details-edit/:id?' element={<ProfileDetailsForm />} />
         <Route path='/add-network' element={<NetworkPage />} />

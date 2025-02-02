@@ -116,6 +116,10 @@ const getStories = async (req: Request, res: Response): Promise<void> => {
     skip: cursor ? 1 : 0, // Skip the first item if cursor exists
     cursor: cursor ? { id: cursor as string } : undefined,
     orderBy: { createdAt: "desc" },
+    include: { member: {include:{profile:{select:{img:true}},
+    networks:{select:{name:true}},
+    verified:{select:{verified:true}},
+  }} },
   });
 
   res.json({
