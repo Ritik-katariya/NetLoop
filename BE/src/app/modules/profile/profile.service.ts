@@ -14,7 +14,7 @@ const createProfile = async (req: Request): Promise<any> => {
       const file = req.file as any;
       const { ...othersData } = req.body;
       if (file) {
-        const uploadImage = await CloudinaryHelper.uploadFile(file);
+        const uploadImage = await CloudinaryHelper.uploadImage(file);
         if (uploadImage) {
           othersData.img = uploadImage.secure_url;
         } else {
@@ -47,7 +47,7 @@ const updateCoverImg = async (req: any): Promise<Profile> => {
     const { flag,...othersData } = req.body;
 
     if (file) {
-      const uploadImage = await CloudinaryHelper.uploadFile(file);
+      const uploadImage = await CloudinaryHelper.uploadImage(file);
       if (uploadImage) {
         if(flag==='1'){
           othersData.coverImg = uploadImage.secure_url;
@@ -96,14 +96,14 @@ const getProfile = async (id: string): Promise<Profile | null> => {
 };
 
 const updateProfile = async (req: Request): Promise<Profile> => {
-  const file = req.file as IUpload;
+  const file = req.file as Express.Multer.File;
   const id = req.params.id as string;
   const { pincode, ...othersData } = req.body.data;
   const convertedPincode = parseInt(pincode);
   othersData.pincode = convertedPincode;
 
   if (file) {
-    const uploadImage = await CloudinaryHelper.uploadFile(file);
+    const uploadImage = await CloudinaryHelper.uploadImage(file);
     if (uploadImage) {
       othersData.img = uploadImage.secure_url;
     } else {

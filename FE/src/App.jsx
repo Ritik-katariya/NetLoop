@@ -18,9 +18,7 @@ import NetworkProfile from './components/Network/NetworkProfile';
 import MessagePage from './components/Message/MessagePage';
 import Explore from './components/Explore/Explore';
 import CreateExpo from './components/Explore/CreateExpo';
-import StoryForm from './components/Story/StoryCreateForm';
-import StoryViewer from './components/Story/StoryFullView';
-import StoryPage from './components/Story/Story';
+import StoryPage from './components/Story/StoryPage';
 
 function App() {
   return (
@@ -44,7 +42,8 @@ function App() {
         <Route path='/message' element={<MessagePage />} />
         <Route path='/explore' element={<Explore />} />
         <Route path='/create-explore/:id' element={<CreateExpo />} />
-        <Route path='/story' element={<StoryPage />} />
+        <Route path='/story/:id' element={<StoryPage />} />
+        {/* <Route path='/story' element={<StoryPage />} /> */}
         {/* <Route path='/signup' element={<SignUp />} /> */}
        
         

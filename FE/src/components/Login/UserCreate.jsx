@@ -21,25 +21,46 @@ export default function UserCreate() {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    if (phone.length !== 10) {
-      toast.error("Phone number must be exactly 10 digits.");
-      return;
-    }
+
     try {
-      const res = await createMemberMutation({ name, phone, email, status: true }).unwrap();
-      toast.success("User created successfully!");
-      setTimeout(() => {
-        if (res?.error) {
-          toast.error(res.error.data);
-          console.log("error", res.error);
-        } else if (res?.accessToken) {
-          saveTokenToCookie(res.accessToken);
+      if (!name || !phone || !email) {
+        toast.error("Please fill in all fields");
+        return;
+      }
+
+      if (phone.length !== 10) {
+        toast.error("Phone number must be exactly 10 digits");
+        return;
+      }
+
+      if (!/^[0-9]+$/.test(phone)) {
+        toast.error("Phone number should only contain digits");
+        return;
+      }
+
+      const res = await createMemberMutation({ 
+        name, 
+        phone, 
+        email, 
+        status: true 
+      }).unwrap();
+
+      if (res?.error) {
+        toast.error(res.error.data?.message || res.error.data || "Failed to create user");
+        return;
+      }
+
+      toast.success("Account created successfully! Redirecting...");
+      
+      if (res?.accessToken) {
+        saveTokenToCookie(res.accessToken);
+        setTimeout(() => {
           navigate("/");
-        }
-      }, 1000);
+        }, 2000);
+      }
     } catch (error) {
-      console.error("Failed to create user:", error);
-      toast.error("Failed to create user. Please try again.");
+      console.error("User creation error:", error);
+      toast.error(error.data?.message || "Failed to create account. Please try again.");
     }
   };
 

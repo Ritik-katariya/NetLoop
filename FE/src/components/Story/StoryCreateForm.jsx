@@ -24,6 +24,8 @@ const StoryModal = () => {
   const [Img, setImg] = useState(true);
   const [createStory, { isLoading }] = useCreateStoryMutation();
   const memberData = useSelector((state) => state.member?.memberData);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
   const {
     control,
@@ -76,22 +78,56 @@ const StoryModal = () => {
     if (file) {
       if (!file.type.startsWith("video/")) {
         toast.error("Please select a video file");
+        e.target.value = null;
         return;
       }
 
-      setImagePreview(null);
-      setValue("image", null);
+      // Check video duration
+      const video = document.createElement('video');
+      video.preload = 'metadata';
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setVideoPreview(reader.result);
+      video.onloadedmetadata = () => {
+        window.URL.revokeObjectURL(video.src);
+        if (video.duration > 15) {
+          toast.error("Video must be 15 seconds or less");
+          setVideoPreview(null);
+          setValue("video", null);
+          e.target.value = null;
+          return;
+        }
+
+        // If duration is valid, proceed with preview
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setVideoPreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+        setValue("video", file);
+        setVid(true);
+        setImg(true);
       };
-      reader.readAsDataURL(file);
 
-      setValue("video", file);
-      setVid(true);
-      setImg(true);
+      video.src = URL.createObjectURL(file);
     }
+  };
+
+  const validateFile = (file) => {
+    if (file.type.startsWith('video/')) {
+      // Check video duration
+      return new Promise((resolve, reject) => {
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+        video.onloadedmetadata = () => {
+          window.URL.revokeObjectURL(video.src);
+          if (video.duration > 15) {
+            reject('Video must be 15 seconds or less');
+          }
+          resolve(true);
+        };
+        video.src = URL.createObjectURL(file);
+      });
+    }
+    return Promise.resolve(true);
   };
 
   const submitForm = async (data) => {
@@ -105,16 +141,10 @@ const StoryModal = () => {
         formData.append("networkId", data.networkId);
       }
 
-      // Append either image or video, not both
       if (data.image) {
         formData.append("file", data.image);
       } else if (data.video) {
         formData.append("file", data.video);
-      }
-
-      // Log FormData contents for debugging
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
       }
 
       const response = await createStory({ formData });
@@ -126,7 +156,7 @@ const StoryModal = () => {
         setVideoPreview(null);
         setImg(true);
         setVid(true);
-        onOpenChange(false); // Close modal
+        onOpenChange(false);
       }
     } catch (error) {
       console.error("Story creation error:", error);

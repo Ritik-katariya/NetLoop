@@ -29,18 +29,38 @@ export default function SignUp({ setActiveForm }) {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    const user = { email, password };
 
     try {
+      if (!email || !password || !confirmPassword) {
+        toast.error("Please fill in all fields");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        toast.error("Passwords do not match");
+        return;
+      }
+
+      if (password.length < 6) {
+        toast.error("Password must be at least 6 characters long");
+        return;
+      }
+
+      const user = { email, password };
       const result = await sendOtpMutation(user).unwrap();
-      toast.success("OTP sent successfully!");
+      
+      if (result?.error) {
+        toast.error(result.error.data?.message || result.error.data || "Failed to sign up");
+        return;
+      }
+
+      toast.success("OTP sent successfully! Please check your email.");
       setTimeout(() => {
-        
-      }, 1000);
-      navigate("/verifyotp");
+        navigate("/verifyotp");
+      }, 2000);
     } catch (error) {
-      toast.error("Failed to send OTP. Please try again.");
-      console.error("Failed to send OTP:", error);
+      console.error("Signup error:", error);
+      toast.error(error.data?.message || "Failed to send OTP. Please try again.");
     }
   };
 

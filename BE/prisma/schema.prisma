@@ -188,22 +188,25 @@ model Cluster{
  
  @@map("Cluster")
 }
-model Post{
+model Post {
   id           String         @id @default(uuid())
   description  String?
   image        String?
   video        String?
+  hlsUrl       String?       // Added HLS URL for adaptive streaming
+  thumbnail    String?       // Added thumbnail URL for video preview
   likes        Likes[]
   comments     Comments[]
   shares       Share[]
   memberId     String
-  member       Members       @relation(fields: [memberId],references: [id],onDelete: Cascade)
+  member       Members       @relation(fields: [memberId], references: [id], onDelete: Cascade)
   networkId    String?
-  network      Network ?     @relation(fields: [networkId],references: [id],onDelete: Cascade)
+  network      Network?      @relation(fields: [networkId], references: [id], onDelete: Cascade)
   clusterId    String?
-  cluster      Cluster?      @relation(fields: [clusterId],references: [id],onDelete: Cascade)
+  cluster      Cluster?      @relation(fields: [clusterId], references: [id], onDelete: Cascade)
   createdAt    DateTime      @default(now())
 }
+
 model Likes{
   id           String         @id @default(uuid())
   memberId     String
@@ -382,20 +385,26 @@ model ChatRequest {
   updatedAt DateTime @updatedAt
 }
 
-model Story{
-  id           String        @id @default(uuid())
-  title        String
-  content      String
-  image        String?
-  video        String?
-  memberId     String
-  member       Members       @relation(fields: [memberId],references: [id], onDelete: Cascade)
-  networkId    String?
-  network      Network?      @relation(fields: [networkId],references: [id],onDelete: Cascade)
-  like         Likes[]
-  views        Views[]
-  createdAt    DateTime      @default(now())
+model Story {
+  id        String     @id @default(uuid())
+  title     String
+  content   String?
+  mediaUrl  String?    // Stores Image/Video URL
+  mediaType MediaType  // Enum: 'image' | 'video'
+  duration  Int?       // Video duration in seconds
+  hlsUrl    String?    // HLS Streaming URL
+  thumbnail String?    // Video Thumbnail
+  status    StoryStatus @default(active)
+  memberId  String
+  member    Members    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  networkId String?
+  network   Network?   @relation(fields: [networkId], references: [id], onDelete: Cascade)
+  likes     Likes[]
+  views     Views[]
+  createdAt DateTime   @default(now())
+  expiresAt DateTime   // Expire after 24 hours
 }
+
 model Views{
   id           String        @id @default(uuid())
   memberId     String
@@ -424,5 +433,16 @@ enum Gender{
   rating
   promotion
   }
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+enum StoryStatus {
+  active
+  expired
+  deleted
+}
 
 

@@ -28,17 +28,22 @@ export default function SignIn({ setActiveForm }) {
     e.preventDefault();
 
     try {
+      if (!email || !password) {
+        toast.error("Please fill in all fields");
+        return;
+      }
+
       const res = await loginMutation({ email, password });
       if (res?.error) {
-        toast.error(res.error.data);
-        console.log("error", res.error);
+        toast.error(res.error.data?.message || res.error.data || "Login failed");
       } else if (res?.data) {
         saveTokenToCookie(res.data.accessToken);
         toast.success("Login successful");
         navigate("/");
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("Login error:", error);
+      toast.error("An unexpected error occurred. Please try again later.");
     }
   };
 
