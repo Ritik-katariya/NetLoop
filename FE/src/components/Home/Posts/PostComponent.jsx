@@ -5,18 +5,19 @@ import { useToggleLikeMutation } from "../../../redux/api/likeApi";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { memberInfo } from "../../../utils/auth";
 import { ToastContainer, toast } from "react-toastify";
-import { FaRegComment,FaComment  } from "react-icons/fa6";
-import { IoSaveOutline,IoSave  } from "react-icons/io5";
+import { FaRegComment, FaComment } from "react-icons/fa6";
+import { IoSaveOutline, IoSave } from "react-icons/io5";
+import Comments from "../../Shared/comments/Comments";
 
 // import { getUserInfo } from "../../../services/auth.service";
 
 const PostComponent = ({ post }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [totalLike, setTotalLike] = useState(0);
+  const [isComment, setIsComment] = useState(false);
+  const [isSave, setIsSave] = useState(false);
   const { id: memberId } = memberInfo();
   const [toggleLike, { isLoading }] = useToggleLikeMutation();
-  const [isSave, setIsSave] = useState(false)
-  const [isComment, setIsComment] = useState(false)
   
   useEffect(() => {
     if(post) {
@@ -38,7 +39,6 @@ const PostComponent = ({ post }) => {
         }
       }).unwrap();
       
-      // Update local state
       setIsLiked(!isLiked);
       setTotalLike(prev => isLiked ? prev - 1 : prev + 1);
     } catch (error) {
@@ -57,7 +57,7 @@ const PostComponent = ({ post }) => {
         {post?.description}
       </div>
 
-      {/* Post Media (Image or Video) */}
+      {/* Post Media */}
       <div className="w-full flex justify-center items-center">
         {post?.image && (
           <Image
@@ -75,40 +75,41 @@ const PostComponent = ({ post }) => {
         )}
       </div>
 
-      {/* Hashtags Section */}
+      {/* Actions Section */}
       <div className="flex justify-between items-center px-4 text-gray-600 text-xs sm:text-sm">
         <div className="flex gap-2 sm:gap-3 cursor-pointer">
           <span 
             onClick={handleLike}
             className={`cursor-pointer flex items-center gap-1 hover:text-teal-500 ${isLoading ? 'opacity-50' : ''}`}
           >
-            {isLiked? (
-              <FaHeart className="text-teal-400 text-lg " />
+            {isLiked ? (
+              <FaHeart className="text-teal-400 text-lg" />
             ) : (
-              <FaRegHeart className="text-lg " />
+              <FaRegHeart className="text-lg" />
             )}
             <span className={isLiked ? 'text-teal-500' : ''}>
               {totalLike || 0} Like{(totalLike || 0) !== 1 ? 's' : ''}
             </span>
           </span>
-          <span className={`flex justify-center items-center gap-1 ${isComment&&"text-teal-400"}`}>
-            {isComment?<FaComment  />:<FaRegComment/>}
-            Comment</span>
-          <span className={`flex justify-center items-center gap-1 ${isSave&&"text-teal-400"}`}>{isSave?<IoSave/>:<IoSaveOutline />} Save</span>
+          <span 
+            onClick={() => setIsComment(!isComment)} 
+            className={`flex justify-center items-center gap-1 ${isComment && "text-teal-400"}`}
+          >
+            {isComment ? <FaComment /> : <FaRegComment />}
+            Comment
+          </span>
+          <span 
+            onClick={() => setIsSave(!isSave)}
+            className={`flex justify-center items-center gap-1 ${isSave && "text-teal-400"}`}
+          >
+            {isSave ? <IoSave /> : <IoSaveOutline />} Save
+          </span>
         </div>
         <div>#more</div>
       </div>
 
-      {/* Comment Input */}
-      <div className="w-full px-4">
-        <input
-          type="text"
-          name="comment"
-          id="comment"
-          placeholder="Write a comment..."
-          className="w-full border-b-2 border-gray-400 py-1 focus:outline-none focus:border-blue-500 transition"
-        />
-      </div>
+      {/* Comments Section */}
+      {isComment && <Comments postId={post?.id} />}
     </div>
   );
 };

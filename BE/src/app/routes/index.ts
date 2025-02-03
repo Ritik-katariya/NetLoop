@@ -18,6 +18,7 @@ import { promotionRouter } from "../modules/Promotion/promotion.route";
 import { storyRouter } from "../modules/story/story.route";
 import { searchRouter } from '../modules/search/search.route';
 import { likeRouter } from '../modules/like/like.route';
+import { commentRouter } from "../modules/comment/comment.route";
 
 const router = express.Router();
 
@@ -98,6 +99,10 @@ const moduleRoutes = [
     path: '/like',
     route: likeRouter,
   },
+  {
+    path: '/comment',
+    route: commentRouter,
+  }
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

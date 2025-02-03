@@ -47,9 +47,9 @@ const networkWithMembers = async (id: string) => {
 // Create a network
 const createNetwork = async (req: Request): Promise<any> => {
   const { memberId, pincode, followers, ...networkData } = req.body;
-  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-  const logo = files?.logo?.[0];
-  const cover = files?.cover?.[0];
+  const files = req.files as { [fieldname: string]: IUpload[] };
+  const logo: IUpload = files?.logo?.[0];
+  const cover: IUpload = files?.cover?.[0];
   const member = await prisma.members.findFirst({
     where: { id: memberId },
     select: { verified: true }
@@ -63,11 +63,11 @@ const createNetwork = async (req: Request): Promise<any> => {
 
   try {
     if (logo) {
-      const logoResponse = await CloudinaryHelper.uploadImage(logo);
+      const logoResponse = await CloudinaryHelper.uploadFile(logo);
       logoUrl = logoResponse.url;
     }
     if (cover) {
-      const coverResponse = await CloudinaryHelper.uploadImage(cover);
+      const coverResponse = await CloudinaryHelper.uploadFile(cover);
       coverUrl = coverResponse.url;
     }
   } catch (error) {

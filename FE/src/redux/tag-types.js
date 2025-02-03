@@ -18,6 +18,7 @@ export const tagTypes = {
   story:"story",
   search: 'search',
   like:"like",
+  comment: "comment",
 };
 
 export const tagTypeList = [
@@ -40,5 +41,6 @@ export const tagTypeList = [
   tagTypes.story,
   tagTypes.search,
   tagTypes.like,
+  tagTypes.comment,
  // Add more tag types as needed
 ];
