@@ -218,10 +218,10 @@ model Likes{
   cluster      Cluster?       @relation(fields: [clusterId],references: [id])
   clusterId    String?
   comments     Comments?      @relation(fields: [commentId],references: [id])
-  commentId    String
+  commentId    String?
   storyId       String?
   story        Story? @relation(fields: [storyId],references: [id])
-  exploreId    String
+  exploreId    String?
   explore      Explore?       @relation(fields: [exploreId],references: [id])
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt

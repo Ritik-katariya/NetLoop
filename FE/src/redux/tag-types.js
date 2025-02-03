@@ -17,6 +17,7 @@ export const tagTypes = {
   opinion:"opinion",
   story:"story",
   search: 'search',
+  like:"like",
 };
 
 export const tagTypeList = [
@@ -38,5 +39,6 @@ export const tagTypeList = [
   tagTypes.opinion,
   tagTypes.story,
   tagTypes.search,
+  tagTypes.like,
  // Add more tag types as needed
 ];
