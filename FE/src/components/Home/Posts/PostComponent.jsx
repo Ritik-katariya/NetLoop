@@ -8,7 +8,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { FaRegComment, FaComment } from "react-icons/fa6";
 import { IoSaveOutline, IoSave } from "react-icons/io5";
 import Comments from "../../Shared/comments/Comments";
-
+import { useToggleSaveMutation } from "../../../redux/api/postSaved";
+import { FaShareAlt } from "react-icons/fa";
 // import { getUserInfo } from "../../../services/auth.service";
 
 const PostComponent = ({ post }) => {
@@ -18,6 +19,7 @@ const PostComponent = ({ post }) => {
   const [isSave, setIsSave] = useState(false);
   const { id: memberId } = memberInfo();
   const [toggleLike, { isLoading }] = useToggleLikeMutation();
+  const [toggleSave,{isLoading:saveLoading}]=useToggleSaveMutation();
   
   useEffect(() => {
     if(post) {
@@ -46,6 +48,26 @@ const PostComponent = ({ post }) => {
       toast.error('Error toggling like');
     }
   };
+  const handleSaved = async () => {
+    if (!memberId || !post?.id || saveLoading) return;
+    
+    try {
+      await toggleSave({
+        data: { 
+          memberId,
+          targetType: 'post',
+          targetId: post?.id
+        }
+      }).unwrap();
+      
+      setIsSave(!isSave);
+      // setTotalLike(prev => isLiked ? prev - 1 : prev + 1);
+    } catch (error) {
+      console.error('Error toggling saved:', error);
+      toast.error('Error toggling saved');
+    }
+  };
+
 
   return (
     <div className="w-full max-w-[550px] md:max-w-[600px] lg:max-w-[650px] bg-white flex flex-col space-y-2 text-sm mb-3 rounded-md pb-6 shadow-md">
@@ -99,13 +121,13 @@ const PostComponent = ({ post }) => {
             Comment
           </span>
           <span 
-            onClick={() => setIsSave(!isSave)}
+            onClick={() => handleSaved()}
             className={`flex justify-center items-center gap-1 ${isSave && "text-teal-400"}`}
           >
             {isSave ? <IoSave /> : <IoSaveOutline />} Save
           </span>
         </div>
-        <div>#more</div>
+        <div className="texl-xl hover:text-teal-400 cursor-pointer hover:scale-110"><FaShareAlt /></div>
       </div>
 
       {/* Comments Section */}
