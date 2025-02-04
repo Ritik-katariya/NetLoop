@@ -10,27 +10,42 @@ import { IoSaveOutline, IoSave } from "react-icons/io5";
 import Comments from "../../Shared/comments/Comments";
 import { useToggleSaveMutation } from "../../../redux/api/postSaved";
 import { FaShareAlt } from "react-icons/fa";
-// import { getUserInfo } from "../../../services/auth.service";
+import { useCreateNotificationMutation } from "../../../redux/api/notificationApi";
+import { useNavigate } from 'react-router-dom';
 
 const PostComponent = ({ post }) => {
+  const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(false);
   const [totalLike, setTotalLike] = useState(0);
   const [isComment, setIsComment] = useState(false);
   const [isSave, setIsSave] = useState(false);
-  const { id: memberId } = memberInfo();
+  const member = memberInfo();
+  const memberId = member?.id;
   const [toggleLike, { isLoading }] = useToggleLikeMutation();
-  const [toggleSave,{isLoading:saveLoading}]=useToggleSaveMutation();
+  const [toggleSave, { isLoading: saveLoading }] = useToggleSaveMutation();
+  const [socket, setSocket] = useState(null);
+const [createNotification]=useCreateNotificationMutation();
+
   
   useEffect(() => {
-    if(post) {
+    if(post && memberId) {
       const bool = post?.likes?.some(like => like?.memberId === memberId);
       setIsLiked(bool);
       setTotalLike(post?.likes?.length || 0);
     }
   }, [post, memberId]);
 
+  const handleAuthRequired = () => {
+    navigate('/login');
+  };
+
   const handleLike = async () => {
-    if (!memberId || !post?.id || isLoading) return;
+    if (!memberId) {
+      handleAuthRequired();
+      return;
+    }
+    
+    if (!post?.id || isLoading) return;
     
     try {
       await toggleLike({
@@ -40,7 +55,9 @@ const PostComponent = ({ post }) => {
           targetId: post?.id
         }
       }).unwrap();
-      
+       if(!isLiked){
+        await createNotification({data:{"senderId":memberId,"receiverId":post.memberId,"targetId":post.id,"content":"Your post have some likes","type":"LIKE","targetType":"Post"}}).unwrap(); 
+       }    
       setIsLiked(!isLiked);
       setTotalLike(prev => isLiked ? prev - 1 : prev + 1);
     } catch (error) {
@@ -48,8 +65,14 @@ const PostComponent = ({ post }) => {
       toast.error('Error toggling like');
     }
   };
+
   const handleSaved = async () => {
-    if (!memberId || !post?.id || saveLoading) return;
+    if (!memberId) {
+      handleAuthRequired();
+      return;
+    }
+    
+    if (!post?.id || saveLoading) return;
     
     try {
       await toggleSave({
@@ -61,13 +84,19 @@ const PostComponent = ({ post }) => {
       }).unwrap();
       
       setIsSave(!isSave);
-      // setTotalLike(prev => isLiked ? prev - 1 : prev + 1);
     } catch (error) {
       console.error('Error toggling saved:', error);
       toast.error('Error toggling saved');
     }
   };
 
+  const handleCommentClick = () => {
+    if (!memberId) {
+      handleAuthRequired();
+      return;
+    }
+    setIsComment(!isComment);
+  };
 
   return (
     <div className="w-full max-w-[550px] md:max-w-[600px] lg:max-w-[650px] bg-white flex flex-col space-y-2 text-sm mb-3 rounded-md pb-6 shadow-md">
@@ -114,14 +143,14 @@ const PostComponent = ({ post }) => {
             </span>
           </span>
           <span 
-            onClick={() => setIsComment(!isComment)} 
+            onClick={handleCommentClick} 
             className={`flex justify-center items-center gap-1 ${isComment && "text-teal-400"}`}
           >
             {isComment ? <FaComment /> : <FaRegComment />}
             Comment
           </span>
           <span 
-            onClick={() => handleSaved()}
+            onClick={handleSaved}
             className={`flex justify-center items-center gap-1 ${isSave && "text-teal-400"}`}
           >
             {isSave ? <IoSave /> : <IoSaveOutline />} Save
@@ -131,7 +160,7 @@ const PostComponent = ({ post }) => {
       </div>
 
       {/* Comments Section */}
-      {isComment && <Comments postId={post?.id} />}
+      {isComment && <Comments post={post} onCommentSubmit={handleCommentClick} socket={socket} />}
     </div>
   );
 };

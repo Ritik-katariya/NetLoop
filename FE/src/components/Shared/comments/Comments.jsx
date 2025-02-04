@@ -6,13 +6,16 @@ import { Avatar } from '@nextui-org/react';
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
 import { format } from 'timeago.js';
 import { toast } from 'react-toastify';
+import { useCreateNotificationMutation } from '../../../redux/api/notificationApi';
 
-const Comments = ({ postId }) => {
+
+const Comments = ({ post, onCommentSubmit, socket }) => {
   const [comment, setComment] = useState('');
   const { id: memberId } = memberInfo();
   const [page, setPage] = useState(1);
   const limit = 10;
-
+  const [createNotification]=useCreateNotificationMutation();
+const postId=post?.id;
   const { data: commentsData, isLoading } = useGetCommentsQuery(
     { postId, page, limit },
     { skip: !postId }
@@ -25,11 +28,15 @@ const Comments = ({ postId }) => {
     if (!comment.trim() || isCreating) return;
 
     try {
-      await createComment({
+      const result = await createComment({
         memberId,
-        postId,
-        content: comment.trim()
+        content: comment.trim(),
+        postId
       }).unwrap();
+   await createNotification({data:{"senderId":memberId,"receiverId":post.memberId,targetId:post.id,"content":"Your post have some comment","type":"COMMENT","targetType":"Post"}})
+      // Call the callback to handle notification
+      onCommentSubmit && onCommentSubmit(result);
+      
       setComment('');
       toast.success('Comment added successfully');
     } catch (error) {
@@ -82,7 +89,7 @@ const Comments = ({ postId }) => {
         ) : (
           <>
             {commentsData?.comments?.map((comment) => (
-              <CommentItem key={comment.id} comment={comment} />
+              <CommentItem key={comment.id} comment={comment} socket={socket} />
             ))}
             {commentsData?.meta?.hasMore && (
               <button
@@ -99,7 +106,7 @@ const Comments = ({ postId }) => {
   );
 };
 
-const CommentItem = ({ comment }) => {
+const CommentItem = ({ comment, socket }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const [replyText, setReplyText] = useState('');
@@ -115,6 +122,8 @@ const CommentItem = ({ comment }) => {
   );
 
   const handleLike = async () => {
+    if (!memberId || !comment?.id) return;
+
     try {
       await toggleLike({
         data: {
@@ -123,9 +132,21 @@ const CommentItem = ({ comment }) => {
           targetId: comment.id
         }
       }).unwrap();
+
+      // Emit like notification for comment
+      if (socket && comment.memberId !== memberId) {
+        socket.emit('likeAction', {
+          senderId: memberId,
+          receiverId: comment.memberId,
+          targetId: comment.id,
+          targetType: 'comment'
+        });
+      }
+
       setIsLiked(!isLiked);
     } catch (error) {
-      toast.error('Failed to toggle like');
+      console.error('Error toggling comment like:', error);
+      toast.error('Failed to like comment');
     }
   };
 

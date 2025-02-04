@@ -37,6 +37,8 @@ model Members {
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   savedPosts    SavedPost[]
+  sentNotifications     Notification[] @relation("SentNotifications")
+  receivedNotifications Notification[] @relation("ReceivedNotifications")
   @@map("Members")
 }
 
@@ -469,6 +471,30 @@ model SavedPost {
 
   @@unique([memberId, postId, networkId, clusterId])
   @@map("SavedPost")
+}
+
+model Notification {
+  id          String      @id @default(uuid())
+  type        NotificationType
+  senderId    String
+  receiverId  String
+  content     String
+  targetId    String?     // ID of the related item (post, comment, etc.)
+  targetType  String?     // Type of the target (post, comment, etc.)
+  isRead      Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  sender      Members     @relation("SentNotifications", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver    Members     @relation("ReceivedNotifications", fields: [receiverId], references: [id], onDelete: Cascade)
+}
+
+enum NotificationType {
+  LIKE
+  COMMENT
+  CHAT_REQUEST
+  MESSAGE
+  FOLLOW
+  MENTION
 }
 
 

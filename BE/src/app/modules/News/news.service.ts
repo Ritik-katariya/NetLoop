@@ -27,7 +27,7 @@ const createNews = async (req: Request): Promise<any> => {
 
       let imageUrls;
       if (file) {
-        const img = await CloudinaryHelper.uploadFile(file);
+        const img = await CloudinaryHelper.uploadImage(file);
         imageUrls = img.secure_url;
          
       }
@@ -113,7 +113,7 @@ const updateNews = async (req: Request): Promise<News> => {
   let imageUrls: string[] = [];
   if (files?.images) {
     const uploadPromises = files.images.map((file: any) =>
-      CloudinaryHelper.uploadFile(file)
+      CloudinaryHelper.uploadImage(file)
     );
     const uploadResults = await Promise.all(uploadPromises);
     imageUrls = uploadResults.map((upload) => upload.secure_url);

@@ -20,6 +20,7 @@ import { searchRouter } from '../modules/search/search.route';
 import { likeRouter } from '../modules/like/like.route';
 import { commentRouter } from "../modules/comment/comment.route";
 import { savedPostRouter } from '../modules/SavedPost/savedPost.route';
+import { notificationRouter } from "../modules/notification/notification.route";
 
 const router = express.Router();
 
@@ -107,6 +108,11 @@ const moduleRoutes = [
   {
     path: '/saved',
     route: savedPostRouter,
+  }
+  ,
+  {
+    path: '/notification',
+    route: notificationRouter,
   }
 ];
 

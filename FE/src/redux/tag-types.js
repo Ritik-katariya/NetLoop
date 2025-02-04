@@ -11,14 +11,15 @@ export const tagTypes = {
   chatrequest: "chatrequest",
   news: "news",
   explore: "explore",
-  poll:"poll",
-  rating:"rating",
-  promotion:"promotion",
-  opinion:"opinion",
-  story:"story",
+  poll: "poll",
+  rating: "rating",
+  promotion: "promotion",
+  opinion: "opinion",
+  story: "story",
   search: 'search',
-  like:"like",
+  like: "like",
   comment: "comment",
+  notification: "notification",
 };
 
 export const tagTypeList = [
@@ -42,5 +43,6 @@ export const tagTypeList = [
   tagTypes.search,
   tagTypes.like,
   tagTypes.comment,
- // Add more tag types as needed
+  tagTypes.notification,
+  // Add more tag types as needed
 ];
