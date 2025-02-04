@@ -36,13 +36,14 @@ const Story = () => {
         slidesPerView={2} // Default for mobile
         spaceBetween={8}
         freeMode={true}
-        loop={stories.length > 3}
+    
+        loop={true}
         autoplay={{
           delay: 3000,
           disableOnInteraction: false,
           pauseOnMouseEnter: true,
         }}
-        speed={500}
+        speed={400}
         className="mySwiper"
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         onReachEnd={() => {
@@ -51,9 +52,9 @@ const Story = () => {
           }
         }}
         breakpoints={{
-          640: { slidesPerView: 3 }, // Tablets
-          768: { slidesPerView: 4 }, // Small Laptops
-          1024: { slidesPerView: 5 }, // Desktops
+          640: { slidesPerView: 4 }, // Tablets
+          768: { slidesPerView: 5 }, // Small Laptops
+          1024: { slidesPerView: 7 }, // Desktops
         }}
       >
         {stories.map((story) => (

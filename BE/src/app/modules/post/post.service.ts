@@ -93,6 +93,9 @@ const getPost = async (id: string): Promise<Post | null> => {
 const getPosts = async (): Promise<Post[]> => {
   return prisma.post.findMany({
     orderBy: { createdAt: "desc" },
+    include:{
+      likes:{select:{memberId:true}}
+    }
   });
 };
 
@@ -170,6 +173,9 @@ const getPostbyMember = async (id: string): Promise<Post[]> => {
   return prisma.post.findMany({
     where: { memberId: id },
     orderBy: { createdAt: "desc" },
+    include:{
+      likes:{select:{memberId:true}}
+    }
   });
 };
 

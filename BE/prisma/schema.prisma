@@ -36,6 +36,9 @@ model Members {
   stories       Story[]
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
+  savedPosts    SavedPost[]
+  sentNotifications     Notification[] @relation("SentNotifications")
+  receivedNotifications Notification[] @relation("ReceivedNotifications")
   @@map("Members")
 }
 
@@ -162,6 +165,7 @@ model Network {
   explore      Explore?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
+  savedBy      SavedPost[]
   @@map("Network")
 }
 
@@ -185,8 +189,8 @@ model Cluster{
   comments     Comments[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
- 
- @@map("Cluster")
+  savedBy      SavedPost[]
+  @@map("Cluster")
 }
 model Post {
   id           String         @id @default(uuid())
@@ -205,6 +209,7 @@ model Post {
   clusterId    String?
   cluster      Cluster?      @relation(fields: [clusterId], references: [id], onDelete: Cascade)
   createdAt    DateTime      @default(now())
+  savedBy      SavedPost[]
 }
 
 model Likes{
@@ -218,10 +223,10 @@ model Likes{
   cluster      Cluster?       @relation(fields: [clusterId],references: [id])
   clusterId    String?
   comments     Comments?      @relation(fields: [commentId],references: [id])
-  commentId    String
+  commentId    String?
   storyId       String?
   story        Story? @relation(fields: [storyId],references: [id])
-  exploreId    String
+  exploreId    String?
   explore      Explore?       @relation(fields: [exploreId],references: [id])
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
@@ -253,10 +258,16 @@ model Comments{
   networkId    String?
   cluster      Cluster?      @relation(fields: [clusterId],references: [id],onDelete: Cascade)
   clusterId    String?
-  exploreId    String
+  exploreId    String?
   explore      Explore?      @relation(fields: [exploreId],references: [id],onDelete: Cascade)
+  parentId     String?
+  parent       Comments?     @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies      Comments[]    @relation("CommentReplies")
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+
+  @@index([parentId])
+  @@map("Comments")
 }
 
 model Explore{
@@ -443,6 +454,47 @@ enum StoryStatus {
   active
   expired
   deleted
+}
+
+model SavedPost {
+  id           String      @id @default(uuid())
+  memberId     String
+  member       Members     @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  postId       String?
+  post         Post?       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  networkId    String?
+  network      Network?    @relation(fields: [networkId], references: [id], onDelete: Cascade)
+  clusterId    String?
+  cluster      Cluster?    @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@unique([memberId, postId, networkId, clusterId])
+  @@map("SavedPost")
+}
+
+model Notification {
+  id          String      @id @default(uuid())
+  type        NotificationType
+  senderId    String
+  receiverId  String
+  content     String
+  targetId    String?     // ID of the related item (post, comment, etc.)
+  targetType  String?     // Type of the target (post, comment, etc.)
+  isRead      Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  sender      Members     @relation("SentNotifications", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver    Members     @relation("ReceivedNotifications", fields: [receiverId], references: [id], onDelete: Cascade)
+}
+
+enum NotificationType {
+  LIKE
+  COMMENT
+  CHAT_REQUEST
+  MESSAGE
+  FOLLOW
+  MENTION
 }
 
 

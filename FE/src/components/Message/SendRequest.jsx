@@ -10,6 +10,7 @@ import { MdPersonAddAlt1 } from 'react-icons/md';
 import { useCreateRequestMutation } from '../../redux/api/chatrequest';
 import { memberInfo } from '../../utils/auth';
 import { Tooltip } from '@nextui-org/react';
+import { useCreateNotificationMutation } from '../../redux/api/notificationApi';
 
 
 export default function SendRequest({ memberId }) {
@@ -19,6 +20,7 @@ export default function SendRequest({ memberId }) {
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const createNotification=useCreateNotificationMutation();
 
   const SubmitEvent = async (e) => {
     e.preventDefault();
@@ -37,6 +39,9 @@ export default function SendRequest({ memberId }) {
         "memberId": memberId,
         "message": message,
       }});
+      await createNotification({data:{
+        "senderId":senderId,"recieverId":memberId,"type":"CHAT_REQUEST","content":"send a chat request","targetId":"1232"
+      }}).unwrap()
 
       setMessage(''); // Reset message after successful submission
       onOpenChange(false); // Close the modal
