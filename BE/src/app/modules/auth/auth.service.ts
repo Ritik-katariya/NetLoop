@@ -45,7 +45,7 @@ const loginUser = async (user: any): Promise<ILginResponse> => {
   }
   // check Verified doctor or not
   let getMemberInfo: Members | null = null;
-  if (isUserExist.role === "member") {
+  if (isUserExist.role === "MEMBER") {
     getMemberInfo = await prisma.members.findUnique({
       where: {
         email: isUserExist.email,

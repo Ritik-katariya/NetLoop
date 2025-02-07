@@ -21,6 +21,7 @@ import { likeRouter } from '../modules/like/like.route';
 import { commentRouter } from "../modules/comment/comment.route";
 import { savedPostRouter } from '../modules/SavedPost/savedPost.route';
 import { notificationRouter } from "../modules/notification/notification.route";
+import { adminRouter } from "../modules/admin/admin.route";
 
 const router = express.Router();
 
@@ -113,6 +114,10 @@ const moduleRoutes = [
   {
     path: '/notification',
     route: notificationRouter,
+  },
+  {
+    path: "/admin",
+    route: adminRouter,
   }
 ];
 
