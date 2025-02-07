@@ -22,6 +22,7 @@ import { commentRouter } from "../modules/comment/comment.route";
 import { savedPostRouter } from '../modules/SavedPost/savedPost.route';
 import { notificationRouter } from "../modules/notification/notification.route";
 import { adminRouter } from "../modules/admin/admin.route";
+import { superAdminRouter } from "../modules/superAdmin/superAdmin.route";
 
 const router = express.Router();
 
@@ -118,6 +119,10 @@ const moduleRoutes = [
   {
     path: "/admin",
     route: adminRouter,
+  },
+  {
+    path: "/super-admin",
+    route: superAdminRouter,
   }
 ];
 

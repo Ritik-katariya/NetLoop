@@ -7,7 +7,11 @@ export const SuperAdminRole = () => {
     try {
       const userRole = req.user?.role;
 
-      if (!userRole || userRole !== 'SUPER_ADMIN') {
+      if (!userRole) {
+        throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized');
+      }
+
+      if (userRole !== 'SUPER_ADMIN') {
         throw new ApiError(
           httpStatus.FORBIDDEN,
           'Only Super Admin can access this resource'

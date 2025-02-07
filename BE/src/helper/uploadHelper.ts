@@ -5,9 +5,9 @@ import { ICloudinaryResponse } from "../interfaces/file";
 import streamifier from "streamifier";
 
 cloudinary.config({
-  cloud_name: config.cloudinary.name,
-  api_key: config.cloudinary.key,
-  api_secret: config.cloudinary.secret,
+  cloud_name: config.cloudinary.cloud_name,
+  api_key: config.cloudinary.api_key,
+  api_secret: config.cloudinary.api_secret,
 });
 
 const upload = multer({ storage: multer.memoryStorage() });

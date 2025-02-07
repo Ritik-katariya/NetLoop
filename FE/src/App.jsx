@@ -23,6 +23,9 @@ import AdminLogin from './components/Admin/AdminLogin';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import AdminRoute from './components/Routes/AdminRoute';
 import CreateAdminModal from './components/Admin/CreateAdminModal';
+import SuperAdminLogin from './components/SuperAdmin/SuperAdminLogin';
+import SuperAdminDashboard from './components/SuperAdmin/SuperAdminDashboard';
+import SuperAdminRoute from './components/Routes/SuperAdminRoute';
 
 function App() {
   return (
@@ -60,9 +63,16 @@ function App() {
        
         {/* Admin Routes */}
         <Route path='/admin/login' element={<AdminLogin />} />
-        <Route path='/admin/sdfs/create' element={<CreateAdminModal/>}/>
         <Route element={<AdminRoute />}>
+        <Route path='/super-admin/admins' element={<CreateAdminModal/>}/>
           <Route path='/admin/dashboard' element={<AdminDashboard />} />
+        </Route>
+
+        {/* Super Admin Routes */}
+        <Route path='/super-admin/login' element={<SuperAdminLogin />} />
+        <Route element={<SuperAdminRoute />}>
+          <Route path='/super-admin/dashboard' element={<SuperAdminDashboard />} />
+          
         </Route>
 
         <Route path='*' element={<NotFound />} />
