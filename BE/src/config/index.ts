@@ -11,15 +11,18 @@ export default {
     clientUrl: clientUrl,
     emailPass: process.env.EMAIL_PASS,
     adminEmail: process.env.ADMIN_EMAIL,
+    superAdminEmail: process.env.SUPER_ADMIN_EMAIL,
     gmail_app_Email: process.env.GMAIL_APP_EMAIL,
     jwt: {
-        secret: process.env.JWT_SCRET,
-        JWT_EXPIRES_IN: process.env.JWT_EXPIRED_IN,
-        refresh_secret: process.env.JWT_REFRESH_SCRET,
-    },cloudinary: {
-        name: process.env.CLOUND_NAME,
-        key: process.env.API_KEY,
-        secret: process.env.API_SECRET
+        secret: process.env.JWT_SECRET,
+        expires_in: process.env.JWT_EXPIRES_IN,
+        refresh_secret: process.env.JWT_REFRESH_SECRET,
+        refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN,
+    },
+    cloudinary: {
+        cloud_name: process.env.CLOUD_NAME,
+        api_key: process.env.API_KEY,
+        api_secret: process.env.API_SECRET
     },
     CLIENT_URL: process.env.CLIENT_URL
     

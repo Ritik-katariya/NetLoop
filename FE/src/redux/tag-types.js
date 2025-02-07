@@ -20,6 +20,7 @@ export const tagTypes = {
   like: "like",
   comment: "comment",
   notification: "notification",
+  admin: "admin",
 };
 
 export const tagTypeList = [
@@ -44,5 +45,6 @@ export const tagTypeList = [
   tagTypes.like,
   tagTypes.comment,
   tagTypes.notification,
+  tagTypes.admin, // For admin-specific tags
   // Add more tag types as needed
 ];

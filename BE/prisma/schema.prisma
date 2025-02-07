@@ -116,7 +116,7 @@ model Work{
   id                    String             @id @default(uuid())
   email                 String             @unique
   password              String
-  role                  UserRole           @default(member) 
+  role                  UserRole           @default(MEMBER) 
   userId                String?
   @@map("Auth")
 }
@@ -426,10 +426,10 @@ model Views{
 
 }
 enum UserRole{
-  admin
-  member
-  verfied
-
+  MEMBER
+  ADMIN
+  MODERATOR
+  SUPER_ADMIN
 }
 enum Gender{
   male
@@ -495,6 +495,31 @@ enum NotificationType {
   MESSAGE
   FOLLOW
   MENTION
+}
+
+model SuperAdmin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("super_admins")
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(ADMIN)
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
 }
 
 
