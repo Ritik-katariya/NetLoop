@@ -248,7 +248,8 @@ const getoneMember = async (id: string): Promise<Members | null> => {
       networks:{
         include:{
           explore:true,
-        }
+        },
+        where:{verified: true}
       },
       chatRequests: true,
       sentRequests: true,

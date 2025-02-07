@@ -127,7 +127,7 @@ const [createNotification]=useCreateNotificationMutation();
       </div>
 
       {/* Actions Section */}
-      <div className="flex justify-between items-center px-4 text-gray-600 text-xs sm:text-sm">
+      <div className="flex justify-between items-center px-4 text-gray-600 text-xs sm:text-base gap-1">
         <div className="flex gap-2 sm:gap-3 cursor-pointer">
           <span 
             onClick={handleLike}

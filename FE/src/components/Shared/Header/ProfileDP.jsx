@@ -16,7 +16,7 @@ export default function ProfileDP({ data }) {
     window.location.reload();
   }
    const { verified } = useSelector((state) => ({
-     verified:state.member.verified
+     verified:state.member?.verified?.verified
    }));
   console.log(data?.networks,"networks")
   return (
