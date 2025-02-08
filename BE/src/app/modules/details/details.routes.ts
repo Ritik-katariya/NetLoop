@@ -5,12 +5,12 @@ import { detailsController } from "./details.controller";
 
 router.post("/", detailsController.createDetails);
 
-router.get("/:id", detailsController.getoneDetails);
-router.put("/:id?", detailsController.updateDetails);
+router.get("/:id?", detailsController.getoneDetails);
+router.patch("/:id?", detailsController.updateDetails);
 router.delete("/:id?", detailsController.deleteDetails);
-router.patch("work/:id", detailsController.updateWork);
+router.patch("work/:id?", detailsController.updateWork);
 router.patch("education/:id", detailsController.updateEducation);
-router.get("work/:id", detailsController.getWork);
-router.get("education/:id", detailsController.getEducation);
+router.get("work/:id?", detailsController.getWork);
+router.get("education/:id?", detailsController.getEducation);
 
 export const detailsRouter = router;

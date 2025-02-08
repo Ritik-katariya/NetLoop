@@ -1,88 +1,168 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { IoPeople } from "react-icons/io5";
-import { FaRegHeart,FaInstagram  } from "react-icons/fa";
+import { FaRegHeart, FaInstagram } from "react-icons/fa";
 import { TbBrandYoutubeFilled } from "react-icons/tb";
 import { Button } from "@nextui-org/react";
-import { MdModeEditOutline  } from "react-icons/md";
-import { NavLink, useParams } from "react-router-dom";
-import { useGetProfileQuery } from "../../redux/api/profile";
-import { useState } from "react";
+import { MdModeEditOutline } from "react-icons/md";
+import { NavLink } from "react-router-dom";
+import { useGetDetailsQuery } from "../../redux/api/details";
+import { useSelector } from "react-redux";
+import { FaGithub, FaLinkedin, FaFacebook, FaLink } from "react-icons/fa6";
+import ReadMore from "../../utils/truncate";
+
 export default function ProfileInfo() {
-  const id=useParams().id;
-    const { data, error, isLoading, isSuccess } = useGetProfileQuery(id);
-  const [detaildata, setDetaildata] = useState("")
-  useEffect(()=>{
-    setDetaildata(data?.details);
-  },[data])
-    const profileData = {
-        name: "Ritik Kumar",
-        bio: "I am a Student at NIT Agartala 2026 | A Full stack Web developer In MERN Stack",
-        stats: {
-          network: 3,
-          cluster: 2,
-          known: 45,
-        },
-        interests: ["Sport Bike", "Super Cars", "Astronomy"],
-        hobbies: ["Gym", "Watching Movies", "Photography"],
-        social: {
-          solo: "Solo",
-          instagram: "ritik_katariya",
-          youtube: "ritik_katariya__",
-        },
-      };
+  const { memberData } = useSelector((state) => state.member);
+  const id = memberData?.profile?.details?.id || "";
+  const { data: detaildata, isLoading } = useGetDetailsQuery(id);
+
+  if (isLoading) {
+    return <div className="text-center text-gray-500">Loading...</div>;
+  }
+
   return (
-   
-       <div className="bg-white p-4 w-2/5 text-xs rounded-md shadow-lg lg:h-[560px]">
-        {detaildata?.overview&& <div>
-            <h2 className="text-base font-semibold">Overview</h2>
-           <p >{detaildata?.overview}</p>
-        </div>}
-            {detaildata?.interests?.lenth>0&&<div className="mt-6">
-                <h2 className="text-base font-semibold mb-4">Interests</h2>
-                <div className="flex flex-wrap gap-2">
-                    {detaildata?.interests.map((interest) => (
-                    <span
-                        key={interest}
-                        className="px-3 py-1 bg-gray-100 rounded-full text-sm"
-                    >
-                        {interest}
-                    </span>
-                    ))}
-                </div>
-            </div>}
-          
-          {detaildata?.hobbie?.lenth>0&&<div className="mt-6">
-            <h2 className="text-base font-semibold mb-4">Hobbies</h2>
-            <div className="flex flex-wrap gap-2">
-              {detaildata.hobbie.map((hobby) => (
-                <span
-                  key={hobby}
-                  className="px-3 py-1 bg-gray-100 rounded-full text-sm"
-                >
-                  {hobby}
-                </span>
-              ))}
-            </div>
-          </div>}
+    <div className="bg-white p-6 lg:w-[70%] rounded-lg shadow-lg border border-gray-200">
+      {/* Overview Section */}
+      {detaildata?.overview && (
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-gray-700">Overview</h2>
+          <p className="text-gray-600 mt-2 text-xs"><ReadMore text={detaildata?.overview} /></p>
+        </div>
+      )}
 
-          {/* Social Links */}
-          {<div className="mt-6 pb-8">
-            <h2 className="text-base font-semibold mb-4">Social</h2>
-            <div className="space-y-2">
-              <p className="flex cursor-pointer items-center gap-2" ><span className="font-semibold flex justify-center items-center gap-2"><IoPeople />
-              Known: </span> {profileData.stats.known}</p>
-              <p className="flex cursor-pointer items-center gap-2"><span className="font-semibold flex justify-center items-center gap-2"> <FaRegHeart />Solo: </span>{profileData.social.solo}</p>
-              <p className="flex cursor-pointer items-center gap-2"><span className="font-semibold flex justify-center items-center gap-2"> <FaInstagram />Instagram: @</span>{profileData.social.instagram}</p>
-              <p className="flex cursor-pointer items-center gap-2"><span className="font-semibold flex justify-center items-center gap-2"><TbBrandYoutubeFilled />YouTube: @</span>{profileData.social.youtube}</p>
-            </div>
+      {/* Interests Section */}
+      {detaildata?.interests?.length > 0 && (
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-gray-700">Interests</h2>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {detaildata?.interests.map((interest, index) => (
+              <span
+                key={index}
+                className="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-700"
+              >
+                {interest}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
-          </div>}
-        <div className="flex justify-center items-center  font-semibold">
-       <NavLink to={`/profile/details-edit/${detaildata?.id}`}>
-       <Button className="bg-primary rounded-lg h-8 text-white text-base" ><MdModeEditOutline/> Details</Button>
-       </NavLink>
+      {/* Hobbies Section */}
+      {detaildata?.hobbie?.length > 0 && (
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-gray-700">Hobbies</h2>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {detaildata?.hobbie?.map((hobby, index) => (
+              <span
+                key={index}
+                className="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-700"
+              >
+                {hobby}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+      {detaildata?.skills?.length > 0 && (
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-gray-700">Skills</h2>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {detaildata?.skills?.map((skill, index) => (
+              <span
+                key={index}
+                className="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-700"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Relationship Status */}
+      {detaildata?.relationStatus && (
+        <div className="mb-6 flex items-center text-gray-700 text-sm">
+          <FaRegHeart className="text-red-500 text-lg mr-2" />
+          <span className="font-medium">{detaildata?.relationStatus}</span>
+        </div>
+      )}
+
+      {/* Social Links */}
+      <div className="mb-6">
+        <h2 className="text-sm font-semibold text-gray-700">Social Links</h2>
+        <div className="flex flex-col gap-3 mt-2">
+          {detaildata?.instagram && (
+            <a
+              href={detaildata?.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center text-gray-600 hover:text-primary transition text-sm"
+            >
+              <FaInstagram className="text-pink-500 text-lg mr-2" />
+              Instagram
+            </a>
+          )}
+
+          {detaildata?.linkedin && (
+            <a
+              href={detaildata?.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center text-gray-600 hover:text-primary transition text-sm"
+            >
+              <FaLinkedin className="text-blue-600 text-lg mr-2" />
+              LinkedIn
+            </a>
+          )}
+
+          {detaildata?.facebook && (
+            <a
+              href={detaildata?.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center text-gray-600 hover:text-primary transition text-sm"
+            >
+              <FaFacebook className="text-blue-500 text-lg mr-2" />
+              Facebook
+            </a>
+          )}
+
+          {detaildata?.github && (
+            <a
+              href={detaildata?.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center text-gray-600 hover:text-primary transition text-sm"
+            >
+              <FaGithub className="text-gray-800 text-lg mr-2" />
+              Github
+            </a>
+          )}
+
+          {detaildata?.website && (
+            <a
+              href={detaildata?.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center text-gray-600 hover:text-primary transition text-sm"
+            >
+              <FaLink className="text-gray-500 text-lg mr-2" />
+              Website
+            </a>
+          )}
         </div>
       </div>
-   
-  )
+
+      {/* Edit Profile Button */}
+      <div className="flex justify-center mt-6">
+        <NavLink to={`/profile/details-edit/${id}`}>
+          <Button
+            className="bg-primary text-white rounded-lg px-5 py-2 flex items-center gap-2 shadow-md hover:bg-primary-dark transition"
+          >
+            <MdModeEditOutline />
+            Edit Details
+          </Button>
+        </NavLink>
+      </div>
+    </div>
+  );
 }

@@ -7,7 +7,7 @@ import Search from '../Shared/Search/Search';
 const NetworkProfile = () => {
   const {id}=useParams();
   const { data: networkData } = useGetNetworkQuery(id);
-  console.log(networkData);
+
   // Dummy member data
   const members = Array(4).fill({
     name: "Ritik Kumar",

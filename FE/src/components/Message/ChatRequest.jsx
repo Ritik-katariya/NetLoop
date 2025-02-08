@@ -18,7 +18,7 @@ export default function ChatRequest({chatId}) {
     const memberId=memberInfo().id;
     const { data, isLoading, isSuccess, isError, error } = useGetRequestQuery(memberId);
 
-    console.log(data,"request");
+    
     const members={data:[]};
       const [searchTerm, setSearchTerm] = useState('');
       const filteredMembers =data?.filter(member =>
@@ -27,7 +27,7 @@ export default function ChatRequest({chatId}) {
 
        const accepthandler=async({memberId,id})=> {
         try {
-          console.log(id,"ygjyid")
+         
        
           await updateChat({id:chatId,data:{"memberId":memberId,
             "requestId":id

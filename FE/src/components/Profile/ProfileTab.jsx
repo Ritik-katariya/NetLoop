@@ -21,7 +21,7 @@ export default function ProfileTab() {
           <Tab key="Profile" title="Profile" className="focus:text-primary ">
             <Card>
               <CardBody >
-              <div className="md:flex gap-4">
+              <div className="md:flex gap-4 grid md:grid-cols-2 grid-cols-1">
               <ProfileInfo/>
               <ProfilePost/>
               </div>
@@ -40,7 +40,9 @@ export default function ProfileTab() {
           <Tab key="Cluster" title="Cluster" className="focus:text-primary ">
             <Card>
               <CardBody>
-               Comming Soon....!
+              <div className="w-full h-96 flex justify-center items-center">
+              Comming Soon....!
+              </div>
               </CardBody>
             </Card>
           </Tab>

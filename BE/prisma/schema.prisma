@@ -70,10 +70,11 @@ model Details{
   interests            String[]          @default([])
   overview             String?
   instagram            String?
-  twitter              String?
+  website              String?
   facebook             String?
   linkedin             String?
   github               String?
+  relationStatus       RelationStatus?
   work                 Work[]
   skills               String[]          @default([])
   @@map("Details")
@@ -454,6 +455,15 @@ enum StoryStatus {
   active
   expired
   deleted
+}
+
+enum RelationStatus{
+  SINGLE
+  MARRIED
+  DIVORCED
+  COMPLICATED
+  INTERESTED
+  NOTINTERESTED
 }
 
 model SavedPost {

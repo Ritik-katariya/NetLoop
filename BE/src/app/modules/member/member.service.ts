@@ -166,7 +166,8 @@ const createMember = async (payload: any): Promise<any> => {
       const profile= await tx.profile.create({data:{memberId:member.id}});
       const details= await tx.details.create({data:{profileId:profile.id}});
       const chat= await tx.chat.create({data:{memberId:member.id}});
-      
+      await tx.work.create({data:{detailsid:details.id}})
+      await tx.education.create({data:{detailsid:details.id}})
       await tx.auth.update({
         where: { email: othersData.email },
         data: {
@@ -243,7 +244,7 @@ const getoneMember = async (id: string): Promise<Members | null> => {
       id: id,
     },
     include: {
-      profile: true,       // Include the profile relation
+      profile: {include:{details:{include:{work:{select:{id:true}},education:{select:{id:true}}}}}},       // Include the profile relation
       verified: true,      // Include the verified relation
       networks:{
         include:{
@@ -253,6 +254,8 @@ const getoneMember = async (id: string): Promise<Members | null> => {
       },
       chatRequests: true,
       sentRequests: true,
+     
+      
     
     },
   });

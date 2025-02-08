@@ -68,7 +68,8 @@ const getSavedItems = async (memberId: string, page = 1, limit = 10) => {
                 name: true,
                 profile: { select: { img: true } }
               }
-            }
+            },likes:true,
+            savedBy:true
           }
         },
         network: {

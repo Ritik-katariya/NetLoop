@@ -1,19 +1,17 @@
-import React, { useEffect, useState,useMemo  } from 'react';
-import netloop from '../../../images/netloop.png'
+import React, { useEffect, useState, useMemo } from "react";
+import netloop from "../../../images/netloop.png";
 import { IoHomeOutline } from "react-icons/io5";
-import { MdOutlineTravelExplore } from "react-icons/md";
-import { MdOutlineGroups3 } from "react-icons/md";
+import { MdOutlineTravelExplore, MdOutlineGroups3 } from "react-icons/md";
 import { AiTwotoneMessage } from "react-icons/ai";
-// import { IoNotifications } from "react-icons/io5";
-import { NavLink } from 'react-router-dom';
-import { memberInfo } from '../../../utils/auth';
-import { useGetMemberQuery } from '../../../redux/api/member';
-import ProfileDP from './ProfileDP';
-import NotificationPage from '../../Notification/NotificationPage';
-import { useDispatch } from 'react-redux';
-import { setMember } from '../../../redux/feature/memberSlice';
-import { setProfile } from '../../../redux/feature/profileSlice';
-import SearchItem from '../SearchItem';
+import { NavLink } from "react-router-dom";
+import { memberInfo } from "../../../utils/auth";
+import { useGetMemberQuery } from "../../../redux/api/member";
+import ProfileDP from "./ProfileDP";
+import NotificationPage from "../../Notification/NotificationPage";
+import { useDispatch } from "react-redux";
+import { setMember } from "../../../redux/feature/memberSlice";
+import { setProfile } from "../../../redux/feature/profileSlice";
+import SearchItem from "../SearchItem";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -22,60 +20,68 @@ const Header = () => {
   const id = member ? member.id : null;
 
   const { data } = useGetMemberQuery(id, { skip: !id });
-  
+
   const memb = useMemo(() => {
     if (data?.id) {
       return {
         name: data.name,
         id: data.id,
-        network: data.networks || [], // Default to empty array if undefined
-        verified: data.verified ?? false, // Default to false if undefined
-        memberData: data || null, // Pass the full data object
+        network: data.networks || [],
+        verified: data.verified ?? false,
+        memberData: data || null,
       };
     }
     return null;
   }, [data]);
 
-  // Dispatch `setMember` only when `memb` changes
   useEffect(() => {
     if (memb) {
       dispatch(setMember(memb));
     }
   }, [memb, dispatch]);
 
-useEffect(() => {
-  if (data && data.profile) {
+  useEffect(() => {
+    if (data?.profile) {
+      dispatch(
+        setProfile({
+          id: data?.profile.id,
+          img: data?.profile.img,
+          memberId: data?.profile.memberId,
+          bio: data?.profile.bio,
+        })
+      );
+    }
+  }, [data, dispatch]);
 
-    const profiledata = {
-      id: data?.profile.id,
-      img: data?.profile.img,
-      memberId: data?.profile.memberId,
-      bio: data?.profile.bio,
-    };
-    // Define setProfile function or import it from props or context
-    dispatch(setProfile(profiledata))
-    
-  }
-}, [data, dispatch]);
   const navItems = [
-    { label: 'Home', href: '/', icon: <IoHomeOutline className='text-2xl' /> },
-    { label: 'Explore', href: '/explore', icon: <MdOutlineTravelExplore className='text-2xl' /> },
-    { label: 'Network', href: '/network', icon: <MdOutlineGroups3 className='text-2xl' /> },
-    { label: 'Message', href: '/message', icon: <AiTwotoneMessage className='text-2xl' /> },
-    { label: 'Notification', href: '#', icon: <NotificationPage /> },
+    { label: "Home", href: "/", icon: <IoHomeOutline className="text-2xl" /> },
+    {
+      label: "Explore",
+      href: "/explore",
+      icon: <MdOutlineTravelExplore className="text-2xl" />,
+    },
+    {
+      label: "Network",
+      href: "/network",
+      icon: <MdOutlineGroups3 className="text-2xl" />,
+    },
+    {
+      label: "Message",
+      href: "/message",
+      icon: <AiTwotoneMessage className="text-2xl" />,
+    },
+    { label: "Notification", href: "#", icon: <NotificationPage /> },
   ];
 
   return (
-    <nav className="bg-white text-primary-textd md:shadow-md">
+    <nav className="bg-white text-gray-800 shadow-md fixed top-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo Section */}
           <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <a href="/" className="text-2xl font-bold">
-                <img src={netloop} alt="Netloop" className='w-32 md:w-48' />
-              </a>
-            </div>
+            <NavLink to="/" className="text-2xl font-bold">
+              <img src={netloop} alt="Netloop" className="w-32 md:w-48" />
+            </NavLink>
           </div>
 
           {/* Search Section */}
@@ -84,33 +90,34 @@ useEffect(() => {
           </div>
 
           {/* Navigation Links */}
-          <div className="hidden md:flex space-x-4 items-center">
+          <div className="hidden md:flex space-x-6 items-center">
             {navItems.map((item) => (
-              <a
+              <NavLink
                 key={item.label}
-                href={item.href}
-                className="hover:bg-white/20 px-3 py-2 rounded-md transition-colors"
+                to={item.href}
+                className="hover:text-primary hover:scale-105 transition-all duration-200 px-3 py-2 rounded-md text-gray-700"
               >
-                <span className='flex flex-col justify-center items-center text-xs'>
+                <span className="flex flex-col justify-center items-center text-xs">
                   {item.icon}
                   {item.label}
                 </span>
-              </a>
+              </NavLink>
             ))}
           </div>
-          {/* mobile search option */}
-          <div className="md:hidden mx-4 -translate-x-4 flex-grow w-32 pt-1 max-w-md">
+
+          {/* Mobile Search Bar */}
+          <div className="md:hidden mx-4 flex-grow w-32 pt-1 max-w-md">
             <SearchItem />
           </div>
 
-          {/* Login/Signup or Avatar */}
+          {/* Profile / Login Section */}
           <div className="hidden md:block">
             <div className="ml-4 flex items-center justify-center">
-              {data ? (
+              {data?.profile ? (
                 <ProfileDP data={data} />
               ) : (
-                <NavLink to='/login'>
-                  <button className="bg-white text-primary hover:text-[rgb(34,183,183)] px-4 py-2 rounded-full hover:bg-white/90 transition-colors">
+                <NavLink to="/login">
+                  <button className="bg-primary text-white px-4 py-2 rounded-full hover:bg-primary/90 transition-all duration-200">
                     Login
                   </button>
                 </NavLink>
@@ -119,10 +126,10 @@ useEffect(() => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center bg-[#f7f7f7] border-[.2px] rounded-sm border-[#727272]">
+          <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-primary hover:text-[rgb(34,183,183)] focus:outline-none"
+              className="text-gray-700 focus:outline-none"
             >
               {isMenuOpen ? (
                 <svg
@@ -161,36 +168,24 @@ useEffect(() => {
         </div>
 
         {/* Mobile Menu */}
-        <div className='flex justify-end'>
-          {isMenuOpen && (
-            <div className="md:hidden w-[180px]   bg-white border-2 border-[#b3b3b3]">
-              <div className="px-4  pb-3 space-y-1 sm:px-3">
-                {/* Mobile Navigation Links */}
-                {navItems.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="hover:bg-white/20 px-3 py-2 rounded-md transition-colors"
-                  >
-                    <span className='flex gap-4 items-center text-sm'>
-                      {item.icon}
-                      {item.label}
-                    </span>
-                  </a>
-                ))}
-
-                {/* Mobile Login/Signup */}
-                <div className="pt-4">
-                  <NavLink to='/login'>
-                    <button className="w-full bg-white text-[#03c6c7] px-4 py-2 rounded-full hover:bg-white/90 transition-colors">
-                      Login/Signup
-                    </button>
-                  </NavLink>
-                </div>
-              </div>
+        {isMenuOpen && (
+          <div className="md:hidden bg-white shadow-lg border border-gray-300 absolute right-4 top-16 rounded-lg w-48">
+            <div className="px-4 py-3">
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.label}
+                  to={item.href}
+                  className="block text-gray-700 hover:text-primary hover:scale-105 transition-all duration-200 px-3 py-2 rounded-md"
+                >
+                  <span className="flex gap-3 items-center text-sm">
+                    {item.icon}
+                    {item.label}
+                  </span>
+                </NavLink>
+              ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </nav>
   );

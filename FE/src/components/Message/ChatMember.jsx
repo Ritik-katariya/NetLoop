@@ -6,11 +6,11 @@ import { memberInfo } from '../../utils/auth';
 export default function ChatMember({chatData}) {
   const memberId=memberInfo().id;
     const { data, isLoading, isSuccess, isError, error } = useGetMembersQuery();
-    console.log(chatData,"chatkda");
+    
     const chmembers = data?.data?.filter(mem => {
         return !chatData[0]?.members?.some(element => element.id === mem.id);
       })||[];
-      console.log(chmembers,"members");
+      
       
       const [searchTerm, setSearchTerm] = useState('');
       const filteredMembers =chmembers?.filter(member =>

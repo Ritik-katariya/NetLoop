@@ -30,7 +30,7 @@ export default function ExploreAll() {
       setExploreData(combinedData);
     }
   }, [data, exploreId]);
- console.log(exploreData, 'exploreData')
+
   return (
     <div>
       {exploreData?exploreData.map((item) =>{

@@ -28,7 +28,7 @@ export default function Promotion() {
     return <div>Error loading promotions.</div>;
   }
 
-  console.log(data, exploreId, 'promotion');
+  
 
   return (
     <div >

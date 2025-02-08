@@ -8,23 +8,23 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { Image } from "@nextui-org/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { RiEditFill } from "react-icons/ri";
 import { useUpdateProfileBannerMutation } from "../../redux/api/profile";
+import { MdOutlineFileUpload } from "react-icons/md";
 
-import { useEffect } from "react";
 export default function UploadImg({ id, img, flag }) {
   const [file, setFile] = useState(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [updateProfileBanner, { isLoading }] = useUpdateProfileBannerMutation();
-  // Moved outside
-  // Moved outside
+
   useEffect(() => {
     setFile(img);
   }, [img]);
+
   const Uploadhandler = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
     if (!file) {
       toast.error("Please select a file to upload");
       return;
@@ -38,8 +38,8 @@ export default function UploadImg({ id, img, flag }) {
       await updateProfileBanner({ formData, id }).unwrap();
 
       toast.success("Image uploaded successfully");
-      setFile(null); // Clear the file input
-      onOpenChange(false); // Close the modal
+      setFile(null);
+      onOpenChange(false);
     } catch (error) {
       toast.error("Image upload failed");
       console.error("Image upload error:", error);
@@ -50,63 +50,69 @@ export default function UploadImg({ id, img, flag }) {
     <>
       <RiEditFill
         onClick={onOpen}
-        className="text-gray-700 hover:text-primary rounded-full bg-[#ffffff37] w-6 h-6 p-[5px]"
+        className="text-gray-700 hover:text-primary bg-white p-1 w-7 h-7 rounded-full shadow-md hover:scale-105 transition-all cursor-pointer"
       />
       <Modal
         backdrop="opaque"
         classNames={{
-          backdrop:
-            "bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20",
+          backdrop: "bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20",
         }}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       >
         <ToastContainer />
-        <ModalContent className="bg-[#0000003f] ">
+        <ModalContent className="bg-[#181b1be6] text-white shadow-xl rounded-lg">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-primary text-2xl font-mono font-semibold">
+              <ModalHeader className="text-primary text-xl font-semibold">
                 {flag ? "Upload Banner" : "Upload Profile Picture"}
               </ModalHeader>
-              <ModalBody>
-                <Image alt="Cover Image" src={img} width={300} />
-                <form
-                  className="flex items-center space-x-6"
-                  onSubmit={Uploadhandler}
-                >
-                  <div className="shrink-0">
+              <ModalBody className="flex flex-col items-center gap-4">
+                {/* Current Image Preview */}
+                <div className="w-full flex justify-center">
+                  <Image
+                    alt="Cover Image"
+                    src={img || "https://via.placeholder.com/400"}
+                    width={300}
+                    className="rounded-md shadow-md"
+                  />
+                </div>
+
+                {/* Upload Form */}
+                <form className="flex flex-col items-center gap-4 w-full" onSubmit={Uploadhandler}>
+                  <div className="w-24 h-24 relative">
                     {file && file instanceof Blob && (
                       <img
-                        className="h-16 w-16 object-cover rounded-full"
+                        className="w-full h-full object-cover rounded-full shadow-md"
                         src={URL.createObjectURL(file)}
-                        alt="current photo"
+                        alt="Selected"
                       />
                     )}
                   </div>
-                  <label className="block">
-                    <span className="sr-only">Choose profile photo</span>
+
+                  {/* File Input */}
+                  <label className="w-full flex flex-col items-center cursor-pointer">
+                    <span className="text-gray-500 font-medium">Choose an image</span>
                     <input
                       type="file"
-                      onChange={(e) => setFile(e.target.files[0])} // Correct file handling
-                      className="block w-full text-sm text-gray-300
-                          file:mr-4 file:py-2 file:px-4
-                          file:rounded-full file:border-0
-                          file:text-sm file:font-semibold
-                          file:bg-cyan-50 file:text-primary
-                          hover:file:bg-cyan-100"
+                      accept="image/*"
+                      onChange={(e) => setFile(e.target.files[0])}
+                      className="hidden"
                     />
+                    <div className="mt-2 px-4 py-2 bg-teal-400 text-white rounded-md flex items-center gap-1 hover:bg-primary/90 transition-all cursor-pointer">
+                     <MdOutlineFileUpload /> Select File
+                    </div>
                   </label>
 
-                  <div>
-                    <Button
-                      color="primary"
-                      type="submit"
-                      className="rounded-lg text-white"
-                      disabled={isLoading}
-                    >
-                      {isLoading ? "Loading.." : "Upload"}
-                    </Button>
-                  </div>
+                  {/* Upload Button */}
+                  <Button
+                    color="primary"
+                    type="submit"
+                    className="w-full text-white font-semibold rounded-md px-6 py-2 hover:scale-105 transition-all duration-200"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Uploading..." : "Upload"}
+                  </Button>
                 </form>
               </ModalBody>
               <ModalFooter></ModalFooter>
