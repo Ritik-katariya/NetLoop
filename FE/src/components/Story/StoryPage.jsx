@@ -5,7 +5,7 @@ import { Mousewheel } from "swiper/modules";
 import { useInView } from "react-intersection-observer";
 import { useGetStoriesQuery } from "../../redux/api/storyApi";
 import { useParams } from "react-router-dom";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { ChevronUp, ChevronDown, Volume2, VolumeX, Heart } from "lucide-react";
 import "swiper/css";
 import Header from "../Shared/Header/Header";
 
@@ -15,6 +15,8 @@ const StoryPage = () => {
   const { data, isFetching } = useGetStoriesQuery({ cursor, limit: 10 });
   const [sortedStories, setSortedStories] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMuted, setIsMuted] = useState(true);
+  const [likedStories, setLikedStories] = useState({});
   const swiperRef = useRef(null);
   const videoRefs = useRef({});
 
@@ -49,7 +51,23 @@ const StoryPage = () => {
     const currentVideo = videoRefs.current[swiper.activeIndex];
     if (currentVideo) {
       currentVideo.play().catch(console.error);
+      currentVideo.muted = isMuted;
     }
+  };
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+    const currentVideo = videoRefs.current[activeIndex];
+    if (currentVideo) {
+      currentVideo.muted = !isMuted;
+    }
+  };
+
+  const toggleLike = (storyId) => {
+    setLikedStories(prev => ({
+      ...prev,
+      [storyId]: !prev[storyId]
+    }));
   };
 
   const handleNextSlide = () => {
@@ -75,7 +93,6 @@ const StoryPage = () => {
         let hls;
   
         if (story.hlsUrl) {
-          // ✅ Use HLS Streaming
           if (Hls.isSupported()) {
             hls = new Hls();
             hls.loadSource(story.hlsUrl);
@@ -84,9 +101,10 @@ const StoryPage = () => {
             video.src = story.hlsUrl;
           }
         } else {
-          // ✅ Fallback to Direct Video URL
           video.src = story.mediaUrl;
         }
+  
+        video.muted = isMuted;
   
         if (inView) {
           video.play().catch(console.error);
@@ -98,7 +116,7 @@ const StoryPage = () => {
           if (hls) hls.destroy();
         };
       }
-    }, [inView, story.hlsUrl, story.mediaUrl]);
+    }, [inView, story.hlsUrl, story.mediaUrl, isMuted]);
   
     return story.mediaType === "VIDEO" ? (
       <video
@@ -112,7 +130,7 @@ const StoryPage = () => {
         playsInline
         autoPlay
         loop
-        muted
+        muted={isMuted}
       />
     ) : (
       <img
@@ -122,7 +140,6 @@ const StoryPage = () => {
       />
     );
   };
-  
 
   if (isFetching) {
     return (
@@ -134,8 +151,8 @@ const StoryPage = () => {
 
   return (
     <>
-      <Header />
-      <div className="flex h-screen w-screen items-center justify-center bg-gray-900 relative">
+      <Header chat={true}/>
+      <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-tr from-[#59ffe669] to-[#00052459] relative ">
         {/* Navigation Buttons */}
         <button
           onClick={handlePrevSlide}
@@ -150,6 +167,39 @@ const StoryPage = () => {
         >
           <ChevronDown className="w-6 h-6" />
         </button>
+
+        {/* Story Controls */}
+        <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex flex-col gap-4 z-10">
+          {/* Mute/Unmute Button */}
+          <button
+            onClick={toggleMute}
+            className="bg-black/50 hover:bg-black/80 text-white p-3 rounded-full transition-all duration-200 hover:scale-110"
+          >
+            {isMuted ? (
+              <VolumeX className="w-6 h-6" />
+            ) : (
+              <Volume2 className="w-6 h-6" />
+            )}
+          </button>
+
+          {/* Like Button */}
+          {sortedStories[activeIndex] && (
+            <button
+              onClick={() => toggleLike(sortedStories[activeIndex].id)}
+              className={`bg-black/50 hover:bg-black/80 p-3 rounded-full transition-all duration-200 hover:scale-110 ${
+                likedStories[sortedStories[activeIndex].id]
+                  ? "text-red-500"
+                  : "text-white"
+              }`}
+            >
+              <Heart
+                className={`w-6 h-6 ${
+                  likedStories[sortedStories[activeIndex].id] ? "fill-current" : ""
+                }`}
+              />
+            </button>
+          )}
+        </div>
 
         {/* Swiper Stories */}
         {sortedStories.length > 0 ? (
