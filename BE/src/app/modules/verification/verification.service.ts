@@ -11,7 +11,7 @@ const createVerification = async (req: Request): Promise<any> => {
   const data = await prisma.$transaction(
     async (tx) => {
       const files = req.files as { adharimg?: any; realphoto?: any; enrollmentimg?: any };
-      const { memberId, adharno, enrollmentno, ...otherData } = req.body;
+      const { memberId, adharno, ...otherData } = req.body;
 
       // Validate if memberId exists in the Members table
       const memberExists = await tx.members.findUnique({
@@ -39,18 +39,10 @@ const createVerification = async (req: Request): Promise<any> => {
       }
     }
 
-    if (files?.enrollmentimg) {
-      const uploadEnrollmentImg = await CloudinaryHelper.uploadImage(files.enrollmentimg[0]);
-      if (uploadEnrollmentImg) {
-        otherData.enrollmentimg = uploadEnrollmentImg.secure_url;
-      } else {
-        throw new ApiError(httpStatus.EXPECTATION_FAILED, "Failed to upload enrollment image");
-      }
-    }
     // Create verification
     try {
       const verification: Verified | null = await tx.verified.create({
-      data: { ...otherData, memberId, adharno, enrollmentno },
+      data: { ...otherData, memberId, adharno },
       });
       return verification;
     } catch (error) {

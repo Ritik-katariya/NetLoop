@@ -52,7 +52,7 @@ const memberId=memberInfo().id;
 
 
   return (
-    <div className="flex h-screen bg-gray-100 scroll-smooth ">
+    <div className="flex h-screen bg-gray-100 scroll-smooth mt-16 ">
       <SideBar chatData={chatData} setActiveChat={setActiveChat} activeChat={activeChat}/>
       <div className="flex-1 flex flex-col">
         {activeChat ? (<ChatApp activeChat={activeChat} setMessages={setMessages} messages={messages} socket={socket}/>

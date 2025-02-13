@@ -1,86 +1,90 @@
-import React from "react";
-import { useState } from "react";
-import { Card, Button } from "@nextui-org/react";
-import { FaRegHeart,FaHeart  } from "react-icons/fa";
+import React, { useState,useEffect } from "react";
+import { Card, Button, Image } from "@nextui-org/react";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { memberInfo } from "../../utils/auth";
 import { useUpdateNetworkMemberMutation } from "../../redux/api/network";
-import { toast,ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { NavLink } from "react-router-dom";
+import { useToggleLikeMutation,useCheckLikeStatusQuery } from "../../redux/api/likeApi";
+import JoinRequest from "../JoinRequest/JoinRequest";
+
 const NetwrokCard = ({ value }) => {
-  const [updateNetworkMember, { isLoading, isSuccess,isError,error }] = useUpdateNetworkMemberMutation();
+  const [toggleLike, { isLoading: likeLoading, isError: likeError, isSuccess: likeSuccess }] = useToggleLikeMutation();
+  const memberId = memberInfo()?.id;
+  // State for like button
+  const [like, setLike] = useState(value?.likes?.some((like) => like.memberId === memberId) || false);
+  const {data:cehcklike}=useCheckLikeStatusQuery({memberId,targetId:value?.id,targetType:'network'})
+  // console.log(value,"network",cehcklike)
+  const handleLike =async () =>{ 
+try {
+  await toggleLike({memberId,targetType:'network',targetId:value?.id});
+  if(likeSuccess)
+  {toast.success("Successfully liked the network!");
 
-  const memberId=memberInfo().id;
-  const [like, setlike] = useState(false);
-  const likehandler= async()=>{
-    setlike(!like);
-  }
-
-  const joinhandler= async()=>{
-     
-  
-    const formData=new FormData();
-    formData.append("memberId", memberId);
-    formData.append("networkId", value?.id);
-    try {
-      await updateNetworkMember({data: formData});
-     if(isSuccess) toast.success("Member join successfully");
-     else toast.error("Member join failed",error);
-      
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to join network");
-    }
+  setLike(!like);
 
   }
+else
+  toast.error("Failed to like the network.");
+} catch (error) {
+  toast.error(error,"Failed to like the network.");
+}
+  }
+  useEffect(()=>{
+    setLike(cehcklike?.isLiked)
+    
+  },[cehcklike])
+
+
+
   return (
-    <Card className="max-w-md max-h-96  space-y-1 bg-white rounded-lg shadow-lg">
-      {/* Background Image */}
-      
+    <Card className="w-full max-w-md bg-white rounded-lg shadow-lg transition-transform hover:scale-105 flex flex-col items-center">
+      {/* Network Cover Image */}
+      <NavLink to={`/network/${value?.id}`}>
+        <Image src={value?.cover} alt={value?.name} className="w-full h-44 rounded-t-lg object-cover" />
+      </NavLink>
 
-       <NavLink to={`/network/${value?.id}`}>
-       <img src={value?.cover} alt={value?.name} className="w-full h-44" />
-       </NavLink>
-           <ToastContainer/>
+      <ToastContainer />
+
       {/* Content */}
-      <div className=" px-2">
-        <div className="flex justify-between items-center">
-       <NavLink to={`/network/${value?.id}`}>
+      <div className="p-4 space-y-3">
+        {/* Title & Like Button */}
+        <div className="flex justify-between items-center relative">
+          <NavLink to={`/network/${value?.id}`} className="text-lg font-bold text-gray-900 hover:text-cyan-500 transition-colors">
+            {value?.name}
+          </NavLink>
 
-        <h2 className="text-lg font-mono font-bold capitalize cursor-pointer">{value?.name}</h2></NavLink>
-          <div className="absolute right-6 top-40">
-            <div className="flex flex-col ">
-              <span className="text-lg text-red-600 cursor-pointer rounded-full bg-[#ffffffde] w-8 h-8 flex justify-center items-center hover:scale-105" onClick={likehandler}>{like?<FaHeart />:<FaRegHeart />}</span>
-              <span className="text-gray-600 text-xs w-8 text-center">{value?.likes?.length}</span>
-            </div>
+          {/* Like Button */}
+          <div className="absolute right-2 -top-12 flex flex-col items-center">
+            <button
+              onClick={handleLike}
+              className="text-lg text-red-600 bg-white rounded-full w-9 h-9 flex justify-center items-center hover:bg-gray-100 transition"
+            >
+              {like? <FaHeart className="text-red-500" /> : <FaRegHeart />}
+            </button>
+            <span className="text-gray-600 text-xs">{value?.likes?.length}</span>
           </div>
         </div>
 
-        <div className="flex justify-between px-4 text-sm items-center my-3">
-        <div className="space-y-2">
-          {/* <div className="flex items-center gap-2">
-            <span className="text-gray-500">Cluster</span>
-            <span className="font-semibold">20</span>
-          </div> */}
+        {/* Member Count & Rating */}
+        <div className="flex justify-between text-sm text-gray-700">
           <div className="flex items-center gap-2">
-            <span className="text-gray-500">Member</span>
-            <span className="font-semibold">{value?.members.length}</span>
+            <span className="text-gray-500">Members:</span>
+            <span className="font-semibold">{value?.members?.length}</span>
+          </div>
+
+          <div className="flex items-center gap-1">
+            <span className="text-yellow-500 text-lg">★</span>
+            <span className="font-semibold">4.6</span>
+            <span className="text-gray-500 text-xs">(3K)</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 justify-center" >
-          <span className="text-cyan-400 text-xl">★</span>
-          <span className="font-semibold ">4.6</span>
-          <span className="text-gray-600 text-xs">3k</span>
-        </div>
-        </div>
+        {/* Short Description */}
+        <p className="text-gray-600 text-sm italic">Grow and thrive with us...</p>
 
-        <p className="text-gray-600 m-2 text-sm">Grow and Joy with us...</p>
-
-       <div className="w-full h-12 flex justify-center items-center m-2">
-       <Button className="w-32 h-10 bg-cyan-400 text-white py-3 rounded-lg text-xl font-mono hover:bg-cyan-500 transition-colors" onClick={joinhandler} disabled={isLoading}>
-          {isLoading?"Loading..":"Join"}
-        </Button>
-       </div>
+        {/* Join Button */}
+        <div className="w-full flex justify-center"><JoinRequest id={value.id}/></div>
       </div>
     </Card>
   );

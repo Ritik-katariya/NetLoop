@@ -12,16 +12,20 @@ const createNotification = async ({
   senderId,
   receiverId,
   content,
-  targetId,
-  targetType,
+  targetId = null,
+  targetType = null,
 }: {
   type: "LIKE" | "COMMENT" | "CHAT_REQUEST" | "MESSAGE" | "FOLLOW" | "MENTION";
   senderId: string;
   receiverId: string;
   content: string;
-  targetId?: string;
-  targetType?: string;
+  targetId?: string | null;
+  targetType?: string | null;
 }) => {
+  if (!receiverId) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "receiverId is required");
+  }
+
   try {
     const notification = await prisma.notification.create({
       data: {
@@ -47,17 +51,22 @@ const createNotification = async ({
       },
     });
 
-    // Emit notification to the receiver using Socket.IO
-    const receiverSocketId = global.onlineUsers?.get(receiverId);
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit("newNotification", notification);
+    // Emit notification via Socket.IO if receiver is online
+    if (global.onlineUsers && io) {
+      const receiverSocketId = global.onlineUsers.get(receiverId);
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("newNotification", notification);
+      }
     }
 
     return notification;
   } catch (error) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Failed to create notification");
+    console.error("Error creating notification:", error);
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create notification");
   }
 };
+
+
 
 const getNotifications = async (receiverId: string, page = 1, limit = 20) => {
   const skip = (page - 1) * limit;

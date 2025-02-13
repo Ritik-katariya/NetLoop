@@ -23,10 +23,10 @@ export const likeApi = baseApi.injectEndpoints({
     }),
 
     checkLikeStatus: build.query({
-      query: ({targetId, memberId}) => ({
+      query: ({targetId, memberId,targetType}) => ({
         url: `${LIKE_URL}/status`,
         method: "GET",
-        params: { targetId, memberId, targetType: 'post' }
+        params: { targetId, memberId, targetType }
       }),
       providesTags: [tagTypes.like]
     })

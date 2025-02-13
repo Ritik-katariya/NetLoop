@@ -71,7 +71,7 @@ const loginUser = async (user: any): Promise<ILginResponse> => {
   const accessToken = JwtHelper.createToken(
     { status, id ,role},
     config.jwt.secret as Secret,
-    config.jwt.JWT_EXPIRES_IN as string
+    config.jwt.expires_in as string
   );
   return { accessToken, user: { status, id } };
 };

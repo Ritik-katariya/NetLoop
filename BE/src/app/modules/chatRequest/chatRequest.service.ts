@@ -52,11 +52,17 @@ const getChatRequestsForMember = async (memberId: string): Promise<any[]> => {
 };
 
 const deleteChatRequest = async (id: string): Promise<any> => {
-  const deletedChatRequest = await prisma.chatRequest.delete({
-    where: { id },
-  });
+  try {
+    
+    const deletedChatRequest = await prisma.chatRequest.delete({
+      where: { id },
+    });
 
-  return deletedChatRequest;
+    return deletedChatRequest;
+  } catch (error) {
+    console.error("Error deleting chat request:", error);
+    throw new Error("Delete chat request failed.");
+  }
 };
 
 export const chatRequestService = {

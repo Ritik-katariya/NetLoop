@@ -63,7 +63,7 @@ export default function SideBar({ chatData, setActiveChat, activeChat }) {
         <ChatMember  chatData={chatData}/>}
       
      { chat==="request"&&
-        <ChatRequest chatId={chatData[0]?.id}/>}
+        <ChatRequest chatId={chatData[0]?.id||{}}/>}
       
     </div>
   );

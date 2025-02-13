@@ -23,6 +23,7 @@ model Members {
   shares        Share[]
   comments      Comments[]
   chats         Chat[]       @relation("MemberChats")
+  chat          Chat?         @relation("ChatOfMember")
   chatRequests  ChatRequest[]  @relation("MemberRequests")
   sentRequests  ChatRequest[]  @relation("MemberChatRequest")
   news          News[]
@@ -34,6 +35,7 @@ model Members {
   pollvotes     Poll[]       @relation("MembersPoll")
   views         Views[]
   stories       Story[]
+  joinRequests  JoinRequest?
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   savedPosts    SavedPost[]
@@ -103,8 +105,6 @@ model Work{
   id                   String            @id     @default(uuid())
   adharno              String               @unique
   adharimg             String  
-  enrollmentno         String            @unique
-  enrollmentimg        String
   realphoto            String
   member               Members           @relation(fields: [memberId],references: [id],onDelete: Cascade)
   memberId             String            @unique
@@ -146,11 +146,12 @@ model Network {
   name         String       @unique
   verified     Boolean      @default(false)
   address      String[]
+  Slogan       String?
   city         String
   state        String
   country      String
   pincode      String
-  website      String
+  website      String?
   socialmedia  String[]
   about        String
   logo         String?
@@ -163,6 +164,7 @@ model Network {
   shares       Share[]
   comments     Comments[]  
   stories      Story[]
+  joinNetwork  JoinRequest[]
   explore      Explore?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
@@ -170,6 +172,18 @@ model Network {
   @@map("Network")
 }
 
+model JoinRequest{
+  id           String       @id @default(uuid())
+  memberId     String       @unique
+  member       Members      @relation(fields: [memberId],references: [id],onDelete: Cascade)
+  networkId    String
+  network      Network       @relation(fields: [networkId],references: [id], onDelete: Cascade)
+  profession   Profession    @default(STUDENT)
+  document     String
+  enrollmentNo String       @unique
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
 
 model Cluster{
   id           String       @id @default(uuid())
@@ -381,7 +395,8 @@ model Message{
 }
 model Chat{
   id               String        @id @default(uuid())
-  memberId         String 
+  member           Members      @relation("ChatOfMember", fields: [memberId], references: [id], onDelete: Cascade)
+  memberId         String        @unique
   members          Members[]     @relation("MemberChats")
   createdAt        DateTime      @default(now())
   
@@ -456,6 +471,12 @@ enum StoryStatus {
   expired
   deleted
 }
+enum Profession{
+  EMPLOYED
+  UNEMPLOYED
+  STUDENT
+  OTHER
+}
 
 enum RelationStatus{
   SINGLE
@@ -494,8 +515,8 @@ model Notification {
   isRead      Boolean     @default(false)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-  sender      Members     @relation("SentNotifications", fields: [senderId], references: [id], onDelete: Cascade)
-  receiver    Members     @relation("ReceivedNotifications", fields: [receiverId], references: [id], onDelete: Cascade)
+  sender      Members?     @relation("SentNotifications", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver    Members?     @relation("ReceivedNotifications", fields: [receiverId], references: [id], onDelete: Cascade)
 }
 
 enum NotificationType {

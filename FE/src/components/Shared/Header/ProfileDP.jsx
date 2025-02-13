@@ -8,6 +8,7 @@ import {
 import { removeTokenFromCookie } from "../../../utils/cookeeSet";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { FaClockRotateLeft } from "react-icons/fa6";
 
 export default function ProfileDP({ data }) {
   function logouthandler() {
@@ -57,16 +58,21 @@ export default function ProfileDP({ data }) {
           {/* Verification */}
           <DropdownItem key="team_settings">
             {!verified ? (
-              <NavLink to={`/verify/${data?.id}`} className="text-gray-700 hover:text-primary transition-all duration-200">
-                Verification
-              </NavLink>
+              data?.verified?<p className="flex items-center gap-2 text-gray-700 hover:text-yellow-400 transition-all duration-200">
+                Verification <FaClockRotateLeft />
+              </p>:<NavLink to={`/verify/${data?.id}`} className="text-gray-700 hover:text-primary transition-all duration-200">
+                  Verification
+                </NavLink>
+  
+              
             ) : (
               <p className="text-green-600 font-medium">Verified ✅</p>
             )}
+            
           </DropdownItem>
 
           {/* Add Network (Only if verified) */}
-          {data?.verified && (
+          {verified && (
             <DropdownItem key="add_network">
               <NavLink to={"/add-network"} className="text-gray-700 hover:text-primary transition-all duration-200">
                 Add Network

@@ -23,6 +23,7 @@ import { savedPostRouter } from '../modules/SavedPost/savedPost.route';
 import { notificationRouter } from "../modules/notification/notification.route";
 import { adminRouter } from "../modules/admin/admin.route";
 import { superAdminRouter } from "../modules/superAdmin/superAdmin.route";
+import { joinRequestRouter } from "../modules/joinRequest/joinRequest.route";
 
 const router = express.Router();
 
@@ -123,6 +124,11 @@ const moduleRoutes = [
   {
     path: "/super-admin",
     route: superAdminRouter,
+  }
+  ,
+  {
+    path: "/join-request",
+    route: joinRequestRouter,
   }
 ];
 
