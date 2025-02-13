@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { memberInfo } from "../../utils/auth";
 import { Avatar } from "@nextui-org/react";
+import { useDispatch, useSelector } from "react-redux";
+import { setActiveChat } from "../../redux/feature/chatSlice";
 
-export default function ChatSidebar({ chatData, setActiveChat, activeChat }) {
+export default function ChatSidebar() {
   const [searchTerm, setSearchTerm] = useState("");
   const memberId = memberInfo().id;
+  const dispatch = useDispatch();
 
+  const{ chatData, activeChat}=useSelector(state=>state.chat)
   // Filter members based on search term
   const filteredMembers =
     chatData?.[0]?.members?.filter((member) =>
@@ -33,7 +37,7 @@ export default function ChatSidebar({ chatData, setActiveChat, activeChat }) {
             filteredMembers.map((member) => (
               <li
                 key={member.id}
-                onClick={() => setActiveChat({ ...member, socketId: member.id })}
+                onClick={() =>dispatch(setActiveChat({ ...member, socketId: member.id }))}
                 className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200 ${
                   activeChat?.id === member.id
                     ? "bg-gray-300 font-semibold shadow"

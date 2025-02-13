@@ -4,26 +4,30 @@ import { io } from "socket.io-client";
 import { useGetChatQuery } from "../../redux/api/chat.js";
 import { memberInfo } from "../../utils/auth.js";
 import ChatApp from "./ChatApp.jsx";
-import ChatSidebar from "./ChatSidebar.jsx";
-import { SocketProvider } from "../../helpers/SocketContext.js";
 import SideBar from "./SideBar.jsx";
 
-
-
+import { setChatData, setMessages } from "../../redux/feature/chatSlice.js";
 
 const SOCKET_SERVER_URL = process.env.REACT_APP_SERVER_API_BASE_URL || "http://localhost:5050";
 
-
-
 function Message() {
-const memberId=memberInfo().id;
-  const [socket, setSocket] = useState(null);
-  const [activeChat, setActiveChat] = useState(null);
+  const memberId = memberInfo().id;
+  const dispatch = useDispatch();
+
   const { memberData } = useSelector((state) => state.member);
-  const [messages, setMessages] = useState([]);
-  const {data: chatData } = useGetChatQuery(memberId);
+  const { data: chat } = useGetChatQuery(memberId);
+  const { chatData, activeChat, messages } = useSelector((state) => state.chat);
 
+  const [socket, setSocket] = useState(null);
 
+  // ✅ Update Redux state with chat data
+  useEffect(() => {
+    if (chat?.length) {
+      dispatch(setChatData(chat));
+    }
+  }, [chat, dispatch]);
+
+  // ✅ Setup socket connection
   useEffect(() => {
     if (!memberData?.id) return;
 
@@ -31,16 +35,8 @@ const memberId=memberInfo().id;
       query: { userId: memberData.id },
     });
 
-    newSocket.on("connect", () => {
-    
-    });
-
-    newSocket.on("getOnlineUsers", (onlineUsers) => {
-      
-    });
-
-    newSocket.on("newMessage", ({senderId, receiverId, message ,file}) => {
-      setMessages((prevMessages) => [...prevMessages, {senderId, receiverId, message ,file}]);
+    newSocket.on("newMessage", ({ senderId, receiverId, message, file }) => {
+      dispatch(setMessages([...messages, { senderId, receiverId, message, file }]));
     });
 
     setSocket(newSocket);
@@ -48,14 +44,14 @@ const memberId=memberInfo().id;
     return () => {
       newSocket.disconnect();
     };
-  }, [memberData?.id,messages,activeChat]);
-
+  }, [memberData?.id, dispatch]);
 
   return (
-    <div className="flex h-screen bg-gray-100 scroll-smooth mt-16 ">
-      <SideBar chatData={chatData} setActiveChat={setActiveChat} activeChat={activeChat}/>
+    <div className="flex h-screen bg-gray-100 scroll-smooth ">
+      <SideBar chatData={chatData} />
       <div className="flex-1 flex flex-col">
-        {activeChat ? (<ChatApp activeChat={activeChat} setMessages={setMessages} messages={messages} socket={socket}/>
+        {activeChat ? (
+          <ChatApp socket={socket} />
         ) : (
           <div className="flex items-center justify-center h-full text-gray-500">
             Select a chat to start messaging

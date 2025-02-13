@@ -14,7 +14,7 @@ import { setMember } from "../../../redux/feature/memberSlice";
 import { setProfile } from "../../../redux/feature/profileSlice";
 import SearchItem from "../SearchItem";
 
-const Header = () => {
+const Header = ({chat}) => {
   const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const member = memberInfo();
@@ -75,7 +75,7 @@ const Header = () => {
   ];
 
   return (
-    <nav className="bg-white text-gray-800 shadow-md fixed top-0 w-full z-50">
+    <nav className={`bg-white text-gray-800 shadow-md ${chat? "" : "fixed top-0"} w-full z-50`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo Section */}
