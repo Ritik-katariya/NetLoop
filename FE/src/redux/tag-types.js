@@ -1,3 +1,5 @@
+
+
 export const tagTypes = {
   member: "member",
   profile: "profile",
@@ -21,6 +23,7 @@ export const tagTypes = {
   comment: "comment",
   notification: "notification",
   admin: "admin",
+  joinrequest:"joinrequest",
 };
 
 export const tagTypeList = [
@@ -45,6 +48,7 @@ export const tagTypeList = [
   tagTypes.like,
   tagTypes.comment,
   tagTypes.notification,
-  tagTypes.admin, // For admin-specific tags
+  tagTypes.admin,
+  tagTypes.joinrequest, // For admin-specific tags
   // Add more tag types as needed
 ];

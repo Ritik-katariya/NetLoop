@@ -7,21 +7,21 @@ const router = express.Router();
 // Toggle like
 router.post(
   "/toggle",
-  auth(),
+  // auth(),
   likeController.toggleLike
 );
 
 // Get likes for a target
 router.get(
   "/:targetType/:targetId",
-  auth(),
+  // auth(),
   likeController.getLikes
 );
 
 // Check like status
 router.get(
   "/status",
-  auth(),
+  // auth(),
   likeController.checkLikeStatus
 );
 

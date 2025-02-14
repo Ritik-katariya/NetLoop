@@ -63,11 +63,11 @@ const createNetwork = async (req: Request): Promise<any> => {
 
   try {
     if (logo) {
-      const logoResponse = await CloudinaryHelper.uploadFile(logo);
+      const logoResponse = await CloudinaryHelper.uploadImage(logo as Express.Multer.File);
       logoUrl = logoResponse.url;
     }
     if (cover) {
-      const coverResponse = await CloudinaryHelper.uploadFile(cover);
+      const coverResponse = await CloudinaryHelper.uploadImage(cover as Express.Multer.File);
       coverUrl = coverResponse.url;
     }
   } catch (error) {
@@ -126,9 +126,16 @@ const getNetwork = async (id: string): Promise<Network> => {
   const result: any = await prisma.network.findFirst({
     where: { id, verified: true },
     include: {
-      members: true,
+    members: {
+      include: {
+        profile: {
+          select: { img: true }
+        }
+      }
+     
+    },
       likes: true,
-      cluster:true,
+      
     },
   });
 
@@ -139,14 +146,18 @@ const getNetwork = async (id: string): Promise<Network> => {
 const getNetworks = async (): Promise<Network[]> => {
   try {
     const networks: Network[] = await prisma.network.findMany({
-      where: { verified: true },include:{
-        members:true,
-        likes:true,
-      }
+      where: { verified: true },
+      include: {
+        members: {
+          select:{id:true,name:true},
+        },
+        likes: true,
+        
+      },
     });
 
     if (!networks.length) {
-      throw new Error("Data not found");
+      return [];
     }
 
     return networks;

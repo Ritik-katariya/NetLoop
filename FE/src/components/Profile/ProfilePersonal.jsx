@@ -21,15 +21,7 @@ export default function ProfilePersonal() {
   }, [misSuccess, memberdata]);
 
 
-  const profileData = {
-   
-    stats: {
-      network: 3,
-      cluster: 2,
-      known: 45,
-    }
-   
-  };
+ 
   return (
     <div className="bg-white">
       <div className="relative h-48 rounded-t-xl overflow-hidden bg-white">
@@ -82,20 +74,20 @@ export default function ProfilePersonal() {
         <div className="text-center">
          
           <p className="text-gray-600 flex gap-2 hover:text-primary cursor-pointer">
-          <p className="font-semibold">{profileData.stats.network}</p>
+          <p className="font-semibold">{memberdata?.networks?.length}</p>
             Network</p>
         </div>
-        <div className="text-center ">
+        {/* <div className="text-center ">
           
           <p className="text-gray-600 flex gap-2 hover:text-primary cursor-pointer"> 
           <p className="font-semibold ">{profileData.stats.cluster}</p>
             Cluster</p>
-        </div>
-        <div className="text-center ">
+        </div> */}
+        {/* <div className="text-center ">
           <p className="text-gray-600 flex gap-2 hover:text-primary cursor-pointer" >
           <p className="font-semibold">{profileData.stats.known}</p>
             Known</p>
-        </div>
+        </div> */}
       </div>
 
      <div>

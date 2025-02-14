@@ -70,10 +70,7 @@ console.log(searchResults?.members,"search");
   const members = searchResults?.members || [];
   const networks = searchResults?.networks || [];
 
-  // Debug logging
-  console.log('Search Results:', searchResults);
-  console.log('Members:', members);
-  console.log('Networks:', networks);
+
 
   return (
     <div ref={searchRef} className="relative">

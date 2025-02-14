@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Card, Button, Modal } from "@nextui-org/react";
 import NetworkProfileImg from "./NetworkProfileImg";
 
-const NetworkProfile = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
 
+const NetworkProfile = ({network}) => {
+  
+  const [selectedImage, setSelectedImage] = useState(null);
+const {about,address,city,country,cover,explore,followers,logo,name,pincode,socialmedia,state,website}=network;
   const images = [
     "https://nextui.org/images/hero-card-complete.jpeg",
     "https://nextui.org/images/hero-card-complete.jpeg",
@@ -21,7 +23,7 @@ const NetworkProfile = () => {
           {/* Institute Image */}
           <div className="w-full md:w-1/3">
             <img
-              src="https://nextui.org/images/hero-card-complete.jpeg"
+              src={logo}
               alt="Institute"
               className="w-full h-[200px] object-cover rounded-lg"
             />
@@ -31,25 +33,25 @@ const NetworkProfile = () => {
           <div className="w-full md:w-2/3 flex flex-col justify-between">
             <div>
               <h1 className="text-2xl font-bold mb-2">
-                National Institute of Technology Agartala
+               {name}
               </h1>
               <p className="text-gray-600">
-                NIT Agartala, Barjala, Jirania, Agartala, Tripura 799046
+                {address.length>0&&address.map(addres=><p>{addres}</p>)}
               </p>
 
               <div className="grid grid-cols-3 gap-8 mt-6">
                 <div>
                   <p className="font-semibold text-gray-600">Total Member:</p>
-                  <p className="text-xl mt-1">530.</p>
+                  <p className="text-xl mt-1">{followers}</p>
                 </div>
-                <div>
+                {/* <div>
                   <p className="font-semibold text-gray-600">Total Cluster:</p>
                   <p className="text-xl mt-1">30.</p>
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <p className="font-semibold text-gray-600">Follower:</p>
                   <p className="text-xl mt-1">800.</p>
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -61,7 +63,7 @@ const NetworkProfile = () => {
           </div>
         </div>
       </Card>
-
+upcoming
       {/* Main Content Section */}
       <div className="relative w-full min-h-[240px] flex  justify-center items-center pb-2">
         {/* Image Gallery */}

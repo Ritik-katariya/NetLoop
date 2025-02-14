@@ -68,6 +68,21 @@ const getoneMember = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getAllMembersExceptSelfAndRequested = catchAsync(async(
+  req: Request,
+  res: Response
+) => {
+  logger.info("insider controller:getAllMembersExceptSelfAndRequested");
+  const result = await memberService.getAllMembersExceptSelfAndRequested(
+    req.params.id
+  );
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Get Members successfull!!",
+    success: true,
+    data: result,
+  });
+});
 const updateMember = catchAsync(async (req: Request, res: Response) => {
   logger.info("insider controller:updateOwner");
   const result = await memberService.updateMember(req);
@@ -97,5 +112,7 @@ export const memberController = {
   updateMember,
   deleteMember,
   getAllMember,
+  getAllMembersExceptSelfAndRequested,
+ 
   
 };

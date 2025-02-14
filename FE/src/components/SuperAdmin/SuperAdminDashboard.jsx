@@ -10,7 +10,7 @@ import SuperAdminSidebar from './SuperAdminSidebar';
 const SuperAdminDashboard = () => {
   const currentAdmin = useSelector(selectCurrentAdmin);
   const { data: admins, isLoading } = useGetAllAdminsQuery();
-console.log(currentAdmin, admins);
+
   const stats = {
     totalAdmins: admins?.length || 0,
     activeAdmins: admins?.filter(admin => admin.status).length || 0,

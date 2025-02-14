@@ -166,7 +166,8 @@ const createMember = async (payload: any): Promise<any> => {
       const profile= await tx.profile.create({data:{memberId:member.id}});
       const details= await tx.details.create({data:{profileId:profile.id}});
       const chat= await tx.chat.create({data:{memberId:member.id}});
-      
+      await tx.work.create({data:{detailsid:details.id}})
+      await tx.education.create({data:{detailsid:details.id}})
       await tx.auth.update({
         where: { email: othersData.email },
         data: {
@@ -243,20 +244,78 @@ const getoneMember = async (id: string): Promise<Members | null> => {
       id: id,
     },
     include: {
-      profile: true,       // Include the profile relation
+      profile: {include:{details:{include:{work:{select:{id:true}},education:{select:{id:true}}}}}},       // Include the profile relation
       verified: true,      // Include the verified relation
       networks:{
         include:{
           explore:true,
-        }
+        },
+        where:{verified: true}
       },
       chatRequests: true,
       sentRequests: true,
+     
+      
     
     },
   });
   return result;
 };
+
+const getAllMembersExceptSelfAndRequested = async (memberId: string): Promise<Members[]> => {
+  const chatParticipants = await prisma.chat.findMany({
+    where: {
+      
+         memberId // Find chats where memberId is involved
+      
+    },
+    select: {
+      members: { select: { id: true } }, // Get all members from those chats
+    },
+  });
+
+  const membersInChats = new Set(
+    chatParticipants.flatMap((chat) => chat.members.map((member) => member.id))
+  );
+
+  // Step 2: Find members who are NOT in those chats & never sent/received a chat request
+  const result = await prisma.members.findMany({
+    where: {
+      id: {
+        not: memberId, // Exclude the given memberId
+        notIn: Array.from(membersInChats), // Exclude members who were in chats with memberId
+      },
+      chatRequests: {
+        none: { senderId: memberId }, // Exclude those who received a request from memberId
+      },
+      sentRequests: {
+        none: { memberId: memberId }, // Exclude those who sent a request to memberId
+      },
+    },
+    include: {
+      profile: {
+        include: {
+          details: {
+            include: {
+              work: { select: { id: true } },
+              education: { select: { id: true } },
+            },
+          },
+        },
+      },
+      verified: true,
+      networks: {
+        include: { explore: true },
+        where: { verified: true },
+      },
+    },
+  });
+
+  return result;
+};
+
+
+
 
 const updateMember = async (req: Request): Promise<Members> => {
   
@@ -297,4 +356,5 @@ export const memberService = {
   updateMember,
   deleteMember,
   getAllMember,
+  getAllMembersExceptSelfAndRequested,
 };

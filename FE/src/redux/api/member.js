@@ -20,6 +20,13 @@ export const memberApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.profile],
     }),
+    getMembersChatRequest:build.query({
+      query: (id) => ({
+        url: `${Member}/chat-request-member/${id}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.profile],
+    }),
     updateMember: build.mutation({
       query: ({ data, id }) => ({
         url: `${Member}/${id}`,
@@ -69,4 +76,5 @@ export const {
   useSendOtpMutation,
   useVerifyOtpMutation,
   useCreateMemberMutation,
+  useGetMembersChatRequestQuery,
 } = memberApi;

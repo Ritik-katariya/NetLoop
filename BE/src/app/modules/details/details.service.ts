@@ -29,7 +29,7 @@ const createDetails = async (req: Request, res: Response): Promise<any> => {
 const updateDetails = async (req: Request, res: Response): Promise<any> => {
   try {
     const { id: detailsId } = req.params;
-    const { education, work, ...detailsData } = req.body;
+    const {  ...detailsData } = req.body;
 
     const data = await prisma.$transaction(async (tx) => {
       // Check if details exist
@@ -45,51 +45,19 @@ const updateDetails = async (req: Request, res: Response): Promise<any> => {
       }
 
       // Update `Details`
+     try {
       const updatedDetails = await tx.details.update({
         where: { id: detailsId },
         data: detailsData,
       });
-
-      // Update or create `Education`
-      if (education && Array.isArray(education)) {
-        for (const edu of education) {
-          if (edu.id) {
-            // If `id` exists, update the record
-            await tx.education.update({
-              where: { id: edu.id },
-              data: { ...edu, detailsid: detailsId },
-            });
-          } else {
-            // Otherwise, create a new record
-            await tx.education.create({
-              data: { ...edu, detailsid: detailsId },
-            });
-          }
-        }
-      }
-
-      // Update or create `Work`
-      if (work && Array.isArray(work)) {
-        for (const w of work) {
-          if (w.id) {
-            // If `id` exists, update the record
-            await tx.work.update({
-              where: { id: w.id },
-              data: { ...w, detailsid: detailsId },
-            });
-          } else {
-            // Otherwise, create a new record
-            await tx.work.create({
-              data: { ...w, detailsid: detailsId },
-            });
-          }
-        }
-      }
-
       return updatedDetails;
+     } catch (error) {
+      throw new Error(`update details is failed: ${(error as Error).message}`);
+      
+     }
     });
     // Set a timeout for the transaction
-    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Transaction timed out")), 2000000));
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Transaction timed out")), 5000000));
     return Promise.race([data, timeoutPromise]);
 
     return res.status(200).json({

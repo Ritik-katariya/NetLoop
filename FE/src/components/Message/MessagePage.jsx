@@ -1,15 +1,16 @@
-import React from 'react'
-import Message from './Message'
-import Header from '../Shared/Header/Header'
-import { SocketProvider } from '../../helpers/SocketContext'
+import { SocketProvider } from "../../helpers/SocketContext";
+import Header from "../Shared/Header/Header";
+import Message from "./Message";
+import React from "react";
+
 export default function MessagePage() {
   return (
     <div>
-      <Header/>
-      <SocketProvider>
+      <Header chat={true} />
 
-      <Message/>
+      <SocketProvider>
+        <Message />
       </SocketProvider>
     </div>
-  )
+  );
 }

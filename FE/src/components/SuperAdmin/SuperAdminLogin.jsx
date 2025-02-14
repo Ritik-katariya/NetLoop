@@ -30,7 +30,7 @@ const SuperAdminLogin = () => {
       }
 
       const res = await loginSuperAdmin({ email, password }).unwrap();
-      console.log(res.accessToken, );
+   
       if (res?.error) {
         toast.error(res.error.data?.message || res.error.data || 'Login failed');
         return;

@@ -1,6 +1,8 @@
-import React from "react";
-import { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import {
+  useUpdateProfileDetailsMutation,
+  useGetDetailsQuery,
+} from "../../redux/api/details";
+import Header from "../Shared/Header/Header";
 import {
   Card,
   CardBody,
@@ -8,260 +10,222 @@ import {
   Button,
   Textarea,
   Chip,
-  Divider,
 } from "@nextui-org/react";
-import Header from "../Shared/Header/Header";
-import { useUpdateProfileDetailsMutation } from "../../redux/api/details";
-import { ToastContainer, toast } from "react-toastify";
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+
+// Relationship Status Enum Options
+const relationshipOptions = [
+  { label: "Single", value: "SINGLE" },
+  { label: "Married", value: "MARRIED" },
+  { label: "Divorced", value: "DIVORCED" },
+  { label: "Complicated", value: "COMPLICATED" },
+  { label: "Interested", value: "INTERESTED" },
+  { label: "Not Interested", value: "NOTINTERESTED" },
+];
 
 export default function ProfileDetailsForm() {
   const { id } = useParams();
-  const [updateProfileDetails, { isLoading }] =
-    useUpdateProfileDetailsMutation();
+  const [updateProfileDetails] = useUpdateProfileDetailsMutation();
+  const { data: detailsData } = useGetDetailsQuery(id);
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      overview: "",
-      hobbies: [],
-      interests: [],
-      skills: [],
-      education: [{ degree: "", college: "", start_date: "" }],
-      work: [
-        {
-          organization: "",
-          position: "",
-          start_date: "",
-          end_date: "",
-          description: "",
-        },
-      ],
-    },
-  });
-
-  const { fields: educationFields, append: appendEducation } = useFieldArray({
-    control,
-    name: "education",
-  });
-
-  const { fields: workFields, append: appendWork } = useFieldArray({
-    control,
-    name: "work",
-  });
-
-  // Tag handling state and functions
+  const [isLoading, setIsLoading] = useState(false);
   const [hobbyInput, setHobbyInput] = useState("");
   const [interestInput, setInterestInput] = useState("");
   const [skillInput, setSkillInput] = useState("");
 
-  const handleAddTag = (field, value) => {
-    if (value.trim()) {
-      const currentValues = watch(field) || [];
-      setValue(field, [...currentValues, value.trim()]);
+  const { register, handleSubmit, setValue, watch, reset } = useForm({
+    defaultValues: {
+      overview: "",
+      hobbie: [],
+      interests: [],
+      skills: [],
+      facebook: "",
+      instagram: "",
+      linkedin: "",
+      github: "",
+      website: "",
+      relationStatus: "",
+    },
+  });
 
-      if (field === "hobbies") setHobbyInput("");
-      if (field === "interests") setInterestInput("");
-      if (field === "skills") setSkillInput("");
+  useEffect(() => {
+    if (detailsData) {
+      reset({
+        overview: detailsData?.overview || "",
+        hobbie: detailsData?.hobbie || [],
+        interests: detailsData?.interests || [],
+        skills: detailsData?.skills || [],
+        facebook: detailsData?.facebook || "",
+        instagram: detailsData?.instagram || "",
+        linkedin: detailsData?.linkedin || "",
+        github: detailsData?.github || "",
+        website: detailsData?.website || "",
+        relationStatus: detailsData?.relationStatus || "",
+      });
+    }
+  }, [detailsData, reset]);
+
+  const onSubmit = async (data) => {
+    try {
+      setIsLoading(true);
+      await updateProfileDetails({ id, data }).unwrap();
+      toast.success("Profile updated successfully");
+    } catch (error) {
+      toast.error("Failed to update profile");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddTag = (field, value, setInput) => {
+    if (value.trim()) {
+      setValue(field, [...watch(field), value.trim()]);
+      setInput("");
     }
   };
 
   const handleRemoveTag = (field, index) => {
-    const currentValues = watch(field);
-    setValue(
-      field,
-      currentValues.filter((_, i) => i !== index)
-    );
-  };
-
-  const onSubmit = async (data) => {
-    try {
-      const response = await updateProfileDetails({ id, ...data }).unwrap();
-      if (response.success) {
-        toast.success("Profile updated successfully");
-      } else {
-        toast.error("Failed to update profile");
-      }
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      toast.error("Failed to update profile");
-    }
+    setValue(field, watch(field).filter((_, i) => i !== index));
   };
 
   return (
     <div>
-      <div className="fixed top-0 w-full z-[20]">
-        <Header />
-      </div>
+      <Header className="fixed top-0 w-full z-20" />
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-4xl mx-auto space-y-6 p-4 bg-white mt-20 rounded-lg shadow-md mb-6"
+        className="w-full max-w-4xl mx-auto space-y-6 p-6 bg-white mt-20 rounded-lg shadow-md mb-6"
       >
         <ToastContainer />
+
+        {/* Basic Info */}
         <Card>
           <CardBody className="space-y-4">
             <h2 className="text-xl font-bold">Basic Information</h2>
+            <label className="block">
+              <span className="text-gray-600">Overview</span>
+              <Textarea
+                placeholder="Write a brief overview"
+                {...register("overview")}
+                className="w-full mt-1"
+              />
+            </label>
 
-            <Textarea
-              label="Overview"
-              placeholder="Write a brief overview about yourself"
-              {...register("overview")}
-              className="w-full"
-            />
+            {/* Relationship Status */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Relationship Status
+              </label>
+              <select
+                {...register("relationStatus")}
+                className="w-full p-2 border rounded bg-transparent"
+              >
+                <option value="">Select your relationship status</option>
+                {relationshipOptions.map((option) => (
+                  <option key={option.value} value={option.value} className="bg-[#ffffffbb]">
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            <div className="space-y-2">
-              <p className="text-sm font-medium">Hobbies</p>
+            {/* Social Links */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {["facebook", "instagram", "linkedin", "github", "website"].map(
+                (field) => (
+                  <label key={field} className="block">
+                    <span className="text-gray-600 capitalize">{field}</span>
+                    <Input
+                      {...register(field)}
+                      placeholder={`Enter ${field} URL`}
+                      className="mt-1"
+                    />
+                  </label>
+                )
+              )}
+            </div>
+          </CardBody>
+        </Card>
+
+        {/* Hobbies, Interests, Skills Section */}
+        {["hobbie", "interests", "skills"].map((field, index) => (
+          <Card key={index}>
+            <CardBody className="space-y-4">
+              <h2 className="text-xl font-bold capitalize">{field}</h2>
               <div className="flex flex-wrap gap-2">
-                {watch("hobbies")?.map((hobby, index) => (
+                {watch(field)?.map((item, idx) => (
                   <Chip
-                    key={index}
-                    onClose={() => handleRemoveTag("hobbies", index)}
+                    key={idx}
+                    onClose={() => handleRemoveTag(field, idx)}
                     variant="flat"
                   >
-                    {hobby}
+                    {item}
                   </Chip>
                 ))}
               </div>
               <div className="flex gap-2">
                 <Input
-                  placeholder="Add a hobby"
-                  value={hobbyInput}
-                  onChange={(e) => setHobbyInput(e.target.value)}
-                  onKeyPress={(e) =>
-                    e.key === "Enter" && handleAddTag("hobbies", hobbyInput)
+                  placeholder={`Add ${field}`}
+                  value={
+                    field === "hobbie"
+                      ? hobbyInput
+                      : field === "interests"
+                      ? interestInput
+                      : skillInput
+                  }
+                  onChange={(e) =>
+                    field === "hobbie"
+                      ? setHobbyInput(e.target.value)
+                      : field === "interests"
+                      ? setInterestInput(e.target.value)
+                      : setSkillInput(e.target.value)
+                  }
+                  onKeyDown={(e) =>
+                    e.key === "Enter" &&
+                    handleAddTag(
+                      field,
+                      field === "hobbie"
+                        ? hobbyInput
+                        : field === "interests"
+                        ? interestInput
+                        : skillInput,
+                      field === "hobbie"
+                        ? setHobbyInput
+                        : field === "interests"
+                        ? setInterestInput
+                        : setSkillInput
+                    )
                   }
                 />
-                <Button onClick={() => handleAddTag("hobbies", hobbyInput)}>
+                <Button
+                  onClick={() =>
+                    handleAddTag(
+                      field,
+                      field === "hobbie"
+                        ? hobbyInput
+                        : field === "interests"
+                        ? interestInput
+                        : skillInput,
+                      field === "hobbie"
+                        ? setHobbyInput
+                        : field === "interests"
+                        ? setInterestInput
+                        : setSkillInput
+                    )
+                  }
+                >
                   Add
                 </Button>
               </div>
-            </div>
+            </CardBody>
+          </Card>
+        ))}
 
-            {/* Similar structure for interests and skills sections */}
-            {/* ... */}
-          </CardBody>
-        </Card>
-
-        <Card>
-          <CardBody className="space-y-4">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold">Education</h2>
-              <Button
-                onClick={() =>
-                  appendEducation({ degree: "", college: "", start_date: "" })
-                }
-              >
-                Add Education
-              </Button>
-            </div>
-
-            {educationFields.map((field, index) => (
-              <div key={field.id} className="space-y-4">
-                {index > 0 && <Divider />}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <label>
-                    Degree
-                    <Input
-                      placeholder="Enter degree"
-                      {...register(`education.${index}.degree`)}
-                    />
-                  </label>
-                  <label>
-                    College
-                    <Input
-                      placeholder="Enter college name"
-                      {...register(`education.${index}.college`)}
-                    />
-                  </label>
-                  <label>
-                    Start Date
-                    <Input
-                      type="date"
-                      {...register(`education.${index}.start_date`)}
-                    />
-                  </label>
-                </div>
-              </div>
-            ))}
-          </CardBody>
-        </Card>
-
-        <Card>
-          <CardBody className="space-y-4">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold">Work Experience</h2>
-              <Button
-                onClick={() =>
-                  appendWork({
-                    organization: "",
-                    position: "",
-                    start_date: "",
-                    end_date: "",
-                    description: "",
-                  })
-                }
-              >
-                Add Work Experience
-              </Button>
-            </div>
-
-            {workFields.map((field, index) => (
-              <div key={field.id} className="space-y-4">
-                {index > 0 && <Divider />}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <label>
-                    Organization
-                    <Input
-                      placeholder="Enter organization name"
-                      {...register(`work.${index}.organization`)}
-                    />
-                  </label>
-                  <label>
-                    Position
-                    <Input
-                      placeholder="Enter position"
-                      {...register(`work.${index}.position`)}
-                    />
-                  </label>
-                  <label>
-                    Start Date
-                    <Input
-                      type="date"
-                      {...register(`work.${index}.start_date`)}
-                    />
-                  </label>
-                  <label>
-                    End Date
-                    <Input
-                      type="date"
-                      {...register(`work.${index}.end_date`)}
-                    />
-                  </label>
-                  <Textarea
-                    className="col-span-2"
-                    label="Description"
-                    placeholder="Enter job description"
-                    {...register(`work.${index}.description`)}
-                  />
-                </div>
-              </div>
-            ))}
-          </CardBody>
-        </Card>
-
-        <div className="flex justify-center items-center">
-          <Button
-            color="primary"
-            type="submit"
-            className="rounded-lg text-white hover:scale-105"
-            disabled={isLoading}
-          >
+        {/* Submit Button */}
+        <div className="flex justify-center">
+          <Button color="primary" type="submit" disabled={isLoading}>
             {isLoading ? "Saving..." : "Save Details"}
           </Button>
         </div>

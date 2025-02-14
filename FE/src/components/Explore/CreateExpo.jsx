@@ -25,7 +25,7 @@ export default function CreateExpo() {
 
   return (
     <div>
-      <Header/>
+      <Header chat={true} />
       <div className="flex flex-col items-center justify-start  bg-gray-100 h-screen text-gray-800 py-4">
       <div className="bg-gradient-to-tr from-[#b2fcff] via-[#d8ebff] to-[#ffffff] w-2/4 min-h-full p-6">
       <h1 className="w-full text-center text-4xl font-mono font-semibold underline mb-4 text-teal-400">Create Explore</h1>

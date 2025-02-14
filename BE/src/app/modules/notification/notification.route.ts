@@ -7,7 +7,7 @@ const router = express.Router();
 // Create notification
 router.post(
   "/create",
-  auth(),
+  // auth(),
   notificationController.createNotification
 );
 

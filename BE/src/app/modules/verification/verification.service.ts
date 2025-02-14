@@ -11,7 +11,7 @@ const createVerification = async (req: Request): Promise<any> => {
   const data = await prisma.$transaction(
     async (tx) => {
       const files = req.files as { adharimg?: any; realphoto?: any; enrollmentimg?: any };
-      const { memberId, adharno, enrollmentno, ...otherData } = req.body;
+      const { memberId, adharno, ...otherData } = req.body;
 
       // Validate if memberId exists in the Members table
       const memberExists = await tx.members.findUnique({
@@ -22,7 +22,7 @@ const createVerification = async (req: Request): Promise<any> => {
       }
 
     if (files?.adharimg) {
-      const uploadAdharImg = await CloudinaryHelper.uploadFile(files.adharimg[0]);
+      const uploadAdharImg = await CloudinaryHelper.uploadImage(files.adharimg[0]);
       if (uploadAdharImg) {
         otherData.adharimg = uploadAdharImg.secure_url;
       } else {
@@ -31,7 +31,7 @@ const createVerification = async (req: Request): Promise<any> => {
     }
 
     if (files?.realphoto) {
-      const uploadRealPhoto = await CloudinaryHelper.uploadFile(files.realphoto[0]);
+      const uploadRealPhoto = await CloudinaryHelper.uploadImage(files.realphoto[0]);
       if (uploadRealPhoto) {
         otherData.realphoto = uploadRealPhoto.secure_url;
       } else {
@@ -39,18 +39,10 @@ const createVerification = async (req: Request): Promise<any> => {
       }
     }
 
-    if (files?.enrollmentimg) {
-      const uploadEnrollmentImg = await CloudinaryHelper.uploadFile(files.enrollmentimg[0]);
-      if (uploadEnrollmentImg) {
-        otherData.enrollmentimg = uploadEnrollmentImg.secure_url;
-      } else {
-        throw new ApiError(httpStatus.EXPECTATION_FAILED, "Failed to upload enrollment image");
-      }
-    }
     // Create verification
     try {
       const verification: Verified | null = await tx.verified.create({
-      data: { ...otherData, memberId, adharno, enrollmentno },
+      data: { ...otherData, memberId, adharno },
       });
       return verification;
     } catch (error) {
@@ -95,7 +87,7 @@ const updateVerification = async (req: Request): Promise<Verified> => {
 
   // Handle adhar image upload
   if (files?.adharimg) {
-    const uploadAdharImg = await CloudinaryHelper.uploadFile(files.adharimg[0]);
+    const uploadAdharImg = await CloudinaryHelper.uploadImage(files.adharimg[0]);
     if (uploadAdharImg) {
       otherData.adharimg = uploadAdharImg.secure_url;
     } else {
@@ -105,7 +97,7 @@ const updateVerification = async (req: Request): Promise<Verified> => {
 
   // Handle real photo upload
   if (files?.realphoto) {
-    const uploadRealPhoto = await CloudinaryHelper.uploadFile(files.realphoto[0]);
+    const uploadRealPhoto = await CloudinaryHelper.uploadImage(files.realphoto[0]);
     if (uploadRealPhoto) {
       otherData.realphoto = uploadRealPhoto.secure_url;
     } else {
@@ -115,7 +107,7 @@ const updateVerification = async (req: Request): Promise<Verified> => {
 
   // Handle enrollment image upload
   if (files?.enrollmentimg) {
-    const uploadEnrollmentImg = await CloudinaryHelper.uploadFile(files.enrollmentimg[0]);
+    const uploadEnrollmentImg = await CloudinaryHelper.uploadImage(files.enrollmentimg[0]);
     if (uploadEnrollmentImg) {
       otherData.enrollmentimg = uploadEnrollmentImg.secure_url;
     } else {

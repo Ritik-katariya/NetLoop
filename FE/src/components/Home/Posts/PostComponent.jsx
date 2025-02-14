@@ -12,7 +12,7 @@ import { useToggleSaveMutation } from "../../../redux/api/postSaved";
 import { FaShareAlt } from "react-icons/fa";
 import { useCreateNotificationMutation } from "../../../redux/api/notificationApi";
 import { useNavigate } from 'react-router-dom';
-
+import ReadMore from "../../../utils/truncate";
 const PostComponent = ({ post }) => {
   const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(false);
@@ -32,6 +32,10 @@ const [createNotification]=useCreateNotificationMutation();
       const bool = post?.likes?.some(like => like?.memberId === memberId);
       setIsLiked(bool);
       setTotalLike(post?.likes?.length || 0);
+    
+   
+      const saved = post?.savedby?.some((save) => save?.memberId === memberId);
+      setIsSave(saved);
     }
   }, [post, memberId]);
 
@@ -78,7 +82,7 @@ const [createNotification]=useCreateNotificationMutation();
       await toggleSave({
         data: { 
           memberId,
-          targetType: 'post',
+          targetType: "post",
           targetId: post?.id
         }
       }).unwrap();
@@ -105,7 +109,7 @@ const [createNotification]=useCreateNotificationMutation();
 
       {/* Post Description */}
       <div className="text-[12px] text-gray-500 font-sans px-4 sm:px-6 break-words">
-        {post?.description}
+        <ReadMore text={post?.description} />
       </div>
 
       {/* Post Media */}
@@ -127,7 +131,7 @@ const [createNotification]=useCreateNotificationMutation();
       </div>
 
       {/* Actions Section */}
-      <div className="flex justify-between items-center px-4 text-gray-600 text-xs sm:text-sm">
+      <div className="flex justify-between items-center px-4 text-gray-600 text-xs sm:text-base gap-1">
         <div className="flex gap-2 sm:gap-3 cursor-pointer">
           <span 
             onClick={handleLike}
