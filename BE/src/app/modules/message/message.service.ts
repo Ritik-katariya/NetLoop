@@ -16,7 +16,7 @@ export const createMessage = async (req: Request, res: Response): Promise<any> =
     const file = req.file as Express.Multer.File | undefined;
     if (file) {
       // Upload the file to Cloudinary
-      const uploadResult = await CloudinaryHelper.uploadFile(file);
+      const uploadResult = await CloudinaryHelper.uploadImage(file);
       if (uploadResult) {
         fileUrl = uploadResult.secure_url; // Retrieve the file URL from Cloudinary response
       } else {

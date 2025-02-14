@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-const ReadMore = ({ text }) => {
+const ReadMore = ({ text,length=20 }) => {
   const words = text.split(" ");
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Show truncated text if more than 20 words
-  const truncatedText = words.length > 20 ? words.slice(0, 20).join(" ") + "..." : text;
+  const truncatedText = words.length > length ? words.slice(0, length).join(" ") + "..." : text;
 
   return (
     <p className="text-gray-700 text-sm leading-relaxed">

@@ -26,7 +26,7 @@ const loginAdmin = catchAsync(async (req: Request, res: Response) => {
       status: result.status,
     },
     config.jwt.secret as Secret,
-    config.jwt.JWT_EXPIRES_IN || '1h'
+    config.jwt.secret as string || '1h'
   );
 
   res.status(httpStatus.OK).json({

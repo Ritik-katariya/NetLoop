@@ -32,8 +32,8 @@ const [createNotification]=useCreateNotificationMutation();
       const bool = post?.likes?.some(like => like?.memberId === memberId);
       setIsLiked(bool);
       setTotalLike(post?.likes?.length || 0);
-    }
-    if (post && memberId) {
+    
+   
       const saved = post?.savedby?.some((save) => save?.memberId === memberId);
       setIsSave(saved);
     }
@@ -82,7 +82,7 @@ const [createNotification]=useCreateNotificationMutation();
       await toggleSave({
         data: { 
           memberId,
-          targetType: 'post',
+          targetType: "post",
           targetId: post?.id
         }
       }).unwrap();

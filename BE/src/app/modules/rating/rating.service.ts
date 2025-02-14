@@ -17,7 +17,7 @@ const createRating = async (req: Request): Promise<Rating> => {
 
   let imageUrls: string | null = null;
   if (file) {
-    const img = await CloudinaryHelper.uploadFile(file);
+    const img = await CloudinaryHelper.uploadImage(file);
     imageUrls = img.secure_url;
   }
 
@@ -86,7 +86,7 @@ const updateRating = async (req: Request): Promise<Rating> => {
 
   let imageUrls: string | null = null;
   if (files?.image) {
-    const upload = await CloudinaryHelper.uploadFile(files.image);
+    const upload = await CloudinaryHelper.uploadImage(files.image);
     imageUrls = upload.secure_url;
   }
 

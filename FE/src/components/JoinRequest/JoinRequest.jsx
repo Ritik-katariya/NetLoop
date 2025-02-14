@@ -11,8 +11,10 @@ import {
 } from "@nextui-org/react";
 import { MdPersonAdd } from "react-icons/md";
 import { toast, ToastContainer } from "react-toastify";
-import { useCreateJoinRequestMutation } from "../../redux/api/joinrequest";
+import { useCreateJoinRequestMutation,useGetJoinRequestsByMemberQuery } from "../../redux/api/joinrequest";
 import { memberInfo } from "../../utils/auth";
+import { FaClockRotateLeft } from "react-icons/fa6";
+
 
 const professions = ["EMPLOYED", "UNEMPLOYED", "STUDENT", "OTHER"];
 
@@ -21,7 +23,8 @@ export default function JoinRequest({ id }) {
   const [profession, setProfession] = useState("");
   const [document, setDocument] = useState(null);
   const [enrollmentNo, setEnrollmentNo] = useState("");
-  const [createJoinRequest] = useCreateJoinRequestMutation();
+  const [createJoinRequest, { isSuccess,isLoading }] = useCreateJoinRequestMutation();
+  const {data:joinRequests}=useGetJoinRequestsByMemberQuery(memberInfo().id);
 const memberId=memberInfo().id;
   const handleFileChange = (e) => {
     setDocument(e.target.files[0]);
@@ -40,8 +43,9 @@ const memberId=memberInfo().id;
     formData.append("document", document);
     formData.append("enrollmentNo", enrollmentNo);
      await createJoinRequest({ data: formData });
-    if (createJoinRequest.isSuccess) {
+    if (isSuccess) {
       toast.success("✅ Request sent successfully!");
+      onOpenChange(false);
     } else {
       toast.error("⚠️ Failed to send request!");
     }
@@ -55,8 +59,13 @@ const memberId=memberInfo().id;
       <Button
         className="bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-medium rounded-lg px-5 py-2 flex items-center gap-2 shadow-lg transition-transform hover:scale-105"
         onPress={onOpen}
+        isDisabled={joinRequests}
       >
-        <MdPersonAdd className="text-xl" /> Join Network
+         {joinRequests?<span className="flex items-center gap-2 text-teal-100">
+<FaClockRotateLeft/> Request Sent
+         </span>:<span className="flex items-center gap-2 ">
+          <MdPersonAdd className="text-xl" /> Join Network
+          </span>}
       </Button>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="md" backdrop="blur">
@@ -123,9 +132,10 @@ const memberId=memberInfo().id;
                 <Button
                   color="primary"
                   onPress={handleSubmit}
+                  disabled={isLoading||isSuccess}
                   className="bg-teal-500 hover:bg-teal-600 text-white font-medium px-4 py-2 rounded-lg"
                 >
-                  Submit Request
+                 {isLoading?"Loading..":" Submit Request"}
                 </Button>
               </ModalFooter>
             </>
