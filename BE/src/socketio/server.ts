@@ -9,9 +9,11 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: config.CLIENT_URL || "http://localhost:3000",
+    origin: config.CLIENT_URL || "https://www.netloop.in",
     methods: ["GET", "POST"],
+    credentials: true,
   },
+  transports: ["websocket", "polling"],
 });
 
 const users: Record<string, string> = {}; // Maps userId to socketId

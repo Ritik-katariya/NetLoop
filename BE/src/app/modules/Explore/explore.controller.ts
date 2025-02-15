@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
 import { exploreService } from "./explore.service";
@@ -9,17 +9,18 @@ const createExplore = catchAsync(async (req: Request, res: Response) => {
   logger.info("Inside controller: createExplore");
   const result = await exploreService.createExplore(req);
   sendResponse(res, {
-    statusCode: 200,
+    statusCode: 201,
     message: "Explore created successfully!",
     success: true,
     data: result,
   });
 });
 
-// Get one Explore by ID
+// Get one Explore by ID (Supports random ordering)
 const getExplore = catchAsync(async (req: Request, res: Response) => {
   logger.info("Inside controller: getExplore");
-  const result = await exploreService.getExplore(req.params.id);
+  const random = req.query.random === "true"; // Check for random order
+  const result = await exploreService.getExplore(req.params.id, random);
   sendResponse(res, {
     statusCode: 200,
     message: "Explore fetched successfully!",
@@ -28,7 +29,7 @@ const getExplore = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// Get all Explores
+// Get all Explores (Latest-first, prioritizing likes >10)
 const getAllExplores = catchAsync(async (req: Request, res: Response) => {
   logger.info("Inside controller: getAllExplores");
   const result = await exploreService.getAllExplores();

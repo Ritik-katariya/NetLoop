@@ -4,34 +4,30 @@ import ApiError from "../../../errors/apiError";
 import httpStatus from "http-status";
 import { Request } from "express";
 
-// Create Explore
-const createExplore = async (req: Request): Promise<Explore> => {
-  const { networkId, ...otherData } = req.body;
-
-  // Check if network exists
-  const networkExists = await prisma.network.findFirst({
-    where: { id: networkId },
-  });
-  if (!networkExists) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Network not found");
-  }
-
-  // Create Explore entry
-  try {
-    const explore = await prisma.explore.create({
-      data: {
-        ...otherData,
-        networkId,
-      },
-    });
-    return explore;
-  } catch (error) {
-    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create Explore");
-  }
+// Helper: Format explore data into { type, data } structure
+const formatExploreData = (explores: any[]) => {
+  return explores.flatMap(explore => [
+    ...explore.news.map((item: any) => ({ type: 'news', data: item })),
+    ...explore.events.map((item: any) => ({ type: 'events', data: item })),
+    ...explore.poll.map((item: any) => ({ type: 'poll', data: item })),
+    ...explore.rating.map((item: any) => ({ type: 'rating', data: item })),
+    ...explore.promotion.map((item: any) => ({ type: 'promotion', data: item })),
+  ]);
 };
 
-// Get Explore by ID
-const getExplore = async (id: string): Promise<Explore | null> => {
+// Helper: Sort explores (latest first, prioritize >10 likes)
+const sortExplores = (explores: any[]) => {
+  return explores
+    .map(exp => ({ ...exp, totalLikes: exp.likes.length }))
+    .sort((a, b) => (b.totalLikes > 10 && a.totalLikes <= 10 ? 1 : -1))
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+};
+
+// Helper: Shuffle array (for random order)
+const shuffleArray = (array: any[]) => array.sort(() => Math.random() - 0.5);
+
+// Get Explore by ID (Supports sorted & random order)
+const getExplore = async (id: string, random: boolean = false): Promise<any> => {
   if (!id) throw new ApiError(httpStatus.BAD_REQUEST, "ID is required");
 
   const explore = await prisma.explore.findUnique({
@@ -40,7 +36,7 @@ const getExplore = async (id: string): Promise<Explore | null> => {
       news: true,
       events: true,
       poll: true,
-      rating:true,
+      rating: true,
       promotion: true,
       likes: true,
       comments: true,
@@ -52,11 +48,13 @@ const getExplore = async (id: string): Promise<Explore | null> => {
     throw new ApiError(httpStatus.NOT_FOUND, "Explore not found");
   }
 
-  return explore;
+  const formattedData = formatExploreData([explore]);
+
+  return random ? shuffleArray(formattedData) : formattedData;
 };
 
-// Get all Explores
-const getAllExplores = async (): Promise<Explore[]> => {
+// Get all Explores (Latest first, prioritize >10 likes)
+const getAllExplores = async (): Promise<any[]> => {
   const explores = await prisma.explore.findMany({
     include: {
       news: true,
@@ -68,39 +66,37 @@ const getAllExplores = async (): Promise<Explore[]> => {
       comments: true,
       share: true,
     },
-    orderBy: {
-      createdAt: "desc",
-    },
+    orderBy: { createdAt: 'desc' }
   });
-  return explores;
+
+  return formatExploreData(sortExplores(explores));
+};
+
+// Create Explore
+const createExplore = async (req: Request): Promise<Explore> => {
+  const { networkId, ...otherData } = req.body;
+
+  const networkExists = await prisma.network.findUnique({ where: { id: networkId } });
+  if (!networkExists) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Network not found");
+  }
+
+  return await prisma.explore.create({ data: { ...otherData, networkId } });
 };
 
 // Update Explore
 const updateExplore = async (req: Request): Promise<Explore> => {
-  const id = req.params.id as string;
+  const id = req.params.id;
   const { ...otherData } = req.body;
 
-  const explore = await prisma.explore.update({
-    where: { id },
-    data: otherData,
-  });
-
-  if (!explore) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Explore not found");
-  }
-
-  return explore;
+  return await prisma.explore.update({ where: { id }, data: otherData });
 };
 
 // Delete Explore
 const deleteExplore = async (id: string): Promise<Explore> => {
   if (!id) throw new ApiError(httpStatus.BAD_REQUEST, "ID is required");
 
-  const explore = await prisma.explore.delete({
-    where: { id },
-  });
-
-  return explore;
+  return await prisma.explore.delete({ where: { id } });
 };
 
 export const exploreService = {

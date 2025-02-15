@@ -1,25 +1,21 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import { exploreController } from "./explore.controller";
 
 const router = express.Router();
 
 // Create a new Explore
-router.post("/", (req: Request, res: Response, next: NextFunction) => {
-  return exploreController.createExplore(req, res, next);
-});
+router.post("/", exploreController.createExplore);
 
-// Get all Explores
+// Get all Explores (Latest-first, likes-prioritized)
 router.get("/", exploreController.getAllExplores);
 
-// Get a specific Explore by ID
-router.get("/:id?", exploreController.getExplore);
+// Get a specific Explore by ID (Supports `random=true` query)
+router.get("/:id", exploreController.getExplore);
 
 // Update a specific Explore by ID
-router.patch("/:id?", (req: Request, res: Response, next: NextFunction) => {
-  return exploreController.updateExplore(req, res, next);
-});
+router.patch("/:id", exploreController.updateExplore);
 
 // Delete a specific Explore by ID
-router.delete("/:id?", exploreController.deleteExplore);
+router.delete("/:id", exploreController.deleteExplore);
 
 export const exploreRouter = router;
