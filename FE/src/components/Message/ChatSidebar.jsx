@@ -1,56 +1,48 @@
-import React, { useState } from "react";
-import { memberInfo } from "../../utils/auth";
-import { Avatar } from "@nextui-org/react";
-import { useDispatch, useSelector } from "react-redux";
-import { setActiveChat } from "../../redux/feature/chatSlice";
+import React, { useState } from 'react';
+import { memberInfo } from '../../utils/auth';
 
-export default function ChatSidebar() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const memberId = memberInfo().id;
-  const dispatch = useDispatch();
 
-  
-  const{ chatData, activeChat}=useSelector(state=>state.chat)
+export default function ChatSidebar({ chatData, setActiveChat, activeChat }) {
+  const [searchTerm, setSearchTerm] = useState('');
+  const memberId=memberInfo().id;
+console.log(chatData,"chat")
   // Filter members based on search term
-  const filteredMembers =
-    chatData?.[0]?.members?.filter((member) =>
-      member.name.toLowerCase().includes(searchTerm.toLowerCase())
-    ) || [];
+  const filteredMembers = chatData && chatData[0]?.members?.filter(member =>
+   { return member.name.toLowerCase().includes(searchTerm.toLowerCase())}
+  );
 
   return (
-    <div className="w-full bg-white border-r border-gray-300 mt-1 h-full shadow-sm">
-      <div className="p-4 space-y-4">
-        {/* Section Header */}
-        <h2 className="text-xl font-semibold text-gray-700">Your Chats</h2>
-
+    <div className="w-full bg-white border-r mt-1 h-full">
+      <div className="p-4">
+        <h2 className="text-xl font-bold mb-4">Your Chats</h2>
+        
         {/* Search Input */}
-        <input
-          type="text"
-          placeholder="Search chats..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white text-gray-700"
-        />
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search chats..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
-        {/* Chat List */}
-        <ul className="space-y-2">
-          {filteredMembers.length > 0 ? (
+        <ul>
+          {(filteredMembers && filteredMembers.length > 0) ? (
             filteredMembers.map((member) => (
               <li
                 key={member.id}
-                onClick={() =>dispatch(setActiveChat({ ...member, socketId: member.id }))}
-                className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-200 ${
-                  activeChat?.id === member.id
-                    ? "bg-gray-300 font-semibold shadow"
-                    : "hover:bg-gray-200"
+                onClick={() => setActiveChat({ ...member, socketId: member.id })}
+                className={`flex items-center p-2 cursor-pointer hover:bg-gray-200 ${
+                  activeChat?.id === member.id ? "bg-blue-50 text-blue-500 font-semibold" : ""
                 }`}
               >
-                <Avatar
-                  className="w-10 h-10 rounded-full object-cover mr-3"
-                  src={member?.profile?.img }
+                <img
+                  className="w-8 h-8 rounded-full mr-3"
+                  src={member?.profile?.img || "/default-profile.png"}
                   alt={member?.name || "User"}
                 />
-                <span className="truncate text-gray-800">{member.name}</span>
+                <span>{member.name}</span>
               </li>
             ))
           ) : (

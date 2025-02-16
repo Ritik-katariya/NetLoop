@@ -14,7 +14,6 @@ import { memberInfo } from '../../utils/auth';
 import { format } from 'timeago.js';
 import { io } from 'socket.io-client';
 import { useSelector } from 'react-redux';
-import { baseUrl } from '../../helpers/config/envConfig';
 
 export default function NotificationPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -46,7 +45,7 @@ export default function NotificationPage() {
   useEffect(() => {
     if (!memberId) return;
 
-    const socket = io(baseUrl, {
+    const socket = io(process.env.REACT_APP_API_URL || 'http://localhost:5050', {
       query: { userId: memberId }
     });
 
