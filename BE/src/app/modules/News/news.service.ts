@@ -70,7 +70,7 @@ const getNews = async (id: string): Promise<News | null> => {
   if (!id) throw new ApiError(httpStatus.BAD_REQUEST, "ID is required");
 
   const result = await prisma.news.findUnique({
-    where: { id },
+    where: { id,expireAt: { gte: new Date() } },
   });
 
   if (!result) {
@@ -82,7 +82,7 @@ const getNews = async (id: string): Promise<News | null> => {
 
 // Get all News
 const getAllNews = async (): Promise<News[]> => {
-  const result = await prisma.news.findMany({
+  const result = await prisma.news.findMany({where: { expireAt: { gte: new Date()} },
     orderBy: { createdAt: "desc" },
     include: {
       member: {
@@ -162,7 +162,7 @@ const getNewsByExplore = async (exploreId: string): Promise<News[]> => {
 
   try {
     const result = await prisma.news.findMany({
-      where: { exploreId },
+      where: { exploreId,expireAt: { gte: new Date() } },
       orderBy: { createdAt: "desc" },
     });
     return result;

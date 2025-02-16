@@ -9,8 +9,10 @@ import { removeTokenFromCookie } from "../../../utils/cookeeSet";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FaClockRotateLeft } from "react-icons/fa6";
+import { memberInfo } from "../../../utils/auth";
 
 export default function ProfileDP({ data }) {
+  const {id}=memberInfo();
   function logouthandler() {
     removeTokenFromCookie();
     window.location.reload();
@@ -20,6 +22,7 @@ export default function ProfileDP({ data }) {
     verified: state.member?.verified?.verified,
   }));
 
+  const name=data?.name?.split(' ').join('-');
   return (
     <div className="flex items-center gap-4">
       <Dropdown placement="bottom-end">
@@ -39,7 +42,7 @@ export default function ProfileDP({ data }) {
           {/* Profile Section */}
           <DropdownItem key="profile" className="h-14 gap-2 text-gray-800">
             <p className="font-semibold text-base">
-              <NavLink to={`/profile/${data?.profile?.id}`} className="hover:text-primary transition-all duration-200">
+              <NavLink to={`/${name}/${id}`} className="hover:text-primary transition-all duration-200">
                 {data?.name}
               </NavLink>
              <span className="text-[12px] text-gray-500 block">
@@ -50,7 +53,7 @@ export default function ProfileDP({ data }) {
 
           {/* My Profile */}
           <DropdownItem key="settings">
-            <NavLink to={`/profile/${data?.profile?.id}`} className="text-gray-700 hover:text-primary transition-all duration-200">
+            <NavLink to={`/${name}/${id}`} className="text-gray-700 hover:text-primary transition-all duration-200">
               My Profile
             </NavLink>
           </DropdownItem>

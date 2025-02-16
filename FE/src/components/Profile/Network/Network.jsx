@@ -1,115 +1,71 @@
 import React, { useState } from "react";
-import { Card, Button, Modal } from "@nextui-org/react";
+import { Card, Button } from "@nextui-org/react";
 import NetworkProfileImg from "./NetworkProfileImg";
+import { ToastContainer,toast } from "react-toastify";
 
-
-const NetworkProfile = ({network}) => {
-  
+const NetworkProfile = ({ network }) => {
   const [selectedImage, setSelectedImage] = useState(null);
-const {about,address,city,country,cover,explore,followers,logo,name,pincode,socialmedia,state,website}=network;
-  const images = [
-    "https://nextui.org/images/hero-card-complete.jpeg",
-    "https://nextui.org/images/hero-card-complete.jpeg",
-    "https://nextui.org/images/hero-card-complete.jpeg",
-    "https://nextui.org/images/hero-card-complete.jpeg",
-    "https://nextui.org/images/hero-card-complete.jpeg",
-  ];
+  const {
+    about,
+    address,
+    city,
+    country,
+    cover,
+    explore,
+    followers,
+    logo,
+    name,
+    pincode,
+    socialmedia,
+    state,
+    website,
+    id
+  } = network;
+
+  function exploreHandle(){
+    toast.success("this feature upcoming in the future");
+  }
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-2 bg-white rounded-xl shadow-lg">
+    <div className="w-full max-w-6xl mx-auto p-4 bg-white rounded-xl shadow-lg">
+      <ToastContainer />
       {/* Header Card */}
-      <Card className="w-full ">
-        <div className="flex flex-col md:flex-row gap-6 p-4">
+      <Card className="w-full p-4">
+        <div className="flex flex-col md:flex-row gap-6">
           {/* Institute Image */}
           <div className="w-full md:w-1/3">
-            <img
-              src={logo}
-              alt="Institute"
-              className="w-full h-[200px] object-cover rounded-lg"
-            />
+            <img src={logo} alt="Institute" className="w-full h-[200px] object-fill rounded-lg" />
           </div>
-
+          
           {/* Institute Info */}
           <div className="w-full md:w-2/3 flex flex-col justify-between">
             <div>
-              <h1 className="text-2xl font-bold mb-2">
-               {name}
-              </h1>
-              <p className="text-gray-600">
-                {address.length>0&&address.map(addres=><p>{addres}</p>)}
-              </p>
-
-              <div className="grid grid-cols-3 gap-8 mt-6">
-                <div>
-                  <p className="font-semibold text-gray-600">Total Member:</p>
-                  <p className="text-xl mt-1">{followers}</p>
-                </div>
-                {/* <div>
-                  <p className="font-semibold text-gray-600">Total Cluster:</p>
-                  <p className="text-xl mt-1">30.</p>
-                </div> */}
-                {/* <div>
-                  <p className="font-semibold text-gray-600">Follower:</p>
-                  <p className="text-xl mt-1">800.</p>
-                </div> */}
-              </div>
+              <h1 className="text-2xl font-bold mb-2">{name}</h1>
+              <p className="text-gray-600">{about}</p>
+              <p className="text-gray-600 mt-2">{city}, {state}, {country}, {pincode}</p>
+              <p className="text-gray-600">Website: <a href={website} target="_blank" className="text-blue-500">{website}</a></p>
             </div>
 
+            <div className="grid grid-cols-3 gap-8 mt-6">
+              <div>
+                <p className="font-semibold text-gray-600">Total Members:</p>
+                <p className="text-xl mt-1">{followers}</p>
+              </div>
+            </div>
+            
             <div className="flex justify-end mt-6">
-            <Button className="bg-cyan-400 text-white w-40 h-10 rounded-lg mr-14" >
-            Exit Network
-          </Button>
+              {/* <Button className="bg-cyan-400 text-white w-40 h-10 rounded-lg mr-4">Exit Network</Button> */}
+              <Button className="bg-blue-500 text-white w-40 h-10 rounded-lg" onClick={() => window.open(`../network/${id}`, '_blank')}>Visit</Button>
             </div>
           </div>
         </div>
       </Card>
-upcoming
-      {/* Main Content Section */}
-      <div className="relative w-full min-h-[240px] flex  justify-center items-center pb-2">
-        {/* Image Gallery */}
-        <div className="relative w-[55%] h-[240px]">
-          {/* Image Grid with Consistent Sizes */}
-          <div
-            onClick={() => setSelectedImage(images[0])}
-            className="absolute left-0 top-0 w-36 h-36 z-50 cursor-pointer hover:z-50"
-            style={{ transform: "translate(10%, 10%)" }}
-          >
-            <NetworkProfileImg />
-          </div>
 
-          <div
-            onClick={() => setSelectedImage(images[1])}
-            className="absolute left-24 top-16 w-36 h-36 cursor-pointer hover:z-50"
-            style={{ transform: "translate(20%, 10%)" }}
-          >
-            <NetworkProfileImg />
-          </div>
-
-          <div
-            onClick={() => setSelectedImage(images[2])}
-            className="absolute left-52 top-0 w-36 h-36 z-30 cursor-pointer hover:z-50"
-            style={{ transform: "translate(30%, 20%)" }}
-          >
-            <NetworkProfileImg />
-          </div>
-
-          <div
-            onClick={() => setSelectedImage(images[3])}
-            className="absolute left-[340px] top-20 w-36 h-36 z-20 cursor-pointer hover:z-50"
-            style={{ transform: "translate(20%, 10%)" }}
-          >
-            <NetworkProfileImg />
-          </div>
-
-          
-        </div>
-
-        {/* Memories Section */}
-        <div className="w-[45%] ml-44 text-right flex justify-center flex-col  items-center">
-          <h2 className="text-xl font-bold mb-6 text-center ">All Memories of a year</h2>
-          <Button className="bg-cyan-400 text-white w-40 h-10 rounded-lg" >
-            Explore
-          </Button>
+      {/* Memories Section */}
+      <div className="relative w-full min-h-[100px] flex justify-center items-center pb-2 mt-6">
+        <div className="w-[45%] text-right flex flex-col items-center">
+          <h2 className="text-xl font-bold mb-4">All Memories of the Year</h2>
+          <Button className="bg-cyan-400 text-white w-40 h-10 rounded-lg" onClick={exploreHandle}>Explore</Button>
         </div>
       </div>
     </div>

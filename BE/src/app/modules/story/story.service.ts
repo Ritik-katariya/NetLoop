@@ -108,24 +108,40 @@ const createStory = async (req: Request): Promise<any> => {
   return data;
 };
 
+const shuffleArray = (array: any[]) => {
+  return array.sort(() => Math.random() - 0.5);
+};
+
 const getStories = async (req: Request, res: Response): Promise<void> => {
-  const { cursor, limit = 10 } = req.query;
+  try {
+    const { cursor, limit = 10, networkId } = req.query;
 
-  const stories = await prisma.story.findMany({
-    take: Number(limit),
-    skip: cursor ? 1 : 0, // Skip the first item if cursor exists
-    cursor: cursor ? { id: cursor as string } : undefined,
-    orderBy: { createdAt: "desc" },
-    include: { member: {include:{profile:{select:{img:true}},
-    networks:{select:{name:true}},
-    verified:{select:{verified:true}},
-  }} },
-  });
+    const stories = await prisma.story.findMany({
+      where: networkId
+        ? { OR: [{ networkId: networkId as string }, { networkId: null }] }
+        : {},
+      take: Number(limit),
+      skip: cursor ? 1 : 0,
+      cursor: cursor ? { id: cursor as string } : undefined,
+      orderBy: { createdAt: "desc" },
+      include: {
+        member: {
+          include: {
+            profile: { select: { img: true } },
+            networks: { select: { name: true } },
+            verified: { select: { verified: true } },
+          },
+        },
+      },
+    });
 
-  res.json({
-    data: stories,
-    nextCursor: stories.length ? stories[stories.length - 1].id : null,
-  });
+    res.json({
+      data: shuffleArray(stories),
+      nextCursor: stories.length ? stories[stories.length - 1].id : null,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 // Get a single Story by ID

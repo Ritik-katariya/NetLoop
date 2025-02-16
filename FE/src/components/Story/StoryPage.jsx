@@ -8,11 +8,19 @@ import { useParams } from "react-router-dom";
 import { ChevronUp, ChevronDown, Volume2, VolumeX, Heart } from "lucide-react";
 import "swiper/css";
 import Header from "../Shared/Header/Header";
-
+import { useSelector } from "react-redux";
 const StoryPage = () => {
   const { id } = useParams();
   const [cursor, setCursor] = useState(null);
-  const { data, isFetching } = useGetStoriesQuery({ cursor, limit: 10 });
+ const {memberData}=useSelector(state=>state.member);
+  const [networkId, setNetworkId] = useState("123");
+  
+  useEffect(() =>{
+    if(memberData){
+      setNetworkId( memberData?.networks[0]?.id);
+    }
+  },[memberData])
+  const { data, isLoading,isFetching } = useGetStoriesQuery({ cursor, limit: 10 ,networkId});
   const [sortedStories, setSortedStories] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
@@ -125,7 +133,7 @@ const StoryPage = () => {
           videoRef.current = el;
           ref(el);
         }}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-fill"
         poster={story.thumbnail}
         playsInline
         autoPlay
@@ -136,7 +144,7 @@ const StoryPage = () => {
       <img
         src={story.mediaUrl}
         alt={story.title}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-fill"
       />
     );
   };
@@ -151,8 +159,10 @@ const StoryPage = () => {
 
   return (
     <>
-      <Header chat={true}/>
-      <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-tr from-[#59ffe669] to-[#00052459] relative ">
+      <div className={`max-md:hidden`}>
+      <Header chat={true} />
+      </div>
+      <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-tr from-[#c6cccb69] to-[#71e1d86f] relative ">
         {/* Navigation Buttons */}
         <button
           onClick={handlePrevSlide}
@@ -214,7 +224,7 @@ const StoryPage = () => {
             spaceBetween={0}
             slidesPerView={1}
           >
-            {sortedStories.map((story, index) => (
+            {sortedStories?.map((story, index) => (
               <SwiperSlide key={story.id}>
                 <div className="relative h-full w-full flex items-center justify-center bg-black">
                   <VideoPlayer story={story} index={index} />

@@ -5,6 +5,7 @@ import RatingInputForm from './RatingInputForm'
 import { useGetRatingByExploreQuery } from '../../../redux/api/rating'
 import { useGetPollbyExploreIdQuery } from '../../../redux/api/poll'
 import { useSelector } from 'react-redux'
+import NoData from '../../Shared/NoData'
 
 export default function Opinion() {
   const memberData = useSelector((state) => state.member?.memberData)
@@ -24,7 +25,7 @@ export default function Opinion() {
   } = useGetPollbyExploreIdQuery(exploreId, { skip: !exploreId })
 
   // Loading and error states
-  if (ratingLoading || pollLoading) return <div>Loading...</div>
+  
   if (ratingError || pollError) return <div>Error loading data</div>
   if (!exploreId) return <div>No network found</div>
 
@@ -33,7 +34,12 @@ export default function Opinion() {
     ...(pollData?.map(item => ({ type: 'poll', data: item })) || []),
     ...(ratingData?.map(item => ({ type: 'rating', data: item })) || [])
   ]
-
+ if(combinedData?.length===0||ratingLoading || pollLoading)return (
+    <div className="flex justify-center items-center  w-full mt-8 p-6 ">
+      <NoData size='md' />
+    </div>
+  );
+  
   return (
     <div>
       {/* Render combined data */}

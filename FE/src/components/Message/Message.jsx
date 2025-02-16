@@ -6,9 +6,10 @@ import { memberInfo } from "../../utils/auth.js";
 import ChatApp from "./ChatApp.jsx";
 import SideBar from "./SideBar.jsx";
 
-import { setChatData, setMessages } from "../../redux/feature/chatSlice.js";
+import { setChatData, setMessages, addMessage } from "../../redux/feature/chatSlice.js";
+import { baseUrl } from "../../helpers/config/envConfig.js";
 
-const SOCKET_SERVER_URL = process.env.REACT_APP_SERVER_API_BASE_URL || "http://localhost:5050";
+const SOCKET_SERVER_URL = baseUrl;
 
 function Message() {
   const memberId = memberInfo().id;
@@ -35,8 +36,10 @@ function Message() {
       query: { userId: memberData.id },
     });
 
-    newSocket.on("newMessage", ({ senderId, receiverId, message, file }) => {
-      dispatch(setMessages([...messages, { senderId, receiverId, message, file }]));
+    // Handle new messages
+    newSocket.on("newMessage", (messageData) => {
+      console.log("New message received:", messageData);
+      dispatch(addMessage(messageData));
     });
 
     setSocket(newSocket);

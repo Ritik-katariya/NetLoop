@@ -9,6 +9,7 @@ export default function ChatSidebar() {
   const memberId = memberInfo().id;
   const dispatch = useDispatch();
 
+  
   const{ chatData, activeChat}=useSelector(state=>state.chat)
   // Filter members based on search term
   const filteredMembers =

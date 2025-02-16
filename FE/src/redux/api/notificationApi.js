@@ -1,3 +1,4 @@
+import { baseUrl } from "../../helpers/config/envConfig";
 import { tagTypes } from "../tag-types";
 import { baseApi } from "./baseApi";
 import io from 'socket.io-client';
@@ -31,7 +32,7 @@ export const notificationApi = baseApi.injectEndpoints({
         try {
           await cacheDataLoaded;
 
-          const socket = io(process.env.REACT_APP_API_URL || 'http://localhost:5050');
+          const socket = io(baseUrl);
 
           socket.on("newNotification", (notification) => {
             updateCachedData((draft) => {

@@ -1,15 +1,16 @@
 import React from 'react'
 import NetworkProfile from './Network'
-import Search from '../../Shared/Search/Search'
-import { useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom';
+import { useGetMemberQuery } from '../../../redux/api/member';
 
 export default function NetworkProfilePage() {
-  const {memberData}=useSelector(state=>state.member);
+  const member = useParams();
+  const{data:memberData,error:merror,isLoading:misLoading,isSuccess:misSuccess}=useGetMemberQuery(member?.id);
+ 
   const networks=memberData?.networks||[];
   return (
     <div className='flex flex-col gap-4'>
-        {/* <Search/> */}
-     
+       
       {networks.map(network=>(
         <NetworkProfile network={network}/>
       ))}
