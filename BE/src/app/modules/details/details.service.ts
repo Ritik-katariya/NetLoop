@@ -12,10 +12,8 @@ const createDetails = async (req: Request, res: Response): Promise<any> => {
       where: { id: memberId },
     });
     if (!isExists) {
-      return res.status(401).json({
-        success: false,
-        message: "User is not authenticated",
-      });
+      throw new Error("failed to find");
+      
     }
 
     const details: Details = await tx.details.create({
@@ -38,10 +36,8 @@ const updateDetails = async (req: Request, res: Response): Promise<any> => {
       });
 
       if (!existingDetails) {
-        return res.status(404).json({
-          success: false,
-          message: "Details not found",
-        });
+       throw new Error("failed to find details");
+       
       }
 
       // Update `Details`
@@ -60,17 +56,11 @@ const updateDetails = async (req: Request, res: Response): Promise<any> => {
     const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Transaction timed out")), 5000000));
     return Promise.race([data, timeoutPromise]);
 
-    return res.status(200).json({
-      success: true,
-      data,
-    });
+   return data;
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: "An error occurred while updating details",
-      error: (error as Error).message,
-    });
+   throw new Error("update details is failed");
+   
   }
 };
 
@@ -106,10 +96,8 @@ const updateEducation = async (req: Request, res: Response): Promise<any> => {
       where: { id: detailsId },
     });
     if (!isExists) {
-      return res.status(401).json({
-        success: false,
-        message: "User is not authenticated",
-      });
+     throw new Error("Details not found");
+     
     }
     const isEducation=await tx.education.findUnique({where:{id}});
     if(!isEducation){
@@ -117,22 +105,16 @@ const updateEducation = async (req: Request, res: Response): Promise<any> => {
         const education = await tx.education.create({data: { ...edudata, detailsid: detailsId }});
       return education;
       } catch (error) {
-        return res.status(500).json({
-          success: false,
-          message: "An error occurred while creating education",
-          error: (error as Error).message,
-        });
+       throw new Error("failed to create education");
+       
       }
     }
     try {
       const education = await tx.education.update({where:{id},data:edudata});
       return education;
     } catch (error) {
-      return res.status(500).json({
-        success: false,
-        message: "An error occurred while updating education",
-        error: (error as Error).message,
-      });      
+     throw new Error("failed to update education");
+           
 
     }
 
@@ -159,10 +141,8 @@ const updateWork = async (req: Request, res: Response): Promise<any> => {
       where: { id: detailsId },
     });
     if (!isExists) {
-      return res.status(401).json({
-        success: false,
-        message: "User is not authenticated",
-      });
+     throw new Error("Details not found");
+     
     }
     const isWork=await tx.work.findUnique({where:{id}});
     if(!isWork){
@@ -170,22 +150,16 @@ const updateWork = async (req: Request, res: Response): Promise<any> => {
         const work = await tx.work.create({data: { ...workdata, detailsid: detailsId }});
       return work;
       } catch (error) {
-        return res.status(500).json({
-          success: false,
-          message: "An error occurred while creating education",
-          error: (error as Error).message,
-        });
+        throw new Error("failed to create work");
+        
       }
     }
     try {
       const work = await tx.work.update({where:{id},data:workdata});
       return work;
     } catch (error) {
-      return res.status(500).json({
-        success: false,
-        message: "An error occurred while updating education",
-        error: (error as Error).message,
-      });      
+     throw new Error("failed to update work");
+        
 
     }
 

@@ -23,7 +23,7 @@ const addMemberToNetwork = async (req: Request, res: Response) => {
       },
     },
   });
-  res.status(200).json({ message: "Member added to the network" });
+  return;
 };
 
 // Fetch a member with their networks

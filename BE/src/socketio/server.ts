@@ -37,32 +37,40 @@ io.on("connection", (socket: Socket) => {
   }
 
   // Handle message sending
-  socket.on("sendMessage", ({ message, senderId,receiverId,file }) => {
+  socket.on("sendMessage", ({ message, senderId,receiverId,file,createdAt }) => {
     // console.log("Message received:", content, "to receiver socket:", receiverSocketId);
-    try {
-      async (message:string,senderId:string,receiverId:string,file:any) => {
-        await prisma.message.create({data:{
-          senderId,
-          receiverId,
-          message,
-          file,
-        }})
+    // try {
+    //   async (message:string,senderId:string,receiverId:string,file:any) => {
+    //    const mesg= await prisma.message.create({data:{
+    //       senderId,
+    //       receiverId,
+    //       message,
+    //       file,
+    //     }})
         
-      }
-    } catch (error) {
-      console.log("something went wrong")
-    }
+    //   }
+    // } catch (error) {
+    //   console.log("something went wrong")
+    // }
     console.log("user",users[receiverId],receiverId);
     if (receiverId && users[receiverId]) {
       io.to(users[receiverId]).emit("newMessage", {
-        message, senderId,receiverId,file 
+        message, senderId,receiverId,file,createdAt
       });
-      console.log("msg send",{ message, senderId,receiverId,file })
+      console.log("msg send",{ message, senderId,receiverId,file,createdAt })
     } else {
       console.log("Receiver socket not found or invalid:", receiverId);
     }
    
   });
+  // Handle typing event
+socket.on("Typing", ({ receiverId, status }) => {
+  if (receiverId && users[receiverId]) {
+    io.to(users[receiverId]).emit("Typing", { senderId: socket.id, status });
+    console.log(`Typing status sent to ${receiverId}: ${status}`);
+  }
+});
+
 
   // Handle disconnections
   socket.on("disconnect", () => {

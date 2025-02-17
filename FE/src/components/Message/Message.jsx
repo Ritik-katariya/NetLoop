@@ -35,13 +35,11 @@ const memberId=memberInfo().id;
     
     });
 
-    newSocket.on("getOnlineUsers", (onlineUsers) => {
-      
-    });
+   
 
-    newSocket.on("newMessage", ({senderId, receiverId, message ,file}) => {
-      setMessages((prevMessages) => [...prevMessages, {senderId, receiverId, message ,file}]);
-    });
+    // newSocket.on("newMessage", ({senderId, receiverId, message ,file}) => {
+    //   setMessages((prevMessages) => [...prevMessages, {senderId, receiverId, message ,file}]);
+    // });
 
     setSocket(newSocket);
 
@@ -52,7 +50,7 @@ const memberId=memberInfo().id;
 
 
   return (
-    <div className="flex h-screen bg-gray-100 scroll-smooth ">
+    <div className="flex h-screen bg-gray-100 scroll-smooth border-t-2">
       <SideBar chatData={chatData} setActiveChat={setActiveChat} activeChat={activeChat}/>
       <div className="flex-1 flex flex-col">
         {activeChat ? (<ChatApp activeChat={activeChat} setMessages={setMessages} messages={messages} socket={socket}/>

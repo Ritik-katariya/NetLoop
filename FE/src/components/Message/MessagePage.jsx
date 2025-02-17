@@ -5,7 +5,7 @@ import { SocketProvider } from '../../helpers/SocketContext'
 export default function MessagePage() {
   return (
     <div>
-      <Header/>
+      <Header chat={true}/>
       <SocketProvider>
 
       <Message/>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { memberInfo } from '../../utils/auth';
+import { Avatar } from '@nextui-org/react';
 
 
 export default function ChatSidebar({ chatData, setActiveChat, activeChat }) {
@@ -37,9 +38,9 @@ console.log(chatData,"chat")
                   activeChat?.id === member.id ? "bg-blue-50 text-blue-500 font-semibold" : ""
                 }`}
               >
-                <img
+                <Avatar
                   className="w-8 h-8 rounded-full mr-3"
-                  src={member?.profile?.img || "/default-profile.png"}
+                  src={member?.profile?.img }
                   alt={member?.name || "User"}
                 />
                 <span>{member.name}</span>

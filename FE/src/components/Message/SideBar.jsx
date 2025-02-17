@@ -20,7 +20,7 @@ export default function SideBar({ chatData, setActiveChat, activeChat }) {
   };
 
   return (
-    <div className="w-[300px] max-h-screen flex flex-col bg-white">
+    <div className="w-[300px] h-screen flex flex-col bg-white">
       
         
         <div className="flex h-12 ml-2 items-center space-x-2 text-small w-full pt-3">

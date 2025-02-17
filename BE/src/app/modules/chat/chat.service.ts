@@ -22,10 +22,11 @@ const createChat = async (req: Request, res: Response): Promise<any> => {
       }
     });
 
-    res.status(201).json(chat);
+   return chat;
   } catch (error) {
     console.error("Error creating chat:", error);
-    res.status(500).json({ message: "Failed to create chat." });
+    throw new Error("Failed to create chat");
+    
   }
 };
 
@@ -114,10 +115,11 @@ const addMemberToChat = async (req: Request, res: Response): Promise<any> => {
       console.warn("No requestId provided, skipping deletion of chatRequest.");
     }
 
-    res.status(200).json(chat);
+   return chat;
   } catch (error) {
     console.error("Error adding member to chat:", error);
-    res.status(500).json({ message: "Failed to add member to chat." });
+   throw new Error("Failed to add member to chat");
+   
   }
 };
 
@@ -133,18 +135,20 @@ const removeMemberFromChat = async (req: Request, res: Response): Promise<any> =
     });
 
     if (!chat) {
-      return res.status(404).json({ message: "Chat not found" });
+      throw new Error("failed to find");
+      
     }
 
     // Check if the member exists in the chat
     const isMemberInChat = chat.members.some((member) => member.id === memberId);
 
     if (!isMemberInChat) {
-      return res.status(404).json({ message: "Member not found in this chat" });
+      throw new Error("failed to find");
+      
     }
 
     // Remove the member from the chat
-    await prisma.chat.update({
+   const chats= await prisma.chat.update({
       where: { id: chatId },
       data: {
         members: {
@@ -153,10 +157,11 @@ const removeMemberFromChat = async (req: Request, res: Response): Promise<any> =
       },
     });
 
-    res.status(200).json({ message: "Member removed from chat successfully" });
+    return chats;
   } catch (error) {
     console.error("Error removing member from chat:", error);
-    res.status(500).json({ message: "Failed to remove member from chat" });
+   throw new Error("failed to remove member from chat");
+   
   }
 };
 
