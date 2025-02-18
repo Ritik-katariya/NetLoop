@@ -7,11 +7,12 @@ import ChatApp from "./ChatApp.jsx";
 import ChatSidebar from "./ChatSidebar.jsx";
 import { SocketProvider } from "../../helpers/SocketContext.js";
 import SideBar from "./SideBar.jsx";
+import { baseUrl } from "../../helpers/config/envConfig.js";
 
 
 
 
-const SOCKET_SERVER_URL = process.env.REACT_APP_SERVER_API_BASE_URL || "http://localhost:5050";
+const SOCKET_SERVER_URL = baseUrl;
 
 
 
