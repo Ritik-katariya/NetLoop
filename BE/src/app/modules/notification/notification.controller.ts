@@ -35,7 +35,7 @@ const markAsRead = catchAsync(async (req: Request, res: Response) => {
 
   res.status(httpStatus.OK).json({
     success: true,
-    message: result.message,
+    message: result,
   });
 });
 
@@ -46,7 +46,7 @@ const markAllAsRead = catchAsync(async (req: Request, res: Response) => {
 
   res.status(httpStatus.OK).json({
     success: true,
-    message: result.message,
+    message: result,
   });
 });
 
@@ -58,7 +58,7 @@ const deleteNotification = catchAsync(async (req: Request, res: Response) => {
 
   res.status(httpStatus.OK).json({
     success: true,
-    message: result.message,
+    message: result,
   });
 });
 
