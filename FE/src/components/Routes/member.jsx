@@ -7,7 +7,7 @@ const MemberRoute = () => {
  
 const member=memberInfo();
 
-console.log(member,"toaketn");
+
   if (!member) {
     return <Navigate to="/login" replace />;
   }

@@ -6,7 +6,7 @@ import { Avatar } from '@nextui-org/react';
 export default function ChatSidebar({ chatData, setActiveChat, activeChat }) {
   const [searchTerm, setSearchTerm] = useState('');
   const memberId=memberInfo().id;
-console.log(chatData,"chat")
+
   // Filter members based on search term
   const filteredMembers = chatData && chatData[0]?.members?.filter(member =>
    { return member.name.toLowerCase().includes(searchTerm.toLowerCase())}

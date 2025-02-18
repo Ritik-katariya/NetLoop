@@ -20,7 +20,7 @@ export default function SendRequest({ memberId }) {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
-console.log(memberId,"received request")
+
   const SubmitEvent = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);

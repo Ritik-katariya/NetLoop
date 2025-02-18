@@ -14,7 +14,7 @@ export default function ChatMember({ chatData }) {
   data?.data?.filter(
     (mem) => !chatData[0]?.members?.some((element) => element.id === mem.id)
   ) || [];
-  // console.log(chmembers[0],v[0],"data");
+  
 
   // Search filtering
   const [searchTerm, setSearchTerm] = useState("");

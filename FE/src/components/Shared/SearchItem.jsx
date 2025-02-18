@@ -21,7 +21,7 @@ const SearchItem = () => {
     { query: debouncedSearch, page },
     { skip: !debouncedSearch || debouncedSearch.length < 1 }
   );
-console.log(searchResults?.members,"search");
+
   // Handle infinite scroll
   useEffect(() => {
     if (inView && !isFetching && searchResults?.data?.hasMore) {

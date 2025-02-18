@@ -9,7 +9,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: config.CLIENT_URL || "http://localhost:3000",
+    origin: config.CLIENT_URL ,
     methods: ["GET", "POST"],
   },
 });

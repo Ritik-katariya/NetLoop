@@ -22,7 +22,7 @@ const JoinRequestList = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 const {data:requests,refetch}=useGetAllJoinRequestQuery();
 const [deleteJoinRequest]=useDeleteJoinRequestMutation();
-// console.log(data);
+
   const handleViewDetails = (request) => {
     setSelectedRequest(request);
     onOpen();
