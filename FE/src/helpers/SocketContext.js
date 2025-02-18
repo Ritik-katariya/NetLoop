@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { baseUrl } from "./config/envConfig";
 import io from "socket.io-client"
 const socketContext = createContext();
-const SOCKET_SERVER_URL =
-  process.env.REACT_APP_SERVER_API_BASE_URL || "http://localhost:5050";
+const SOCKET_SERVER_URL =baseUrl;
 // it is a hook.
 export const useSocketContext = () => {
   return useContext(socketContext);
