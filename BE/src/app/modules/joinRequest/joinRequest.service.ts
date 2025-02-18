@@ -116,6 +116,14 @@ const deleteJoinRequest = async (id: string): Promise<any> => {
     );
   }
 };
+const getAllJoinRequest = async (): Promise<any[]> => {
+  return await prisma.joinRequest.findMany({
+    include: {
+      member: true,
+      network: true,
+    },
+  });
+};  
 
 // Export JoinRequest Service
 export const joinRequestService = {
@@ -124,4 +132,5 @@ export const joinRequestService = {
   getJoinRequestsForMember,
   getJoinRequestsForNetwork,
   deleteJoinRequest,
+  getAllJoinRequest,
 };

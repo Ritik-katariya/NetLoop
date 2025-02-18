@@ -6,9 +6,12 @@ import { GiCheckMark } from "react-icons/gi";
 import { useGetMemberQuery } from "../../../redux/api/member";
 import { useNavigate } from "react-router-dom";
 import OptionButton from "./ThreeDot";
+import { isAuthenticated, memberInfo } from "../../../utils/auth";
 
 const PostHeader = ({ post }) => {
   const navigate = useNavigate();
+  const isCheck=isAuthenticated();
+  const id=memberInfo()?.id||"";
   const { 
     data: memberdata, 
     error: merror, 
@@ -16,14 +19,19 @@ const PostHeader = ({ post }) => {
     isSuccess: misSuccess 
   } = useGetMemberQuery(post?.memberId);
 
-  const name = memberdata?.name?.trim()?.split(" ")?.join("");
+  const name = memberdata?.name?.trim()?.split(" ")?.join("-");
   
   const clickHandler = (e) => {
     e.preventDefault();
+    if(!isCheck){
+      navigate('/login');
+      return;
+    }
     navigate(`/${name}/${memberdata?.id}`);
   };
 
-  const img = useSelector((state) => state.profile.img);
+  // const img = useSelector((state) => state.profile.img);
+
 
   return (
     <div className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
@@ -60,7 +68,7 @@ const PostHeader = ({ post }) => {
       </div>
 
       {/* Right Section: Options Button */}
-      <OptionButton id={post?.id} />
+     { memberdata?.id===id&&<OptionButton id={post?.id} />}
     </div>
   );
 };

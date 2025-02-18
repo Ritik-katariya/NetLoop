@@ -11,7 +11,8 @@ import ProfileInfoEdit from "./ProfileInfoEdit/ProfileInfoEdit";
 import CreatePost from "./Posts/CreatePost";
 
 export default function ProfilePersonal() {
-  const member = memberInfo();
+  const { id } = memberInfo()||"";
+  const member = useParams();
   const{data:memberdata,error:merror,isLoading:misLoading,isSuccess:misSuccess}=useGetMemberQuery(member?.id);
   const [data, setdata] = useState({});
   useEffect(() => {
@@ -27,14 +28,14 @@ export default function ProfilePersonal() {
       <div className="relative h-48 rounded-t-xl overflow-hidden bg-white">
         {/* Banner */}
         <img
-          src={data?.coverImg}
+          src={data?.coverImg||"https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2029&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
           alt="banner"
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="relative  lg:left-[790px] md:left-[340px] left-[240px] top-[-40px] z-[10]  w-12">
+     {member?.id===id&& <div className="relative  lg:left-[790px] md:left-[340px] left-[240px] top-[-40px] z-[10]  w-12">
         <UploadImg id={memberdata?.profile?.id} img={data?.coverImg} flag={1} />
-      </div>
+      </div>}
 
       {/* Profile Picture */}
       <div className="relative">
@@ -42,9 +43,9 @@ export default function ProfilePersonal() {
           src={data?.img}
           className="absolute -bottom-16 md:-bottom-16 left-12 w-32 h-32 md:w-44 md:h-44  border-4 border-white bg-gray-400"
         />
-        <div className="absolute left-40 md:left-48 top-[20px] z-[10] w-12">
+       {member?.id===id&& <div className="absolute left-40 md:left-48 top-[20px] z-[10] w-12">
           <UploadImg id={memberdata?.profile?.id} img={data?.img} flag={0} />
-        </div>
+        </div>}
       </div>
 
       {/* Profile Info */}
@@ -54,11 +55,11 @@ export default function ProfilePersonal() {
             <h1 className="text-2xl font-bold text-center md:pl-8">
               {memberdata?.name}
             </h1>
-            <div className="space-x-4 flex justify-end items-center ">
+           { member?.id===id&&<div className="space-x-4 flex justify-end items-center ">
               <ProfileInfoEdit/>
               <CreatePost id={''}/>
               
-            </div>
+            </div>}
           </div>
 
          {data?.bio&& <p className="text-gray-600 mt-1 text-sm text-center">{data?.bio}</p>}

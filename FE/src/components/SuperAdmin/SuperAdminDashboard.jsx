@@ -25,37 +25,7 @@ const SuperAdminDashboard = () => {
       
       <div className="flex">
         <SuperAdminSidebar />
-        
-        <main className="flex-1 p-8">
-          <h1 className="text-2xl font-bold mb-6">Welcome, {currentAdmin?.name}</h1>
-          
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card>
-              <CardBody>
-                <h3 className="text-lg font-semibold">Total Admins</h3>
-                <p className="text-3xl font-bold text-primary">{stats.totalAdmins}</p>
-              </CardBody>
-            </Card>
-            
-            <Card>
-              <CardBody>
-                <h3 className="text-lg font-semibold">Active Admins</h3>
-                <p className="text-3xl font-bold text-success">{stats.activeAdmins}</p>
-              </CardBody>
-            </Card>
-            
-            <Card>
-              <CardBody>
-                <h3 className="text-lg font-semibold">Inactive Admins</h3>
-                <p className="text-3xl font-bold text-danger">{stats.inactiveAdmins}</p>
-              </CardBody>
-            </Card>
-          </div>
 
-          {/* Admin List */}
-          <AdminList admins={admins} />
-        </main>
       </div>
     </div>
   );

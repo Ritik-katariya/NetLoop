@@ -137,7 +137,7 @@ const markAsRead = async (notificationId: string, receiverId: string) => {
       data: { isRead: true },
     });
 
-    return { message: "Notification marked as read" };
+    return ;
   } catch (error) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Failed to mark notification as read");
   }
@@ -155,7 +155,7 @@ const markAllAsRead = async (receiverId: string) => {
       },
     });
 
-    return { message: "All notifications marked as read" };
+    return ;
   } catch (error) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Failed to mark notifications as read");
   }
@@ -175,7 +175,7 @@ const deleteNotification = async (notificationId: string, receiverId: string) =>
       where: { id: notificationId },
     });
 
-    return { message: "Notification deleted successfully" };
+    return ;
   } catch (error) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Failed to delete notification");
   }

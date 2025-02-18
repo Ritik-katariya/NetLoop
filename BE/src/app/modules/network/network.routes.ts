@@ -9,7 +9,7 @@ const router = express.Router();
 router.post("/", CloudinaryHelper.upload.fields([{ name: 'logo', maxCount: 1 }, { name: 'cover', maxCount: 1 }]), (req: express.Request, res: express.Response, next: express.NextFunction) => {
     return networkController.createNetwork(req, res, next);
 });
-router.patch("/addmember", networkController.addMemberToNetwork);
+router.patch("/addmember/:networkId/:memberId", networkController.addMemberToNetwork);
 
 router.get("/", networkController.getAllNetworks);
 router.get("/:id", networkController.getOneNetwork);

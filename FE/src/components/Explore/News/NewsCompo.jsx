@@ -27,7 +27,7 @@ const {id,author,content,createdAt,image,member,title}=data;
               {getTimeAgo(new Date(createdAt))}
             </span>
             </div>
-           {member?.networks.length > 0 && (<p className="text-[10px] text-gray-500">{member?.networks[0]?.name}</p>)}
+           {member?.networks?.length > 0 && (<p className="text-[10px] text-gray-500">{member?.networks[0]?.name}</p>)}
           </div>
       </div>
       <OptionButton id={id} />

@@ -11,8 +11,7 @@ router.post("/login", adminController.loginAdmin);
 // Protected routes
 router.post(
   "/create",
-  auth(),
-  AdminRole("SUPER_ADMIN"),
+ 
   adminController.createAdmin
 );
 

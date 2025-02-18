@@ -99,6 +99,43 @@ const getPosts = async (): Promise<Post[]> => {
   });
 };
 
+const getHomePagePosts = async (networkId?: string) => {
+  try {
+    const posts = await prisma.post.findMany({
+      where: {
+        OR: [
+          { networkId: null }, // Always fetch posts with no network
+          ...(networkId ? [{ networkId }] : []), // If networkId exists, also fetch posts with that networkId
+        ],
+      },
+      include: {
+        likes: true, // Include likes to count them
+        member: true, // Include member details
+      },
+    });
+    
+
+    // Sort posts based on the criteria
+    const sortedPosts = posts.sort((a, b) => {
+      const likesDiff = (b.likes?.length || 0) - (a.likes?.length || 0); // More liked first
+      const dateDiff = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(); // Latest first
+      const randomFactor = Math.random() - 0.5; // Introduce randomness
+
+      const factors = [likesDiff, dateDiff, randomFactor];
+const selectedFactor = factors[Math.floor(Math.random() * factors.length)];
+return selectedFactor;
+
+    });
+
+    return sortedPosts;
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return [];
+  }
+};
+
+
+
 // Get only Video Posts
 const getVideoPosts = async (): Promise<Post[]> => {
   return prisma.post.findMany({
@@ -187,4 +224,5 @@ export const postService = {
   getPosts,
   getVideoPosts, // ✅ Fetch only video posts
   getPostbyMember,
+  getHomePagePosts
 };

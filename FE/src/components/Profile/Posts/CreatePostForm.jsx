@@ -58,6 +58,7 @@ const CreatePostForm = ({ id, close }) => {
         toast.success("Post created successfully");
         setTimeout(() => {
           close();
+          window.location.reload();
         }, 1000);
         reset();
       }

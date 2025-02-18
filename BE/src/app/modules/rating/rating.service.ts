@@ -53,7 +53,11 @@ const getRating = async (id: string): Promise<Rating | null> => {
   if (!id) throw new ApiError(httpStatus.BAD_REQUEST, "ID is required");
 
   const result = await prisma.rating.findUnique({
-    where: { id },
+    where: { id,expireAt: { gte: new Date() } },
+    include: {
+      member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}},
+      explore: true,
+    },
   });
 
   if (!result) {
@@ -65,10 +69,10 @@ const getRating = async (id: string): Promise<Rating | null> => {
 
 // Get all Ratings
 const getAllRatings = async (): Promise<Rating[]> => {
-  const result = await prisma.rating.findMany({
+  const result = await prisma.rating.findMany({where:{expireAt: { gte: new Date() }},
     orderBy: { createdAt: "desc" },
     include: {
-      member: true,
+      member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}},
       explore: true,
     },
   });
@@ -131,7 +135,7 @@ const getRatingsByExplore = async (exploreId: string): Promise<Rating[]> => {
   if (!exploreId) throw new ApiError(httpStatus.BAD_REQUEST, "Explore ID is required");
 
   const result = await prisma.rating.findMany({
-    where: { exploreId },
+    where: { exploreId,expireAt: { gte: new Date() } },
     orderBy: { createdAt: "desc" },
     include: { member: {include:{profile:{select:{img:true}},
     networks:{select:{name:true}},

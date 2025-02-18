@@ -56,6 +56,13 @@ export const joinRequestApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: tagTypes.joinrequest }],
     }),
+    getAllJoinRequest: build.query({
+      query: () => ({
+        url: `${JoinRequest}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.joinrequest],
+    }),
 
   }),
 });
@@ -67,4 +74,5 @@ export const {
   useGetJoinRequestByIdQuery,
   useDeleteJoinRequestMutation,
   useCreateJoinRequestMutation,
+  useGetAllJoinRequestQuery
 } = joinRequestApi;

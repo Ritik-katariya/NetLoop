@@ -4,9 +4,15 @@ import ProfilePost from "./ProfilePost";
 import NetworkProfilePage from "./Network/NetworkProfilePage";
 import ProfilePosts from "./Posts/ProfilePosts";
 import ProfileSaved from "./Saved/ProfileSaved";
+import { memberInfo } from "../../utils/auth";
+import { useParams } from "react-router-dom";
+import { useGetMemberQuery } from "../../redux/api/member";
 
 export default function ProfileTab() {
-  return (
+  const id=memberInfo()?.id||"";
+  const member = useParams();
+  const{data:memberdata,error:merror,isLoading:misLoading,isSuccess:misSuccess}=useGetMemberQuery(member?.id);
+    return (
     <div className="w-full max-w-full overflow-hidden ">
       <div className="w-full">
         <Tabs 
@@ -47,21 +53,21 @@ export default function ProfileTab() {
             </Card>
           </Tab>
 
-          <Tab key="Posts" title="Posts" className="focus:text-primary ">
+         {member?.id===id&& <Tab key="Posts" title="Posts" className="focus:text-primary ">
             <Card>
               <CardBody className="flex flex-col justify-center items-center">
               <ProfilePosts/>
               </CardBody>
             </Card>
-          </Tab>
+          </Tab>}
 
-          <Tab key="Saved" title="Saved" className="focus:text-primary ">
+         {member?.id===id&& <Tab key="Saved" title="Saved" className="focus:text-primary ">
             <Card>
               <CardBody>
               <ProfileSaved/>
               </CardBody>
             </Card>
-          </Tab>
+          </Tab>}
         </Tabs>
       </div>
     </div>

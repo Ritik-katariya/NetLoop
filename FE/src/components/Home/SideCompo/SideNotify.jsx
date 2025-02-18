@@ -11,8 +11,8 @@ export default function SideNotify() {
     <div className="w-[18%] mt-4 p-4 flex flex-col gap-6 max-lg:hidden bg-gray-50 rounded-lg h-[650px] shadow-lg border border-gray-200 max-xl:hidden">
       
       {/* Members Section */}
-      <div>
-        <div className="flex justify-between items-center mb-2">
+      <div className="max-h-[400px] overflow-auto">
+        <div className="flex justify-between items-center mb-2 ">
           <h1 className="text-base font-medium text-gray-700">Members</h1>
           <h1 className="text-xs text-gray-600">Recent join</h1>
         </div>

@@ -79,9 +79,9 @@ const NetworkCard = ({ value }) => {
         </p>
 
         {/* Join Button */}
-        <div className="w-full flex justify-center">
+       {memberId&& <div className="w-full flex justify-center">
           <JoinRequest id={value.id} />
-        </div>
+        </div>}
       </div>
     </Card>
   );

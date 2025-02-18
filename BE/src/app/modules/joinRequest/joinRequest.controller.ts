@@ -53,6 +53,18 @@ const getJoinRequestsForNetwork = catchAsync(async (req: Request, res: Response)
     data: result,
   });
 });
+const getAllJoinRequest = catchAsync(async (req: Request, res: Response) => {
+  logger.info("Inside controller: getalljoin request");
+
+ 
+  const result = await joinRequestService.getAllJoinRequest();
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Join requests  fetched successfully!",
+    success: true,
+    data: result,
+  });
+});
 
 const deleteJoinRequest = catchAsync(async (req: Request, res: Response) => {
   logger.info("Inside controller: deleteJoinRequest");
@@ -72,4 +84,5 @@ export const joinRequestController = {
   getJoinRequestsForMember,
   getJoinRequestsForNetwork,
   deleteJoinRequest,
+  getAllJoinRequest,
 };
