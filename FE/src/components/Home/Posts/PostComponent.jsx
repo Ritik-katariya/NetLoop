@@ -59,7 +59,7 @@ const [createNotification]=useCreateNotificationMutation();
           targetId: post?.id
         }
       }).unwrap();
-       if(!isLiked){
+       if(!isLiked&&memberId!==post?.memberId){
         await createNotification({data:{"senderId":memberId,"receiverId":post.memberId,"targetId":post.id,"content":"Your post have some likes","type":"LIKE","targetType":"Post"}}).unwrap(); 
        }    
       setIsLiked(!isLiked);
@@ -102,10 +102,19 @@ const [createNotification]=useCreateNotificationMutation();
     setIsComment(!isComment);
   };
 
+  function handleShare(){
+    const postUrl = `${window.location.origin}/profile/${post?.memberId}`;
+    navigator.clipboard.writeText(postUrl).then(() => {
+      toast.success('Copied to clipboard');
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+      toast.error('Failed to copy');
+    });
+  }
   return (
     <div className="w-full max-w-[550px] md:max-w-[600px] lg:max-w-[650px] bg-white flex flex-col space-y-2 text-sm mb-3 rounded-md pb-6 shadow-md">
       <PostHeader post={post} />
-      <ToastContainer />
+      <ToastContainer className={"absolute top-24 "} />
 
       {/* Post Description */}
       <div className="text-[12px] text-gray-500 font-sans px-4 sm:px-6 break-words">
@@ -160,7 +169,7 @@ const [createNotification]=useCreateNotificationMutation();
             {isSave ? <IoSave /> : <IoSaveOutline />} Save
           </span>
         </div>
-        <div className="texl-xl hover:text-teal-400 cursor-pointer hover:scale-110"><FaShareAlt /></div>
+        <div className="texl-xl hover:text-teal-400 cursor-pointer hover:scale-110" onClick={handleShare}><FaShareAlt /></div>
       </div>
 
       {/* Comments Section */}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useGetNetworkQuery } from '../../redux/api/network';
 import { useParams } from 'react-router-dom';
 import Header from '../Shared/Header/Header';
@@ -9,20 +9,25 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import Footer from './Footer';
 import { Avatar } from '@nextui-org/react';
+import { ToastContainer,toast } from 'react-toastify';
 
 const NetworkProfile = () => {
+  useEffect(()=>{
+    toast.success("Network page in working phase not completed yet.")
+  },[1])
   const { id } = useParams();
   const { data: networkData } = useGetNetworkQuery(id);
 
   return (
     <div className='bg-gray-100 min-h-screen '>
       <Header />
+      <ToastContainer/>
       <div className='max-w-6xl mx-auto p-4 space-y-10 shadow-lg bg-white rounded-md mt-20 -mb-14'>
         {/* Cover Image */}
         <div className='relative mb-28'>
-          <img src={networkData?.cover} alt='Cover' className='w-full h-80 object-cover rounded-md' />
+          <img src={networkData?.cover||"https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2029&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt='Cover' className='w-full h-80 object-cover rounded-md' />
           <div className='absolute -bottom-24 left-1/2 transform -translate-x-1/2'>
-            <img src={networkData?.logo} alt='Logo' className='w-48 h-48 object-fill bg-white rounded-full border-4 border-white shadow-xl' />
+            <img src={networkData?.logo||"https://media.istockphoto.com/id/1173812126/vector/bank-line-cion.jpg?s=2048x2048&w=is&k=20&c=RFxR7vZD19n4kBhwTpN4Ht890GE48s2v2L49EmMQnOg="} alt='Logo' className='w-48 h-48 object-fill bg-white rounded-full border-4 border-white shadow-xl' />
           </div>
         </div>
 
@@ -47,7 +52,7 @@ const NetworkProfile = () => {
             {["Innovative Curriculum", "Top-notch Faculty", "Cutting-edge Research"].map((highlight, index) => (
               <div key={index} className='bg-gray-50 p-4 rounded-md shadow-md '>
                 <h4 className='text-lg font-semibold text-teal-400'>{highlight}</h4>
-                <p className='text-gray-600 text-sm'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <p className='text-gray-600 text-sm'>Premier institute fostering innovation, excellence, and industry-ready skills through cutting-edge education and research</p>
               </div>
             ))}
           </div>
@@ -76,10 +81,10 @@ const NetworkProfile = () => {
         </div>
 
         {/* Gallery Section */}
-        <div className='grid grid-cols-2 md:grid-cols-3 gap-4 mt-6'>
+        <div className='grid grid-cols-2 md:grid-cols-3 gap-4 mt-6 cursor-pointer'>
           {['Moksha 4.0', 'Aayam 4.0', 'Others', 'Gallery 1', 'Gallery 2', 'Gallery 3'].map((title, index) => (
             <div key={index} className='relative w-full h-40 bg-gray-200 flex items-center justify-center rounded-lg shadow-lg'>
-              <img src={`https://www.akamai.com/site/im-demo/perceptual-standard.jpg?imbypass=true`} alt={title} className='w-full h-full object-cover rounded-lg absolute z-0'
+              <img src={`https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2029&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`} alt={title} className='w-full h-full object-cover rounded-lg absolute z-0'
               />
               <span className='text-xl font-bold text-white bg-black bg-opacity-50 px-4 py-1 rounded z-10'>{title}</span>
             </div>
@@ -106,7 +111,7 @@ const NetworkProfile = () => {
         </div>
 
         {/* Sidebar */}
-        <div className='flex flex-col md:flex-row gap-6 mt-10'>
+        <div className='flex flex-col md:flex-row gap-6 mt-10 max-h-[300px] overflow-auto'>
           <div className='bg-gray-50 p-4 w-full md:w-1/3 rounded-md shadow-lg'>
             {/* <Search /> */}
             <h3 className='text-xl font-semibold mt-4'>Members ({networkData?.members?.length || 0})</h3>

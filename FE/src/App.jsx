@@ -26,7 +26,7 @@ import CreateAdminModal from './components/Admin/CreateAdminModal';
 import SuperAdminLogin from './components/SuperAdmin/SuperAdminLogin';
 import SuperAdminDashboard from './components/SuperAdmin/SuperAdminDashboard';
 import SuperAdminRoute from './components/Routes/SuperAdminRoute';
-
+import MemberRoute from './components/Routes/member';
 function App() {
   return (
     <Router >
@@ -40,20 +40,26 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/verifyotp' element={<OtpVerify />} />
         <Route path='/create' element={<UserCreate />} />
-        <Route path='/:name/:id?' element={<ProfileApp />} />
-        <Route path='/verify/:id?' element={<VerifiedPage />} />
-        <Route path='/profile/details-edit/:id?' element={<ProfileDetailsForm />} />
-        <Route path='/add-network' element={<NetworkPage />} />
+  
         <Route path='/network' element={<Network />} />
         <Route path='/network/:id?' element={<NetworkProfile />} />
-        <Route path='/message' element={<MessagePage />} />
-        <Route path='/explore' element={<Explore />} />
-        <Route path='/create-explore/:id' element={<CreateExpo />} />
+
         <Route path='/story/:id' element={<StoryPage />} />
         {/* <Route path='/story' element={<StoryPage />} /> */}
         {/* <Route path='/signup' element={<SignUp />} /> */}
        
+        <Route element={<MemberRoute/>}>
         
+        <Route path='/:name/:id?' element={<ProfileApp />} />
+        <Route path='/message' element={<MessagePage />} />
+        <Route path='/explore' element={<Explore />} />
+        <Route path='/create-explore/:id' element={<CreateExpo />} />
+        <Route path='/verify/:id?' element={<VerifiedPage />} />
+        <Route path='/profile/details-edit/:id?' element={<ProfileDetailsForm />} />
+        <Route path='/add-network' element={<NetworkPage />} />
+
+
+        </Route>
 
         {/* protected route for doctor booking */}
         

@@ -54,12 +54,12 @@ export const networkApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.network],
     }),
     updateNetworkMember: build.mutation({
-      query: ( data ) => ({
-        url: `${Network}/addmember`,
+      query: ( {memberId, networkId,data} ) => ({
+        url: `${Network}/addmember/${networkId}/${memberId}`,
         method: "PATCH",
-        data: data,
+        data,
         headers: {
-          "Content-Type": "multipart/form-data",
+       
         },
       }),
       invalidatesTags: [tagTypes.network],

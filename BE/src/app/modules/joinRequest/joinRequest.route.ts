@@ -13,6 +13,7 @@ router.post(
 
 // 🟢 Get a Single Join Request by ID
 router.get("/:id", joinRequestController.getJoinRequestById);
+router.get("/", joinRequestController.getAllJoinRequest);
 
 // 🟢 Get Join Requests for a Specific Member
 router.get("/member/:memberId", joinRequestController.getJoinRequestsForMember);

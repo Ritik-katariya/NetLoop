@@ -4,18 +4,18 @@ import { Request, Response } from "express";
 import ApiError from "../../../errors/apiError";
 import { IUpload } from "../../../interfaces/file";
 import { CloudinaryHelper } from "../../../helper/uploadHelper";
+import { request } from "http";
 // Add a member to a network
 const addMemberToNetwork = async (req: Request, res: Response) => {
-  const { memberId, networkId } = req.body;
+  const { memberId, networkId } = req.params;
+  const { requestId } = req.body;
   const member = await prisma.members.findFirst({
-    where: { id: memberId },
-    select: { verified: true }
+    where: { id: memberId }
   });
 
-  if (!member?.verified?.verified) {
-    throw new ApiError(400, "Member is not verified");
-  }
-  await prisma.network.update({
+ 
+ try {
+  const updateMember= await prisma.network.update({
     where: { id: networkId },
     data: {
       members: {
@@ -23,7 +23,13 @@ const addMemberToNetwork = async (req: Request, res: Response) => {
       },
     },
   });
-  return;
+const deleteRequest=await prisma.joinRequest.delete({where: {id: requestId}})
+
+  return updateMember;
+ } catch (error) {
+  throw new Error("Failed to add member to network");
+  
+ }
 };
 
 // Fetch a member with their networks
