@@ -23,6 +23,13 @@ export const postApi = baseApi.injectEndpoints({
       }),
       providesTags: (result, error, id) => [{ type: tagTypes.post, id }]
     }),
+    getHomePost: build.query({
+      query: (id) => ({
+        url: `${POST_URL}/home-post/${id}`,
+        method: "GET"
+      }),
+      providesTags: (result, error, id) => [{ type: tagTypes.post, id }]
+    }),
 
     // Create a post
     createPost: build.mutation({
@@ -102,5 +109,6 @@ export const {
   useDeletePostMutation,
   useGetMemberPostsQuery,
   useGetNetworkPostsQuery,
-  useLikePostMutation
+  useLikePostMutation,
+  useGetHomePostQuery
 } = postApi; 

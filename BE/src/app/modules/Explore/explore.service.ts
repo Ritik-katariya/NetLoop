@@ -33,11 +33,33 @@ const getExplore = async (id: string, random: boolean = false): Promise<any> => 
   const explore = await prisma.explore.findUnique({
     where: { id },
     include: {
-      news: true,
-      events: true,
-      poll: true,
-      rating: true,
-      promotion: true,
+      news: { where: { expireAt: { gte: new Date() } },
+        include:{
+          member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}}
+        }
+      },
+      events: { where: { expireAt: { gte: new Date() } },
+        include:{
+          member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}}
+        }
+      },
+      poll: {where: { expireAt: { gte: new Date() } },
+        include:{
+          member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}},
+          voter:{select:{name:true,id:true}}
+        }
+      },
+      rating: {where: { expireAt: { gte: new Date() } },
+        include:{
+          member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}},
+          voter:{select:{name:true,id:true}}
+        }
+      },
+      promotion: {where: { expireAt: { gte: new Date() } },
+        include:{
+          member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}}
+        }
+      },
       likes: true,
       comments: true,
       share: true,
@@ -57,11 +79,33 @@ const getExplore = async (id: string, random: boolean = false): Promise<any> => 
 const getAllExplores = async (): Promise<any[]> => {
   const explores = await prisma.explore.findMany({
     include: {
-      news: true,
-      events: true,
-      poll: true,
-      rating: true,
-      promotion: true,
+      news: {where: { expireAt: { gte: new Date() } },
+        include:{
+          member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}}
+        }
+      },
+      events: {where: { expireAt: { gte: new Date() } },
+        include:{
+          member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}}
+        }
+      },
+      poll: {where: { expireAt: { gte: new Date() } },
+        include:{
+          member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}},
+          voter:{select:{name:true,id:true}}
+        }
+      },
+      rating: {where: { expireAt: { gte: new Date() } },
+        include:{
+          member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}},
+          voter:{select:{name:true,id:true}}
+        }
+      },
+      promotion: {where: { expireAt: { gte: new Date() } },
+        include:{
+          member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}}
+        }
+      },
       likes: true,
       comments: true,
       share: true,

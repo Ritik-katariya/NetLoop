@@ -12,7 +12,7 @@ export default function ExplorePage() {
     const {memberData} = useSelector(state => state.member)
 
   return (
-   <div className='flex flex-col w-full justify-start items-center mt-4 gap-3'>
+   <div className='flex flex-col w-full justify-start items-center mt-20 gap-3'>
     <span className='absolute top-32 text-center text-[70px] font-bold text-transparent font-mono bg-clip-text bg-gradient-to-r from-[#323232cc] via-[#ebf9f6cf] to-[#00debca3] backdrop-blur-sm'>Explore {memberData?.networks[0]?.name}</span>
     <img src={memberData?.networks[0]?.cover} alt="cover page of Netwrok" className='w-[70%] h-56 object-cover ' />
      <div className='xl:w-[50%] min-h-screen flex flex-col gap-3 justify-start items-center px-4 '>

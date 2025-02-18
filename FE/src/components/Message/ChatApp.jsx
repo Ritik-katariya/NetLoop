@@ -1,235 +1,154 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { debounce } from "lodash";
+import React, { useState, useEffect, useRef } from "react";
 import { memberInfo } from "../../utils/auth";
 import { useGetMessageQuery, useCreateMessageMutation } from "../../redux/api/message";
-import { useDispatch, useSelector } from "react-redux";
-import { setMessages } from "../../redux/feature/chatSlice";
+import { Card, Button, Input, Avatar, Spinner } from "@nextui-org/react";
+import { Paperclip, Send } from "lucide-react";
 
-export default function ChatApp({ socket }) {
+export default function ChatApp({ activeChat, socket, setMessages, messages }) {
   const memberId = memberInfo().id;
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
-  const fileInputRef = useRef(null);
+  const isTypingRef = useRef(false);
+  const typingTimeoutRef = useRef(null);
+  const bottomRef = useRef(null);
 
-  const dispatch = useDispatch();
-  const { activeChat, messages } = useSelector((state) => state.chat);
-
-  const { data: msg, isSuccess } = useGetMessageQuery(
-    { senderId: memberId, receiverId: activeChat?.socketId },
-    { skip: !activeChat }
-  );
+  const { data: msg } = useGetMessageQuery({ senderId: memberId, receiverId: activeChat?.socketId });
+  const [createMessage, { isLoading: isLoadingMessage }] = useCreateMessageMutation();
 
   useEffect(() => {
-    if (isSuccess && msg) {
-      dispatch(setMessages(msg));
+    if (msg && Array.isArray(msg)) {
+      setMessages((prev) => (prev.length === msg.length ? prev : [...msg]));
     }
-  }, [msg, dispatch, isSuccess]);
+  }, [msg, setMessages]);
 
-  const [createMessage] = useCreateMessageMutation();
+  useEffect(() => {
+    if (!socket) return;
 
-  const handleSendMessage = async () => {
+    const handleReceiveMessage = (newMessage) => {
+      if (
+        newMessage.receiverId === memberId &&
+        newMessage.senderId === activeChat?.socketId
+      ) {
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      }
+    };
+
+    socket.on("newMessage", handleReceiveMessage);
+
+    return () => {
+      socket.off("newMessage", handleReceiveMessage);
+    };
+  }, [socket, activeChat, memberId, setMessages]);
+
+  const handleSendMessage = () => {
     if (!message.trim() || !socket || !activeChat) return;
 
     const receiverId = activeChat.socketId;
-    const newMessage = { senderId: memberId, receiverId, message, file };
+    const newMessage = { senderId: memberId, receiverId, message, file,createdAt:new Date() };
 
-    socket.emit("sendMessage", newMessage, (ack) => {
-      if (ack.success) {
-        dispatch(setMessages([...messages, newMessage]));
-      }
-    });
+    socket.emit("sendMessage", newMessage);
+
+    setMessages((prev) => [...prev, newMessage]);
 
     const formData = new FormData();
     formData.append("senderId", memberId);
     formData.append("receiverId", receiverId);
     formData.append("message", message);
     if (file) formData.append("file", file);
+   
 
-    await createMessage({ data: formData });
+    createMessage({ data: formData });
+
     setMessage("");
     setFile(null);
   };
 
-  const handleTyping = useCallback(
-    debounce((text) => {
-      socket.emit("Typing", "Typing...");
-    }, 500),
-    [socket]
-  );
-
-  const handleChange = (e) => {
+  const handleTyping = (e) => {
     setMessage(e.target.value);
-    handleTyping(e.target.value);
-  };
 
-  const handleFileChange = (e) => {
-    if (e.target.files?.[0]) {
-      setFile(e.target.files[0]);
+    if (!isTypingRef.current) {
+      isTypingRef.current = true;
+      socket.emit("Typing", { receiverId: activeChat?.socketId, status: "Typing" });
+
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = setTimeout(() => {
+        isTypingRef.current = false;
+        socket.emit("Typing", { receiverId: activeChat?.socketId, status: "Stopped" });
+      }, 2000);
     }
   };
 
-  const lastMsgRef = useRef(null);
+  console.log(activeChat,"sdkfjsldj");
   useEffect(() => {
-    lastMsgRef.current?.scrollIntoView({ behavior: "smooth" });
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-  };
-
   return (
-    <div className="flex flex-col h-full bg-white rounded-lg shadow-lg">
+    <div className="flex flex-col h-[100vh] bg-gray-50  shadow-xl ">
       {/* Chat Header */}
-      <div className="border-b p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600">
-              {activeChat?.name?.[0]?.toUpperCase() || "?"}
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg text-gray-800">
-                {activeChat?.name || "Select a chat"}
-              </h3>
-              {/* {activeChat?.status && (
-                <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                  <span className="text-sm text-gray-600">Online</span>
-                </div>
-              )} */}
+      <div className="bg-white text-primary p-4 flex items-center gap-3 rounded-t-lg shadow-lg">
+        <Avatar src={activeChat?.profile?.img} size="md" />
+        <h3 className="font-semibold text-lg">{activeChat.name}</h3>
+      </div>
+
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.map((msg, index) => (
+          <div key={index} className={`flex ${msg.senderId === memberId ? "justify-end" : "justify-start"} mb-4 px-2`}>
+          <div className={`max-w-sm rounded-2xl shadow-lg transition-all ${
+            msg.senderId === memberId 
+              ? "bg-teal-400 text-white rounded-tr-none" 
+              : "bg-gray-50 text-gray-800 rounded-tl-none border border-gray-200"
+          }`}>
+            {msg.file && (
+              <img 
+                src={msg.file} 
+                alt="Sent file" 
+                className="rounded-lg mx-auto mb-2 max-w-full h-auto hover:opacity-95 transition-opacity" 
+              />
+            )}
+            <div className="p-3">
+              <p className="whitespace-pre-wrap text-sm leading-relaxed">
+                {msg.message}
+              </p>
+              <p className={`text-xs mt-1.5 ${
+                msg.senderId === memberId 
+                  ? "text-blue-100" 
+                  : "text-gray-500"
+              }`}>
+                {new Date(msg.createdAt).toLocaleTimeString()}
+              </p>
             </div>
           </div>
         </div>
+        ))}
+        {/* {isTypingRef.current && <p className="text-gray-500 italic text-sm">Typing...</p>} */}
+        <div ref={bottomRef} />
       </div>
 
-      {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
-        <div className="space-y-4">
-          {messages?.map((msg, index) => (
-            <div
-              key={index}
-              ref={index === messages.length - 1 ? lastMsgRef : null}
-              className={`flex ${msg.senderId === memberId ? "justify-end" : "justify-start"}`}
-            >
-              <div
-                className={`max-w-[70%] ${
-                  msg.senderId === memberId
-                    ? "bg-teal-400 text-white rounded-l-2xl rounded-tr-2xl"
-                    : "bg-white text-gray-800 rounded-r-2xl rounded-tl-2xl shadow-sm"
-                } px-4 py-2`}
-              >
-                <p className="mb-1 break-words">{msg.message}</p>
-                <div className={`text-xs ${
-                  msg.senderId === memberId ? "text-blue-100" : "text-gray-500"
-                } flex items-center justify-end gap-1`}>
-                  <svg
-                    className="w-3 h-3"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  {formatTime(msg.createdAt)}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Input Section */}
+      <div className="p-4 bg-white border-t flex gap-2 items-center rounded-b-lg">
+        {/* <label className="cursor-pointer">
+          <Paperclip className="text-gray-500 hover:text-blue-500" size={22} />
+          <input type="file" className="hidden" onChange={(e) => setFile(e.target.files[0])} />
+        </label> */}
 
-      {/* Message Input */}
-      <div className="border-t p-4 bg-white">
-        <div className="flex items-center space-x-2">
-          {/* <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            className="hidden"
-          /> */}
-          {/* <button
-            onClick={() => fileInputRef.current?.click()}
-            className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
-              />
-            </svg>
-          </button> */}
-          <input
-            value={message}
-            onChange={handleChange}
-            placeholder="Type your message..."
-            className="flex-1 p-2 border rounded-full focus:outline-none focus:border-teal-400 bg-gray-50"
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSendMessage();
-              }
-            }}
-          />
-          <button
-            onClick={handleSendMessage}
-            disabled={!message.trim()}
-            className={`p-2 rounded-full ${
-              message.trim()
-                ? "bg-teal-400 hover:bg-teal-500 text-white"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed"
-            } transition-colors`}
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-              />
-            </svg>
-          </button>
-        </div>
-        {file && (
-          <div className="mt-2 text-sm text-gray-600 flex items-center gap-2">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
-              />
-            </svg>
-            <span>{file.name}</span>
-            <button
-              onClick={() => setFile(null)}
-              className="text-red-500 hover:text-red-700"
-            >
-              Remove
-            </button>
-          </div>
-        )}
+        <Input
+          value={message}
+          onChange={handleTyping}
+          placeholder="Type a message..."
+          className="flex-1"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSendMessage();
+            }
+          }}
+        />
+
+        <Button className="text-primary hover:text-teal-500 hover:scale-110" onClick={handleSendMessage} isLoading={isLoadingMessage}>
+          {isLoadingMessage ? <Spinner size="sm" /> : <Send />}
+        </Button>
       </div>
     </div>
   );

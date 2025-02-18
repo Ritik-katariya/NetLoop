@@ -52,9 +52,9 @@ const getPoll = async (id: string): Promise<Poll | null> => {
   if (!id) throw new ApiError(httpStatus.BAD_REQUEST, "ID is required");
 
   const result = await prisma.poll.findUnique({
-    where: { id },
+    where: { id,expireAt: { gte: new Date() } },
     include: {
-      member: true,
+      member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}},
       explore: true,
     },
   });
@@ -68,7 +68,7 @@ const getPoll = async (id: string): Promise<Poll | null> => {
 
 // Get all Polls
 const getAllPolls = async (): Promise<Poll[]> => {
-  const result = await prisma.poll.findMany({
+  const result = await prisma.poll.findMany({where:{expireAt: { gte: new Date() }},
     orderBy: { createdAt: "desc" },
     include: {
       member: {
@@ -130,7 +130,7 @@ const getPollsByExplore = async (exploreId: string): Promise<Poll[]> => {
   if (!exploreId) throw new ApiError(httpStatus.BAD_REQUEST, "Explore ID is required");
 
   const result = await prisma.poll.findMany({
-    where: { exploreId },
+    where: { exploreId ,expireAt: { gte: new Date() }},
     orderBy: { createdAt: "desc" },
     include: {
       member: {

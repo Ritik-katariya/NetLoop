@@ -3,9 +3,11 @@ import PostView from "./ProfilePostFull";
 import { memberInfo } from "../../utils/auth";
 import { useGetPostByMemberQuery } from "../../redux/api/post";
 import { Spinner } from "@nextui-org/react";
+import { useParams } from "react-router-dom";
 
 export default function ProfilePost() {
-  const memberId = memberInfo()?.id;
+  const memberId = useParams()?.id || "";
+
 
   const { data, isLoading, isSuccess, isError, error } = useGetPostByMemberQuery(memberId);
 

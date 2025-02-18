@@ -4,16 +4,21 @@ import { FaRegHeart, FaInstagram } from "react-icons/fa";
 import { TbBrandYoutubeFilled } from "react-icons/tb";
 import { Button } from "@nextui-org/react";
 import { MdModeEditOutline } from "react-icons/md";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { useGetDetailsQuery } from "../../redux/api/details";
 import { useSelector } from "react-redux";
 import { FaGithub, FaLinkedin, FaFacebook, FaLink } from "react-icons/fa6";
 import ReadMore from "../../utils/truncate";
+import { memberInfo } from "../../utils/auth";
+import { useGetMemberQuery } from "../../redux/api/member";
 
 export default function ProfileInfo() {
-  const { memberData } = useSelector((state) => state.member);
-  const id = memberData?.profile?.details?.id || "";
-  const { data: detaildata, isLoading } = useGetDetailsQuery(id);
+  const id=memberInfo()?.id;
+    const member = useParams();
+    const{data:memberData,error:merror,isLoading:misLoading,isSuccess:misSuccess}=useGetMemberQuery(member?.id);
+  // const { memberData } = useSelector((state) => state.member);
+  const detailId = memberData?.profile?.details?.id || "";
+  const { data: detaildata, isLoading } = useGetDetailsQuery(detailId);
 
   if (isLoading) {
     return <div className="text-center text-gray-500">Loading...</div>;
@@ -153,8 +158,8 @@ export default function ProfileInfo() {
       </div>
 
       {/* Edit Profile Button */}
-      <div className="flex justify-center mt-6">
-        <NavLink to={`/profile/details-edit/${id}`}>
+     { member?.id===id&&<div className="flex justify-center mt-6">
+        <NavLink to={`/profile/details-edit/${detailId}`}>
           <Button
             className="bg-primary text-white rounded-lg px-5 py-2 flex items-center gap-2 shadow-md hover:bg-primary-dark transition"
           >
@@ -162,7 +167,7 @@ export default function ProfileInfo() {
             Edit Details
           </Button>
         </NavLink>
-      </div>
+      </div>}
     </div>
   );
 }

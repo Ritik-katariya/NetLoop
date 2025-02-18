@@ -5,6 +5,7 @@ import NewsCompo from '../News/NewsCompo';
 import RatingInputForm from '../Openion/RatingInputForm';
 import Poll from '../Openion/Poll';
 import { PromotionCard } from '../Promotion/PromotionCard';
+import NoData from '../../Shared/NoData';
 
 export default function ExploreAll() {
   const { memberData } = useSelector((state) => state.member);
@@ -13,27 +14,18 @@ export default function ExploreAll() {
 
   const { data, isLoading, isSuccess, error } = useGetExploreQuery(exploreId);
 
-  // Set the exploreId based on memberData
+ 
   useEffect(() => {
     if (memberData) {
       setExploreId(memberData?.networks[0]?.explore?.id || '');
     }
   }, [memberData]);
-console.log(data,"exdklf")
-  // Process the data and set exploreData
-  // useEffect(() => {
-  //   if (exploreId && data) {
-  //     const { news = [], events = [], promotion = [], opinion = [] } = data;
 
-  //     // Combine all items into a single array, sorted by `createdAt`
-  //     const combinedData = [...news, ...events, ...promotion, ...opinion]
-  //       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-  //       .slice(0, 10); // Limit to 10 items
-
-  //     setExploreData(combinedData);
-  //   }
-  // }, [data, exploreId]);
-
+  if(data?.length===0)return (
+    <div className="flex justify-center items-center  w-full mt-8 p-6 ">
+      <NoData size='md' />
+    </div>
+  );
   return (
     <div>
       {data?data.map((item) =>{

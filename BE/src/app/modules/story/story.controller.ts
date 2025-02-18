@@ -29,12 +29,7 @@ const getOneStory = catchAsync(async (req: Request, res: Response) => {
 const getStories = catchAsync(async (req: Request, res: Response) => {
   logger.info("Inside controller: getStories");
   const result = await storyService.getStories(req, res);
-  sendResponse(res, {
-    statusCode: 200,
-    message: "Get Stories successful !!",
-    success: true,
-    data: result,
-  });
+  
 });
 
 const updateStory = catchAsync(async (req: Request, res: Response) => {

@@ -14,6 +14,8 @@ import { toast, ToastContainer } from "react-toastify";
 import { useCreateJoinRequestMutation,useGetJoinRequestsByMemberQuery } from "../../redux/api/joinrequest";
 import { memberInfo } from "../../utils/auth";
 import { FaClockRotateLeft } from "react-icons/fa6";
+import { useSelector } from "react-redux";
+
 
 
 const professions = ["EMPLOYED", "UNEMPLOYED", "STUDENT", "OTHER"];
@@ -29,43 +31,47 @@ const memberId=memberInfo().id;
   const handleFileChange = (e) => {
     setDocument(e.target.files[0]);
   };
-
+const {memberData}=useSelector(state=>state.member)
   const handleSubmit = async() => {
     if (!profession || !document || !enrollmentNo.trim()) {
       toast.error("⚠️ All fields are required!");
       return;
     }
 
-    const formData = new FormData();
+    try {
+      const formData = new FormData();
     formData.append("memberId", memberId);
     formData.append("networkId", id);
     formData.append("profession", profession);
     formData.append("document", document);
     formData.append("enrollmentNo", enrollmentNo);
      await createJoinRequest({ data: formData });
-    if (isSuccess) {
+    
       toast.success("✅ Request sent successfully!");
       onOpenChange(false);
-    } else {
+     window.location.reload();
+      
+    } catch (error) {
       toast.error("⚠️ Failed to send request!");
+      console.error("Error sending request:", error);
     }
-    // onSubmit(formData);
-    onOpenChange(false);
   };
-
+// console.log(memberData,"network")
   return (
     <>
       <ToastContainer />
       <Button
         className="bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-medium rounded-lg px-5 py-2 flex items-center gap-2 shadow-lg transition-transform hover:scale-105"
         onPress={onOpen}
-        isDisabled={joinRequests}
+        isDisabled={(memberData?.networks[0]?.id===id)||(joinRequests?.length>0)}
       >
-         {joinRequests?<span className="flex items-center gap-2 text-teal-100">
+         {joinRequests?.length>0?<span className="flex items-center gap-2 text-teal-100">
 <FaClockRotateLeft/> Request Sent
-         </span>:<span className="flex items-center gap-2 ">
+         </span>:(!memberData?.networks[0]?.id===id?<span className="flex items-center gap-2 ">
           <MdPersonAdd className="text-xl" /> Join Network
-          </span>}
+          </span>:<span className="flex items-center gap-2 ">
+           Joined
+          </span>)}
       </Button>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="md" backdrop="blur">

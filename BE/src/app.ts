@@ -8,15 +8,7 @@ import config from "./config";
 import { app, server } from "./socketio/server";
 import passport from "./helper/passport_jwt";
 
-app.use(
-    cors({
-      origin:"*", // Allow only your frontend
-      credentials: true, // Allow cookies & authentication headers
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization", "*"], // Allow all headers
-      exposedHeaders: ["Content-Length", "X-Requested-With"], // Expose necessary headers
-    })
-  );
+app.use(cors({ origin: '*' }));
 
 app.use(CookieParser());
 app.use(express.json());

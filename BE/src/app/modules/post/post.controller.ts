@@ -28,6 +28,16 @@ const getonePost = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getHomePagePosts = catchAsync(async (req: Request, res: Response) => {
+  logger.info("insider controller:getonePost");
+  const result = await postService.getHomePagePosts(req.params.id);
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Get Post successfull !!",
+    success: true,
+    data: result,
+  });
+});
 const getPosts = catchAsync(async (req: Request, res: Response) => {
   logger.info("insider controller:getPosts");
   const result = await postService.getPosts();
@@ -75,5 +85,6 @@ export const postController = {
   getPosts,
   updatePost,
   deletePost,
-  getPostbyMember
+  getPostbyMember,
+  getHomePagePosts
 };

@@ -221,8 +221,14 @@ const getAllMember = async (
     where: whereCondition,
     include: {
       profile: true,
-     
+     networks: true,
+    posts: true,
+    likes: true,
+    chatRequests: true,
+    sentRequests: true,
       verified: true,
+      stories: true,
+      comments: true,
 
     }
   });

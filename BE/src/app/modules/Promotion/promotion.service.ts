@@ -53,20 +53,21 @@ const getPromotion = async (id: string): Promise<Promotion | null> => {
   if (!id) throw new ApiError(httpStatus.BAD_REQUEST, "ID is required");
 
   const result = await prisma.promotion.findUnique({
-    where: { id },
+    where: { id,expireAt: { gte: new Date() } },
   });
 
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Promotion not found");
-  }
+ 
 
   return result;
 };
 
 // Get all Promotions
 const getAllPromotions = async (): Promise<Promotion[]> => {
-  const result = await prisma.promotion.findMany({
+  const result = await prisma.promotion.findMany({where:{expireAt: { gte: new Date() }},
     orderBy: { createdAt: "desc" },
+    include:{
+      member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}}
+    }
   });
   return result;
 };
@@ -90,9 +91,7 @@ const updatePromotion = async (req: Request): Promise<Promotion> => {
     },
   });
 
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Promotion not found");
-  }
+  
 
   return result;
 };
@@ -121,7 +120,7 @@ const getPromotionsByExplore = async (exploreId: string): Promise<Promotion[]> =
 
   try {
     const result = await prisma.promotion.findMany({
-      where: { exploreId },
+      where: { exploreId,expireAt: { gte: new Date() } },
       orderBy: { createdAt: "desc" },
       include: { member: {include:{profile:{select:{img:true}},
       networks:{select:{name:true}},

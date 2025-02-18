@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode } from "swiper/modules";
 import StoryComponent from "./StoryComponent";
@@ -6,14 +6,24 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useGetStoriesQuery } from "../../../redux/api/storyApi";
 import "swiper/css";
 import "swiper/css/free-mode";
+import ImageSkeleton from "./scuton";
+import { useSelector } from "react-redux";
 
 const Story = () => {
   const [cursor, setCursor] = useState(null);
-  const { data: storyData, isLoading } = useGetStoriesQuery({ cursor, limit: 10 });
+  const {memberData}=useSelector(state=>state.member);
+  const [networkId, setNetworkId] = useState("123");
+  
+  useEffect(() =>{
+    if(memberData){
+      setNetworkId( memberData?.networks[0]?.id);
+    }
+  },[memberData])
+  const { data: storyData, isLoading } = useGetStoriesQuery({ cursor, limit: 10 ,networkId});
   const swiperRef = useRef(null);
 
   if (isLoading) {
-    return <div className="text-center text-gray-500 py-4">Loading stories...</div>;
+    return <ImageSkeleton/>;
   }
 
   const stories = storyData || [];

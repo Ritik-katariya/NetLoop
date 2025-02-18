@@ -3,6 +3,7 @@ import { useGetPromotionByExploreQuery } from '../../../redux/api/promotion';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { PromotionCard } from './PromotionCard';
+import NoData from '../../Shared/NoData';
 export default function Promotion() {
   const { memberData } = useSelector(state => state.member);
   const [exploreId, setExploreId] = useState("")
@@ -19,15 +20,17 @@ export default function Promotion() {
     return <div>Explore ID is not available.</div>;
   }
 
-  if (isLoading) {
-    return <div>Loading promotions...</div>;
-  }
+ 
 
   if (error) {
     console.error('Error fetching promotions:', error);
     return <div>Error loading promotions.</div>;
   }
-
+ if(data?.length===0||isLoading)return (
+    <div className="flex justify-center items-center  w-full mt-8 p-6 ">
+      <NoData size='md' />
+    </div>
+  );
   
 
   return (
