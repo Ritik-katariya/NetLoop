@@ -81,7 +81,7 @@ const getAllExplores = async (): Promise<any[]> => {
     include: {
       news: {where: { expireAt: { gte: new Date() } },
         include:{
-          member:{select:{name:true,id:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}}
+          member:{select:{name:true,id:true,verified:true,profile:{select:{img:true}},networks:{select:{id:true,name:true}}}}
         }
       },
       events: {where: { expireAt: { gte: new Date() } },

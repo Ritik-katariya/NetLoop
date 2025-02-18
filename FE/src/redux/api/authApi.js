@@ -19,49 +19,30 @@ export const authApi = baseApi.injectEndpoints({
                 }
             },
         }),
-        patientSignUp: build.mutation({
+        forgetPassword: build.mutation({
+            query: (email) => ({
+                url: `${AUTH_URL}/forgot-password`,
+                method: 'POST',
+                data: email ,
+            }),
+
+           }),
+
+           setNewPassword: build.mutation({
             query: (data) => ({
-                url: `/patient`,
+                url: `${AUTH_URL}/set-new-password`,
                 method: 'POST',
                 data,
             }),
-        }),
-        doctorSignUp: build.mutation({
-            query: (data) => ({
-                url: `/doctor`,
-                method: 'POST',
-                data,
-            }),
-        }),
-        resetPassword: build.mutation({
-            query: (data) => ({
-                url: `${AUTH_URL}/reset-password`,
-                method: 'POST',
-                data,
-            }),
-        }),
-        resetConfirm: build.mutation({
-            query: (data) => ({
-                url: `${AUTH_URL}/reset-password/confirm`,
-                method: 'POST',
-                data,
-            }),
-        }),
-        changePassword: build.mutation({
-            query: (data) => ({
-                url: `${AUTH_URL}/change-password`,
-                method: 'POST',
-                data,
-            }),
-        }),
+        })
+       
+      
     })
 })
 
 export const { 
     useUserLoginMutation, 
-    useDoctorSignUpMutation, 
-    usePatientSignUpMutation,
-    useResetPasswordMutation, 
-    useResetConfirmMutation,
-    useChangePasswordMutation
+    useForgetPasswordMutation, 
+    useSetNewPasswordMutation,  // add this line to use the mutation
+   
 } = authApi

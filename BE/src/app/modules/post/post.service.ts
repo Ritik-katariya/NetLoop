@@ -110,7 +110,8 @@ const getHomePagePosts = async (networkId?: string) => {
       },
       include: {
         likes: true, // Include likes to count them
-        member: true, // Include member details
+        member: true,
+        comments: true, // Include member details
       },
     });
     

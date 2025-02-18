@@ -13,7 +13,7 @@ const {id,author,content,createdAt,image,member,title}=data;
   return (
     <div className="w-[550px] bg-white flex flex-col justify-center items-between  space-y-1 px-3 text-sm mb-3 rounded-md pb-6 ">
          <div className="flex items-center justify-between p-4 bg-white">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 cursor-pointer" onClick={()=>{window.location.href=`/profile/${member?.id}`}}>
         <Avatar
           src={member?.profile?.img}
           size="md"
@@ -45,7 +45,7 @@ const {id,author,content,createdAt,image,member,title}=data;
 
         />
       </div>
-      <div className="flex justify-between items-center">
+      {/* <div className="flex justify-between items-center">
         <div className="flex justify-evenly gap-3 items-center">
             <span>#</span>
             <span>#</span>
@@ -59,7 +59,7 @@ const {id,author,content,createdAt,image,member,title}=data;
         <div>
             <input type="text" name="comment" id="comment" placeholder="Comment" className="w-11/12 border-b-2 border-gray-500 " />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

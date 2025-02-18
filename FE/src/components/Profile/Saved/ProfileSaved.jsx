@@ -7,7 +7,7 @@ import PostView from '../ProfilePostFull'
 export default function ProfileSaved() {
   const {id}=memberInfo()
   const {data}=useGetSavedItemsQuery({memberId:id});
-  console.log(data?.savedItems,"profile")
+ 
     const save=data?.savedItems||[];
   return (
     <div className="grid grid-cols-3 gap-4 p-4 bg-white w-full rounded-lg shadow-lg">

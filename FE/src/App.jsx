@@ -27,6 +27,7 @@ import SuperAdminLogin from './components/SuperAdmin/SuperAdminLogin';
 import SuperAdminDashboard from './components/SuperAdmin/SuperAdminDashboard';
 import SuperAdminRoute from './components/Routes/SuperAdminRoute';
 import MemberRoute from './components/Routes/member';
+import ResetPasswordForm from './components/Login/ResetPassword';
 function App() {
   return (
     <Router >
@@ -43,6 +44,7 @@ function App() {
   
         <Route path='/network' element={<Network />} />
         <Route path='/network/:id?' element={<NetworkProfile />} />
+        <Route path='/forgot-password' element={<ResetPasswordForm />} />
 
         <Route path='/story/:id' element={<StoryPage />} />
         {/* <Route path='/story' element={<StoryPage />} /> */}

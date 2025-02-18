@@ -105,7 +105,7 @@ const addMemberToChat = async (req: Request, res: Response): Promise<any> => {
           },
         },
       });
-      console.log(ch)
+      
     }
 
     // Delete the chat request

@@ -27,7 +27,7 @@ const Posts = () => {
   
 
   return (
-    <div className='w-full h-full lg:px-7 flex flex-col justify-center items-start py-5 z-[1]'>
+    <div className='w-full h-full lg:px-7 flex flex-col justify-start items-center py-5 z-[1]'>
       {homePosts?.map((post) => (
         <PostComponent key={post.id} post={post} />
       ))}

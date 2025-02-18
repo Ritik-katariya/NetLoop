@@ -67,7 +67,7 @@ const {memberData}=useSelector(state=>state.member)
       >
          {joinRequests?.length>0?<span className="flex items-center gap-2 text-teal-100">
 <FaClockRotateLeft/> Request Sent
-         </span>:(!memberData?.networks[0]?.id===id?<span className="flex items-center gap-2 ">
+         </span>:(!(memberData?.networks[0]?.id===id)?<span className="flex items-center gap-2 ">
           <MdPersonAdd className="text-xl" /> Join Network
           </span>:<span className="flex items-center gap-2 ">
            Joined

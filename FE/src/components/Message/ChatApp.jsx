@@ -78,7 +78,7 @@ export default function ChatApp({ activeChat, socket, setMessages, messages }) {
     }
   };
 
-  console.log(activeChat,"sdkfjsldj");
+ 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);

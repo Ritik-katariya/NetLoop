@@ -136,7 +136,7 @@ const setNewPassword = async (payload: any) => {
   });
   if (!isOtpValid) throw new Error("Invalid OTP or expired OTP");
   if (isOtpValid.expiresAt < new Date()) throw new Error("OTP is expired");
-  if (otp === isOtpValid.otp) {
+  if (otp == isOtpValid.otp) {
     const hashedPassword = await bcrypt.hash(password, 10);
     await prisma.auth.update({
       where: { email },
