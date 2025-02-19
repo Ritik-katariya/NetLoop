@@ -45,7 +45,7 @@ const memberWithNetworks = async (id: string) => {
 const networkWithMembers = async (id: string) => {
   const networkWithMembers = await prisma.network.findMany({
     where: { id },
-    include: { members: true },
+    include: { members: {select:{id:true,name:true,status:true}} },
   });
   return networkWithMembers;
 };

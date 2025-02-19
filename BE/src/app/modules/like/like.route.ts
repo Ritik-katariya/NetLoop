@@ -7,7 +7,7 @@ const router = express.Router();
 // Toggle like
 router.post(
   "/toggle",
-  // auth(),
+  auth(),
   likeController.toggleLike
 );
 

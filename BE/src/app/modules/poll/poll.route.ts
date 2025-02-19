@@ -1,27 +1,28 @@
 import express, { NextFunction, Request, Response } from "express";
 import { CloudinaryHelper } from "../../../helper/uploadHelper";
 import { pollController } from "./poll.controller";
+import auth from "../../middlewares/auth";
 
 const router = express.Router();
 
-router.post("/",pollController.createPoll);
+router.post("/",auth(),pollController.createPoll);
 
-router.get("/", pollController.getAllPolls);
+router.get("/", auth(),pollController.getAllPolls);
 
-router.get("/:id?", pollController.getPoll);
+router.get("/:id?",auth(), pollController.getPoll);
 
-router.get("/explore/:exploreId?", pollController.getPollsByExplore);
+router.get("/explore/:exploreId?",auth(), pollController.getPollsByExplore);
 
 router.patch(
-  "/:id?",
+  "/:id?",auth(),
   CloudinaryHelper.upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
     return pollController.updatePoll(req, res, next);
   }
 );
 
-router.delete("/:id?", pollController.deletePoll);
+router.delete("/:id?", auth(),pollController.deletePoll);
 
-router.patch("/vote/:id?", pollController.votePoll);
+router.patch("/vote/:id?",auth(), pollController.votePoll);
 
 export const pollRouter = router;

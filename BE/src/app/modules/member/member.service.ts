@@ -174,9 +174,10 @@ const createMember = async (payload: any): Promise<any> => {
           userId: member.id,
         },
       });
- const { id, status } = member || { id: null, status: null };
+const { role } = existEmail;
+const { id, status } = member || { id: null, status: null };
   const accessToken = JwtHelper.createToken(
-    { status, id },
+    { status, id ,role},
     config.jwt.secret as Secret,
     config.jwt.expires_in as string
   );
@@ -192,7 +193,7 @@ const createMember = async (payload: any): Promise<any> => {
 
 const getAllMember = async (
   filters: memberFilters
-): Promise<IGenericResponse<Members[]>> => {
+): Promise<IGenericResponse<any>> => {
   const { searchTerm, ...filterData } = filters;
 
   const andCondition = [];
@@ -219,19 +220,46 @@ const getAllMember = async (
 
   const result = await prisma.members.findMany({
     where: whereCondition,
-    include: {
-      profile: true,
-     networks: true,
-    posts: true,
-    likes: true,
-    chatRequests: true,
-    sentRequests: true,
-      verified: true,
+    select: {
+      id: true,
+      name: true,
+      status: true,
+      created_at: true,
+      verified: { 
+        select: { id: true, verified: true } 
+      },
+      profile: {
+        select: {
+          id: true,
+          img: true,
+          coverImg: true,
+          bio: true,
+          address: true,
+          city: true,
+          state: true,
+          pincode: true,
+        },
+      },
+      networks: {
+        select: {
+          id: true,
+          logo: true,
+          cover: true,
+          verified: true,
+          name: true,
+          Slogan: true,
+        },
+      },
+      posts: true,
+      likes: true,
+      chatRequests: true,
+      sentRequests: true,
       stories: true,
       comments: true,
-
-    }
+      
+    },
   });
+  
 
   const total = await prisma.members.count({ where: whereCondition });
   return {
