@@ -94,7 +94,7 @@ export default function ProfileDP({ data }) {
 
           {/* Query & Feedback */}
           <DropdownItem key="query_feedback">
-            <NavLink to={"/query-feedback"} className="text-gray-700 hover:text-primary transition-all duration-200">
+            <NavLink to={"#"} className="text-gray-700 hover:text-primary transition-all duration-200">
               Query & Feedback
             </NavLink>
           </DropdownItem>

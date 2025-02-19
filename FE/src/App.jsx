@@ -28,6 +28,7 @@ import SuperAdminDashboard from './components/SuperAdmin/SuperAdminDashboard';
 import SuperAdminRoute from './components/Routes/SuperAdminRoute';
 import MemberRoute from './components/Routes/member';
 import ResetPasswordForm from './components/Login/ResetPassword';
+import ExploreRoute from './components/Routes/ExploreRoute';
 function App() {
   return (
     <Router >
@@ -54,7 +55,6 @@ function App() {
         
         <Route path='/:name/:id?' element={<ProfileApp />} />
         <Route path='/message' element={<MessagePage />} />
-        <Route path='/explore' element={<Explore />} />
         <Route path='/create-explore/:id' element={<CreateExpo />} />
         <Route path='/verify/:id?' element={<VerifiedPage />} />
         <Route path='/profile/details-edit/:id?' element={<ProfileDetailsForm />} />
@@ -63,6 +63,10 @@ function App() {
 
         </Route>
 
+        <Route element={<ExploreRoute/>} >
+
+        <Route path='/explore' element={<Explore />} />
+        </Route>
         {/* protected route for doctor booking */}
         
          

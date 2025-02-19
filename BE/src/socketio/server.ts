@@ -8,11 +8,14 @@ import config from "../config";
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: {
-    origin: config.CLIENT_URL ,
-    methods: ["GET", "POST"],
-  },
+    cors: {
+        origin: "*", // Allow all origins
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow all common HTTP methods
+        allowedHeaders: ["*"], // Allow all headers
+        credentials: true, // Allow cookies and authentication headers
+    },
 });
+
 
 const users: Record<string, string> = {}; // Maps userId to socketId
 
