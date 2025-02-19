@@ -112,7 +112,7 @@ const [createNotification]=useCreateNotificationMutation();
     });
   }
   return (
-    <div className=" max-w-[550px] md:max-w-[600px] lg:max-w-[650px] bg-white flex flex-col space-y-2 text-sm mb-3 rounded-md pb-6 shadow-md">
+    <div className=" w-full md:max-w-[600px] lg:max-w-[650px] bg-white flex flex-col space-y-2 text-sm mb-3 rounded-md pb-6 shadow-md">
       <PostHeader post={post} />
       <ToastContainer className={"absolute top-24 "} />
 

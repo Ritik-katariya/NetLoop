@@ -14,7 +14,7 @@ export default function ExplorePage() {
   return (
    <div className='flex flex-col w-full justify-start items-center mt-20 gap-3'>
     <span className='absolute top-32 text-center text-[70px] font-bold text-transparent font-mono bg-clip-text bg-gradient-to-r from-[#323232cc] via-[#ebf9f6cf] to-[#00debca3] backdrop-blur-sm'>Explore {memberData?.networks[0]?.name}</span>
-    <img src={memberData?.networks[0]?.cover} alt="cover page of Netwrok" className='w-[70%] h-56 object-cover ' />
+    <img src={memberData?.networks[0]?.cover||"https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2029&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt="cover page of Netwrok" className='w-[70%] h-56 object-cover ' />
      <div className='xl:w-[50%] min-h-screen flex flex-col gap-3 justify-start items-center px-4 '>
         
         <div className="flex justify-around w-full h-16 items-center text-[#616161] bg-white rounded-md shadow-lg text-xl font-mono font-semibold sticky top-0 z-40">

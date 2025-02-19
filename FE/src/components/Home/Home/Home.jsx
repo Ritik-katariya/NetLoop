@@ -14,7 +14,7 @@ const Home = () => {
       </div>
 
       {/* Keeping the original flexbox layout */}
-      <div className="flex w-screen justify-center items-start gap-4 mt-16 max-md:px-4">
+      <div className="flex w-screen justify-center items-start gap-4 mt-16 max-md:px-1">
         <SideProfile />
 
         {/* Fixed: Changed 'hero' to 'div' while keeping the same CSS */}
