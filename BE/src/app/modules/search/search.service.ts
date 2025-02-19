@@ -8,7 +8,9 @@ const searchAll = async (query: string) => {
         { email: { contains: query, mode: 'insensitive' } },
       ],
     },
-    include: {
+    select: {id:true,
+      name: true,
+    
       profile: {
         select: {
           img: true,

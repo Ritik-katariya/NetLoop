@@ -1,11 +1,12 @@
 import express, { NextFunction, Request, Response } from "express";
 import { CloudinaryHelper } from "../../../helper/uploadHelper";
 import { storyController } from "./story.controller";
+import auth from "../../middlewares/auth";
 
 const router = express.Router();
 
 router.post(
-  "/",
+  "/",auth(),
   CloudinaryHelper.upload.single("file"),
   (req, res, next) => {
     console.log('Request body:', req.body);
@@ -28,17 +29,17 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
   return storyController.getStories(req, res, next);
 });
 
-router.get("/:id", storyController.getOneStory);
-router.get("/member/:id", storyController.getStoryByMember);
+router.get("/:id",auth(), storyController.getOneStory);
+router.get("/member/:id",auth(), storyController.getStoryByMember);
 
 router.patch(
-  "/:id",
+  "/:id",auth(),
   CloudinaryHelper.upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
     return storyController.updateStory(req, res, next);
   }
 );
 
-router.delete("/:id", storyController.deleteStory);
+router.delete("/:id",auth(), storyController.deleteStory);
 
 export const storyRouter = router;
