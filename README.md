@@ -12,8 +12,7 @@ Built with a modern tech stack, including **real-time messaging, event managemen
 - 🎥 Auto-quality video streaming (HLS with Cloudinary)  
 - 🔒 Secure authentication (JWT, OAuth)  
 - 🗄 Scalable backend with PostgreSQL and Prisma ORM  
-- ⚡ Fast API responses with optimized queries  
-- 📄 Intelligent PDF reader with semantic search (FAISS + NLP)  
+
 
 ---
 
