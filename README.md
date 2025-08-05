@@ -54,8 +54,8 @@ root
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/your-username/college-social-media.git
-cd college-social-media
+git clone [https://github.com/your-username/college-social-media.git](https://github.com/Ritik-katariya/NetLoop)
+cd NetLoop
 ```
 
 ### 2️⃣ Setup Backend (BE)
